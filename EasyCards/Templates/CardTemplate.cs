@@ -15,7 +15,8 @@ public class CardTemplate
     public float LevelUpWeight { get; set; }
     public int MaxLevel { get; set; }
     public List<ModifierTemplate> Modifiers { get; set; } = new();
-    public Dictionary<string, string> NameLocalization { get; set; }
+    public Dictionary<string, string> NameLocalization { get; set; } = new();
+    public Dictionary<string, string> DescriptionLocalization { get; set; } = new();
 
     public List<string> BanishesCardsByName { get; set; } = new();
     public List<string> BanishesCardsWithStatsOfType { get; set; } = new();
