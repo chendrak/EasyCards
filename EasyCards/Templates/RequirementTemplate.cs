@@ -37,9 +37,8 @@ public class RequirementTemplate
         if (Stats != null)
         {
             EasyCards.Log.LogInfo($"Converting Stat requirements");
-            EasyCards.Log.LogWarning($"Stat Requirements don't currently work! Disabled for now!");
-            // statRequirements = Stats.ToStatsModifier();
-            // isMinRequirement = Stats.IsMinRequirement();
+            statRequirements = Stats.ToStatsModifier();
+            isMinRequirement = Stats.IsMinRequirement();
         }
         else
         {
