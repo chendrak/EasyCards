@@ -3,6 +3,7 @@ using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
 using EasyCards.Helpers;
+using EasyCards.UI;
 using HarmonyLib;
 
 namespace EasyCards
@@ -22,6 +23,11 @@ namespace EasyCards
             // CardHelper.LogCardWeights();
             CardHelper.LoadCustomCards();
 
+            AddComponent<UiKeyPressHandler>();
+
+            // UiManager.Initialize();
+            // UiManager.CreateAllPanels();
+            
             Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
         }
     }
