@@ -23,9 +23,9 @@ public class CardPanel : UniverseLib.UI.Panels.PanelBase
     public override Vector2 DefaultAnchorMin => new(0.5f, 1f);
     public override Vector2 DefaultAnchorMax => new(0.5f, 1f);
     
-    public override Vector2 DefaultPosition => new(0 - MinWidth / 2, Screen.height);
+    public override Vector2 DefaultPosition => new(0 - MinWidth / 2, 0 + MinHeight / 2);
     
-    public override bool CanDragAndResize => false;
+    public override bool CanDragAndResize => true;
     
     public ButtonRef CloseBtn { get; private set; }
 

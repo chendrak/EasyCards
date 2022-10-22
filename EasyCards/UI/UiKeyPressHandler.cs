@@ -9,9 +9,9 @@ public class UiKeyPressHandler : MonoBehaviour
 {
     private void LateUpdate()
     {
-        // if (Keyboard.current.nKey.wasPressedThisFrame)
-        // {
-        //     UiManager.ShowCardPanel();
-        // }
+        if (Keyboard.current.nKey.wasPressedThisFrame)
+        {
+            UiManager.ShowCardPanel();
+        }
     }
 }

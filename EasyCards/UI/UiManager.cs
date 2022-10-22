@@ -30,6 +30,8 @@ internal class UiManager
     {
         Int32 unixTimestamp = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
         UiBase = UniversalUI.RegisterUI(unixTimestamp.ToString(), UiUpdate);
+        
+        CreateAllPanels();
     }
     
     static void LogHandler(string message, LogType type)
