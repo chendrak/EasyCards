@@ -15,15 +15,15 @@ internal class UiManager
     {
         const float startupDelay = 3f;
         // Universe.Init(OnInitialized, LogHandler);
-        // UniverseLib.Config.UniverseLibConfig config = new()
-        // {
-        //     Disable_EventSystem_Override = false, // or null
-        //     Force_Unlock_Mouse = false, // or null
-        //     Allow_UI_Selection_Outside_UIBase = true,
-        //     Unhollowed_Modules_Folder = Path.Combine(BepInEx.Paths.BepInExRootPath, "interop") // or null
-        // };
-        //
-        // Universe.Init(startupDelay, OnInitialized, LogHandler, config);
+        UniverseLib.Config.UniverseLibConfig config = new()
+        {
+            Disable_EventSystem_Override = false, // or null
+            Force_Unlock_Mouse = false, // or null
+            Allow_UI_Selection_Outside_UIBase = true,
+            Unhollowed_Modules_Folder = Path.Combine(BepInEx.Paths.BepInExRootPath, "interop") // or null
+        };
+        
+        Universe.Init(startupDelay, OnInitialized, LogHandler, config);
     }
     
     static void OnInitialized()

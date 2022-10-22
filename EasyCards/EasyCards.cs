@@ -25,8 +25,8 @@ namespace EasyCards
 
             AddComponent<UiKeyPressHandler>();
 
-            // UiManager.Initialize();
-            // UiManager.CreateAllPanels();
+            UiManager.Initialize();
+            UiManager.CreateAllPanels();
             
             Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
         }
