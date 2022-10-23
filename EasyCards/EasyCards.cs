@@ -22,7 +22,7 @@ namespace EasyCards
 
             // CardHelper.LogCardWeights();
             CardHelper.LoadCustomCards();
-
+            
             AddComponent<UiKeyPressHandler>();
 
             UiManager.Initialize();

@@ -28,15 +28,14 @@ internal class UiManager
     
     static void OnInitialized()
     {
-        Int32 unixTimestamp = (int)DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-        UiBase = UniversalUI.RegisterUI(unixTimestamp.ToString(), UiUpdate);
+        UiBase = UniversalUI.RegisterUI(MyPluginInfo.PLUGIN_GUID, UiUpdate);
         
         CreateAllPanels();
     }
     
     static void LogHandler(string message, LogType type)
     {
-        EasyCards.Log.LogInfo($"UiManager.Log: {message}");
+        EasyCards.Log.LogInfo(message);
     }
 
     public static void CreateAllPanels()
