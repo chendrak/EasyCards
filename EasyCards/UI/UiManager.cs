@@ -47,6 +47,7 @@ internal class UiManager
     private static void CreateCardPanel()
     {
         CardPanel = new CardPanel(UiBase);
+        CardPanel.SetActive(false);
     }
 
     public static void ShowCardPanel()
