@@ -15,7 +15,6 @@ public class RequirementTemplate
     {
         if (Cards == null && Stats == null)
         {
-            EasyCards.Log.LogInfo($"Nothing to convert, leaving");
             return null;
         }
 
@@ -25,10 +24,6 @@ public class RequirementTemplate
         {
             cardRequirements = Cards.ConvertAll(template => template.ToModCardRequirement());
         }
-        else
-        {
-            EasyCards.Log.LogInfo($"No Card requirements");
-        }
 
         StatsModifier statRequirements = null;
 
@@ -36,13 +31,8 @@ public class RequirementTemplate
         
         if (Stats != null)
         {
-            EasyCards.Log.LogInfo($"Converting Stat requirements");
             statRequirements = Stats.ToStatsModifier();
             isMinRequirement = Stats.IsMinRequirement();
-        }
-        else
-        {
-            EasyCards.Log.LogInfo($"No Stat requirements");
         }
         
         var requirementList = ModGenesia.ModGenesia.MakeCardRequirement(cardRequirements?.ToIl2CppReferenceArray(), statRequirements, isMinRequirement);

@@ -38,6 +38,9 @@
     <Reference Include="Il2CppSystem.Core">
       <HintPath>../Libraries/Unity/Il2CppSystem.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>..\Libraries\Unity\Unity.InputSystem.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Localization">
       <HintPath>../Libraries/Unity/Unity.Localization.dll</HintPath>
     </Reference>
@@ -60,7 +63,7 @@
 
   <ItemGroup>
     <!-- Content to copy -->
-    <Content Include="../DataToCopy/EasyCards/**/*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" LinkBase="EasyCards" />
+    <Content Include="../DataToCopy/**/*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
   </ItemGroup>
   <ItemGroup>
     <!-- the compiler will copy these, since they're referenced -->
@@ -77,7 +80,7 @@
     <Delete Files="@(FilesToDelete)" />
   </Target>
   <Target Name="CreateDataDirectory" AfterTargets="Publish">
-    <Message Text="Creating EasyCards/Data directory" Importance="high" />
-    <MakeDir Directories="$(PublishDir)EasyCards/Data" ContinueOnError="true" />
+    <Message Text="Creating Data directory" Importance="high" />
+    <MakeDir Directories="$(PublishDir)Data" ContinueOnError="true" />
   </Target>
 </Project>

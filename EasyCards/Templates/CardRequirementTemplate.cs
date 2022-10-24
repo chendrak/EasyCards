@@ -11,8 +11,6 @@ public class CardRequirementTemplate
     {
         var requirement = new ModCardRequirement();
         
-        EasyCards.Log.LogInfo($"Card Requirement: Name: {Name}, Level: {Level}");
-        
         requirement.cardName = Name;
         requirement.requiredLevel = Level;
 
