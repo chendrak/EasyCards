@@ -28,8 +28,6 @@ public static class Localization
                 Value = translation
             };
 
-            Logger.LogInfo($"\tAdding translation for {locale.Identifier.Code}: {translation}");
-
             result.Add(ld);
         }
 
@@ -38,13 +36,11 @@ public static class Localization
 
     public static List<LocalizationData> GetNameTranslations(CardTemplate cardTemplate)
     {
-        Logger.LogInfo($"\tHandling Name translations");
         return GetTranslations(cardTemplate.NameLocalization);
     }
 
     private static List<LocalizationData> GetDescriptionTranslations(CardTemplate cardTemplate)
     {
-        Logger.LogInfo($"\tHandling Description translations");
         return GetTranslations(cardTemplate.DescriptionLocalization);
     }
 

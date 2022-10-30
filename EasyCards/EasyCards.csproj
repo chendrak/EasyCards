@@ -36,6 +36,7 @@
             <FilesToDelete Include="$(PublishDir)RogueGenesia.dll"/>
             <FilesToDelete Include="$(PublishDir)ModGenesia*.dll"/>
             <FilesToDelete Include="$(PublishDir)RogueGenesia*.dll"/>
+            <FilesToDelete Include="$(PublishDir)Newtonsoft.Json.dll"/>
             <!-- This is skipped in debug configuration, to make debugging plugins easier -->
             <FilesToDelete Include="$(PublishDir)*.pdb" Condition="'$(Configuration)' == 'Release'"/>
             <FilesToDelete Include="$(PublishDir)*.deps.json"/>

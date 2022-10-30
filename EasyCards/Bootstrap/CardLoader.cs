@@ -14,7 +14,8 @@ namespace EasyCards.Bootstrap;
 
 public sealed class CardLoader : ICardLoader
 {
-    public CardLoader(ILogger<CardLoader> logger, IJsonDeserializer jsonDeserializer, IDebugHelper debugHelper, ISpriteLoader spriteLoader, ICardRepository cardRepository)
+    public CardLoader(ILogger<CardLoader> logger, IJsonDeserializer jsonDeserializer, IDebugHelper debugHelper,
+        ISpriteLoader spriteLoader, ICardRepository cardRepository)
     {
         Logger = logger;
         _jsonDeserializer = jsonDeserializer;
@@ -71,13 +72,13 @@ public sealed class CardLoader : ICardLoader
             try
             {
                 var soulCardData = ConvertCardTemplate(modSource, cardTemplate);
-                Logger.LogInformation($"\tAdding card {cardTemplate.Name}");
+                Logger.LogInformation($"Adding card {cardTemplate.Name}");
                 ModGenesia.ModGenesia.AddCustomStatCard(cardTemplate.Name, soulCardData);
                 successFullyAddedCards.Add(cardTemplate.Name, cardTemplate);
             }
             catch (Exception ex)
             {
-                Logger.LogInformation(ex, $"Error adding {cardTemplate.Name}");
+                Logger.LogInformation(ex, $"Error adding {cardTemplate.Name}: {ex}");
             }
         }
 
@@ -92,25 +93,25 @@ public sealed class CardLoader : ICardLoader
     private void PostProcessRequirements(Dictionary<string, SoulCardScriptableObject> allCards,
         Dictionary<string, CardTemplate> addedCards)
     {
-        Logger.LogInformation($"=== Post processing requirements for {addedCards.Count} cards ===");
+        Logger.LogDebug($"=== Post processing requirements for {addedCards.Count} cards ===");
 
         var addedCardNames = addedCards.Keys;
         foreach (var cardName in addedCardNames)
         {
-            Logger.LogInformation($"Processing {cardName}");
+            Logger.LogDebug($"Processing {cardName}");
             var cardTemplate = addedCards[cardName];
             var cardScso = allCards[cardName];
 
             if (cardTemplate.RequiresAny != null)
             {
-                Logger.LogInformation($"\t{cardName} - RequiresAny");
+                Logger.LogDebug($"\t{cardName} - RequiresAny");
                 cardScso.CardRequirement = cardTemplate.RequiresAny.ToRequirementList();
                 _debugHelper.LogRequirements(cardScso.CardRequirement, "\t\t");
             }
 
             if (cardTemplate.RequiresAll != null)
             {
-                Logger.LogInformation($"\t{cardName} - RequiresAll");
+                Logger.LogDebug($"\t{cardName} - RequiresAll");
                 cardScso.HardCardRequirement = cardTemplate.RequiresAll.ToRequirementList();
                 _debugHelper.LogRequirements(cardScso.HardCardRequirement, "\t\t");
             }
@@ -120,12 +121,12 @@ public sealed class CardLoader : ICardLoader
     private void PostProcessRemovals(Dictionary<string, SoulCardScriptableObject> allCards,
         Dictionary<string, CardTemplate> addedCards)
     {
-        Logger.LogInformation($"=== Post processing removals for {addedCards.Count} cards ===");
+        Logger.LogDebug($"=== Post processing removals for {addedCards.Count} cards ===");
 
         var addedCardNames = addedCards.Keys;
         foreach (var cardName in addedCardNames)
         {
-            Logger.LogInformation($"Processing {cardName}");
+            Logger.LogDebug($"Processing {cardName}");
             var cardTemplate = addedCards[cardName];
             var cardScso = allCards[cardName];
 
@@ -134,13 +135,12 @@ public sealed class CardLoader : ICardLoader
 
             if (cardsToRemove.Count > 0)
             {
-                Logger.LogInformation($"\tRemoves {cardsToRemove.Count} cards:");
+                Logger.LogDebug($"\tRemoves {cardsToRemove.Count} cards:");
                 foreach (var cardToRemove in cardsToRemove)
                 {
-                    Logger.LogInformation($"\t\t{cardToRemove.name}");
+                    Logger.LogDebug($"\t\t{cardToRemove.name}");
                 }
             }
-
 
             cardScso.CardToRemove = cardsToRemove.ToIl2CppReferenceArray();
         }
@@ -149,7 +149,7 @@ public sealed class CardLoader : ICardLoader
     private void PostProcessBanishes(Dictionary<string, SoulCardScriptableObject> allCards,
         Dictionary<string, CardTemplate> addedCards)
     {
-        Logger.LogInformation($"=== Post processing banishes for {addedCards.Count} cards ===");
+        Logger.LogDebug($"=== Post processing banishes for {addedCards.Count} cards ===");
 
         var addedCardNames = addedCards.Keys;
         var statToCardMap = _cardRepository.GetAllCards()
@@ -162,35 +162,31 @@ public sealed class CardLoader : ICardLoader
 
         foreach (var cardName in addedCardNames)
         {
-            Logger.LogInformation($"Processing {cardName}");
+            Logger.LogDebug($"Processing {cardName}");
             var cardTemplate = addedCards[cardName];
             var cardScso = allCards[cardName];
 
             if (cardTemplate == null || cardScso == null)
             {
-                Logger.LogInformation($"\tTemplate and SCSO are null! bailing!");
+                Logger.LogDebug($"\tTemplate and SCSO are null! bailing!");
                 continue;
             }
 
             var explicitlyBanishedCards = GetCardsForIdentifiers(allCards, cardTemplate.BanishesCardsByName);
-
-
+            Logger.LogDebug($"\tExplicitly banished cards: {explicitlyBanishedCards.Count}");
+            foreach (var card in explicitlyBanishedCards)
             {
-                Logger.LogInformation($"\tExplicitly banished cards: {explicitlyBanishedCards.Count}");
-                foreach (var card in explicitlyBanishedCards)
-                {
-                    Logger.LogInformation($"\t\t{card.name}");
-                }
+                Logger.LogDebug($"\t\t{card.name}");
             }
 
             var banishedCardsByStat =
                 GetCardsWithStatModifiers(statToCardMap, cardTemplate.BanishesCardsWithStatsOfType);
 
             {
-                Logger.LogInformation($"\tBanished cards by stat: {banishedCardsByStat.Count}");
+                Logger.LogDebug($"\tBanished cards by stat: {banishedCardsByStat.Count}");
                 foreach (var card in banishedCardsByStat)
                 {
-                    Logger.LogInformation($"\t\t{card.name}");
+                    Logger.LogDebug($"\t\t{card.name}");
                 }
             }
 
@@ -203,17 +199,14 @@ public sealed class CardLoader : ICardLoader
             var removedCards = finalList.RemoveAll(card => card.name == cardName);
             if (removedCards > 0)
             {
-                Logger.LogInformation(
+                Logger.LogDebug(
                     $"\tRemoved {cardName} from the list of banished cards! We don't want to banish ourselves, do we?");
             }
 
-
+            Logger.LogDebug($"\tFinal list of banished cards: {finalList.Count}");
+            foreach (var banishedCard in finalList)
             {
-                Logger.LogInformation($"\tFinal list of banished cards: {finalList.Count}");
-                foreach (var banishedCard in finalList)
-                {
-                    Logger.LogInformation($"\t\t{banishedCard.name}");
-                }
+                Logger.LogDebug($"\t\t{banishedCard.name}");
             }
 
             cardScso.CardExclusion = finalList.ToIl2CppReferenceArray();
@@ -259,7 +252,7 @@ public sealed class CardLoader : ICardLoader
 
     private SoulCardCreationData ConvertCardTemplate(string modSource, CardTemplate cardTemplate)
     {
-        Logger.LogInformation($"Converting {cardTemplate.Name}");
+        Logger.LogDebug($"Converting {cardTemplate.Name}");
         var soulCardData = new SoulCardCreationData();
 
         soulCardData.ModSource = modSource;
@@ -268,8 +261,14 @@ public sealed class CardLoader : ICardLoader
 
         var sprite = _spriteLoader.LoadSprite(texturePath);
 
-        Logger.LogInformation($"\tSprite loaded: {sprite != null}");
-        soulCardData.Texture = sprite;
+        if (sprite)
+        {
+            soulCardData.Texture = sprite;
+        }
+        else
+        {
+            Logger.LogError($"Unable to load sprite from {texturePath}");
+        }
 
         soulCardData.Rarity = (CardRarity)(int)cardTemplate.Rarity;
 
