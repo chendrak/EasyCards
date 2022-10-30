@@ -45,7 +45,7 @@ public sealed class CardLoader : ICardLoader
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "Unable to load cards from file {jsonFile}", jsonFile);
+                Logger.LogError(ex, "Unable to load cards from file {jsonFile}: {ex}", jsonFile, ex);
             }
         }
     }
