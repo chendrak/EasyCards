@@ -33,12 +33,12 @@ public static class CardTemplateExtensions
             return statsModifier;
         }
 
-        EasyCards.Instance.Log.LogWarning($"{template.RequirementType} is not a valid requirement type! Values values are: {System.Enum.GetNames(typeof(RequirementTemplate))}");
+        EasyCards.Instance.Log.LogWarning($"{template.RequirementType} is not a valid requirement type! Valid options are: [{EnumToStringHelper.NamesToString(typeof(StatRequirementType))}]");
         return null;
     }
     public static StatModifier ToStatModifier(this StatRequirement template)
     {
-        if (Enum.TryParse<StatRequirementType>(template.Name, true, out _))
+        if (Enum.TryParse<StatsType>(template.Name, true, out _))
         {
             var statModifier = new StatModifier();
 
@@ -54,7 +54,7 @@ public static class CardTemplateExtensions
             return statModifier;
         }
 
-        EasyCards.Instance.Log.LogWarning($"{template.Name} is not valid a valid stat name!");
+        EasyCards.Instance.Log.LogWarning($"{template.Name} is not a valid stat name! Valid options are: [{EnumToStringHelper.NamesToString(typeof(StatsType))}]");
         return null;
     }
 
