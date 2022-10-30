@@ -209,7 +209,7 @@ public sealed class CardLoader : ICardLoader
                 Logger.LogDebug($"\t\t{banishedCard.name}");
             }
 
-            cardScso.Exclusions = finalList.ToIl2CppReferenceArray();
+            cardScso.CardExclusion = finalList.ToIl2CppReferenceArray();
         }
     }
 
