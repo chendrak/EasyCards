@@ -27,6 +27,12 @@
         <!-- Content to copy -->
         <Content Include="../DataToCopy/**/*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="ModManager.RogueGenesiaMod">
+        <HintPath>Libraries\ModManager.RogueGenesiaMod.dll</HintPath>
+      </Reference>
+    </ItemGroup>
   
     <Target Name="PostPublishCleanup" AfterTargets="Publish">
         <ItemGroup>

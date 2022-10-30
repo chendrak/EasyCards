@@ -1,15 +1,14 @@
-using System.Collections.Concurrent;
 using BepInEx;
-using BepInEx.Unity.IL2CPP;
 using EasyCards.Bootstrap;
-using Il2CppInterop.Generator.Extensions;
+using ModManager;
 
 namespace EasyCards
 {
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
-    public class EasyCards : BasePlugin
+    public class EasyCards : RogueGenesiaMod
     {
         internal static EasyCards Instance { get; private set; }
+        private static ICardLoader CardLoader { get; set; }
 
         public override void Load()
         {
@@ -17,6 +16,13 @@ namespace EasyCards
             // As the container uses this to expose BepInEx types.
             Instance = this;
             Container.Instance.Resolve<IEasyCardsPluginLoader>().Load();
+            CardLoader = Container.Instance.Resolve<ICardLoader>();
+        }
+
+        public override string ModDescription()
+        {
+            var loadedCards = CardLoader.GetLoadedCards();
+            return $"Loaded cards: {loadedCards.Count}";
         }
     }
 }

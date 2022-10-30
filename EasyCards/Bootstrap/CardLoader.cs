@@ -32,6 +32,8 @@ public sealed class CardLoader : ICardLoader
     private readonly ISpriteLoader _spriteLoader;
     private readonly ICardRepository _cardRepository;
 
+    private readonly Dictionary<string, CardTemplate> _successFullyLoadedCards = new();
+
     public void Initialize()
     {
         var jsonFiles = Directory.GetFiles(Paths.Data, "*.json");
@@ -48,6 +50,7 @@ public sealed class CardLoader : ICardLoader
         }
     }
 
+    public Dictionary<string, CardTemplate> GetLoadedCards() => _successFullyLoadedCards;
 
     public void AddCardsFromFile(string fileName)
     {
@@ -65,8 +68,6 @@ public sealed class CardLoader : ICardLoader
 
         var modSource = templateFile.ModSource ?? MyPluginInfo.PLUGIN_NAME;
 
-        var successFullyAddedCards = new Dictionary<string, CardTemplate>();
-
         foreach (var cardTemplate in templateFile.Stats)
         {
             try
@@ -74,7 +75,7 @@ public sealed class CardLoader : ICardLoader
                 var soulCardData = ConvertCardTemplate(modSource, cardTemplate);
                 Logger.LogInformation($"Adding card {cardTemplate.Name}");
                 ModGenesia.ModGenesia.AddCustomStatCard(cardTemplate.Name, soulCardData);
-                successFullyAddedCards.Add(cardTemplate.Name, cardTemplate);
+                _successFullyLoadedCards.Add(cardTemplate.Name, cardTemplate);
             }
             catch (Exception ex)
             {
@@ -84,10 +85,10 @@ public sealed class CardLoader : ICardLoader
 
         var allCards = _cardRepository.GetAllCards().ToDictionary(card => card.name);
 
-        Localization.PostProcessDescriptions(allCards, successFullyAddedCards);
-        PostProcessBanishes(allCards, successFullyAddedCards);
-        PostProcessRemovals(allCards, successFullyAddedCards);
-        PostProcessRequirements(allCards, successFullyAddedCards);
+        Localization.PostProcessDescriptions(allCards, _successFullyLoadedCards);
+        PostProcessBanishes(allCards, _successFullyLoadedCards);
+        PostProcessRemovals(allCards, _successFullyLoadedCards);
+        PostProcessRequirements(allCards, _successFullyLoadedCards);
     }
 
     private void PostProcessRequirements(Dictionary<string, SoulCardScriptableObject> allCards,
