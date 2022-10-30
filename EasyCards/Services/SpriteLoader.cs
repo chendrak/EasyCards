@@ -1,6 +1,4 @@
 using System.IO;
-using EasyCards.Validation;
-using EasyCards.Validation.Extensions;
 using Microsoft.Extensions.Logging;
 using UnityEngine;
 
@@ -8,11 +6,8 @@ namespace EasyCards.Services;
 
 public sealed class SpriteLoader : ISpriteLoader
 {
-    private readonly IValidationAggregator _validationAggregator;
-
-    public SpriteLoader(ILogger<SpriteLoader> logger, IValidationAggregator validationAggregator)
+    public SpriteLoader(ILogger<SpriteLoader> logger)
     {
-        _validationAggregator = validationAggregator;
         Logger = logger;
     }
 
@@ -20,7 +15,7 @@ public sealed class SpriteLoader : ISpriteLoader
 
     private Texture2D? LoadPNGIntoTexture(string filePath)
     {
-        Texture2D tex = null;
+        Texture2D? tex = null;
 
         if (File.Exists(filePath))
         {
@@ -38,7 +33,6 @@ public sealed class SpriteLoader : ISpriteLoader
     public Sprite? LoadSprite(string filePath)
     {
         var tex = LoadPNGIntoTexture(filePath);
-        var result = _validationAggregator.TryValidate(tex);
-        return !Logger.LogValidationErrors(result) ? null : Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
+        return tex ? Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f) : null;
     }
 }
