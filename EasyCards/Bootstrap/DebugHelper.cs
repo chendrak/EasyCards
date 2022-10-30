@@ -28,43 +28,43 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
             return;
         var allCards = _cardRepository.GetAllCards();
 
-        Logger.LogInformation("=== Listing All Cards ===");
+        Logger.LogDebug("=== Listing All Cards ===");
 
         var cardIdx = 0;
         foreach (var card in allCards)
         {
             cardIdx++;
-            Logger.LogInformation($"=== Card {cardIdx}: {card.name} ===");
+            Logger.LogDebug($"=== Card {cardIdx}: {card.name} ===");
 
             var cardsToRemove = card.CardToRemove;
-            Logger.LogInformation($"Removes cards: {cardsToRemove.Count}");
+            Logger.LogDebug($"Removes cards: {cardsToRemove.Count}");
             foreach (var cardToRemove in cardsToRemove)
             {
-                Logger.LogInformation($"\t{cardToRemove.name}");
+                Logger.LogDebug($"\t{cardToRemove.name}");
             }
 
             var cardsToBanish = card.CardExclusion;
-            Logger.LogInformation($"Banishes cards: {cardsToBanish.Count}");
+            Logger.LogDebug($"Banishes cards: {cardsToBanish.Count}");
             foreach (var cardToBanish in cardsToBanish)
             {
-                Logger.LogInformation($"\t{cardToBanish.name}");
+                Logger.LogDebug($"\t{cardToBanish.name}");
             }
 
             var requiresAnyCard = card.CardRequirement;
-            Logger.LogInformation($"Requires ANY of the following cards:");
+            Logger.LogDebug($"Requires ANY of the following cards:");
             LogRequirements(requiresAnyCard);
 
             var requiresAllCard = card.HardCardRequirement;
-            Logger.LogInformation($"Requires ALL of the following:");
+            Logger.LogDebug($"Requires ALL of the following:");
             LogRequirements(requiresAllCard);
         }
 
-        Logger.LogInformation("=== Listing All Currently Excluded Cards ===");
+        Logger.LogDebug("=== Listing All Currently Excluded Cards ===");
 
         var excludedCards = SoulCardScriptableObject.GetExcludedSoulCard();
         foreach (var excludedCard in excludedCards)
         {
-            Logger.LogInformation($"\t{excludedCard.name}");
+            Logger.LogDebug($"\t{excludedCard.name}");
         }
     }
 
@@ -77,29 +77,29 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
         var cardRequirements = requirementList.CardRequirement;
         if (cardRequirements is { Count: > 0 })
         {
-            Logger.LogInformation($"{prefix}Cards:");
+            Logger.LogDebug($"{prefix}Cards:");
             foreach (var cardRequirement in cardRequirements)
             {
-                Logger.LogInformation($"{prefix}{prefix}{cardRequirement.RequiredCard.name}, Lvl {cardRequirement.RequiredCardLevel}");
+                Logger.LogDebug($"{prefix}{prefix}{cardRequirement.RequiredCard.name}, Lvl {cardRequirement.RequiredCardLevel}");
             }
         }
 
         var statReqs = requirementList.StatsRequirement;
         if (statReqs is { Count: > 0 })
         {
-            Logger.LogInformation($"{prefix}Stats:");
+            Logger.LogDebug($"{prefix}Stats:");
             foreach (var statReq in statReqs)
             {
-                Logger.LogInformation($"{prefix}{prefix}Modifiers:");
+                Logger.LogDebug($"{prefix}{prefix}Modifiers:");
                 foreach (var statModifier in statReq.RequiredStats.ModifiersList)
                 {
-                    Logger.LogInformation(
+                    Logger.LogDebug(
                         $"{prefix}{prefix}{prefix}{statModifier.Key}: {statModifier.Value.Value} ({statModifier.Value.ModifierType})");
                 }
 
                 var typeString = statReq.RequireMore ? "Min" : "Max";
 
-                Logger.LogInformation($"{prefix}{prefix}{prefix}Type: {typeString}");
+                Logger.LogDebug($"{prefix}{prefix}{prefix}Type: {typeString}");
             }
         }
     }
