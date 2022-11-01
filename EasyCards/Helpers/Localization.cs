@@ -8,7 +8,7 @@ namespace EasyCards.Helpers;
 public static class Localization
 {
     private static ManualLogSource Logger => EasyCards.Instance.Log;
-    private static List<LocalizationData> GetTranslations(Dictionary<string, string> translations)
+    public static List<LocalizationData> GetTranslations(Dictionary<string, string> translations)
     {
         var result = new List<LocalizationData>();
 
