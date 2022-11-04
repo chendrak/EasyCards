@@ -7,7 +7,7 @@ using Il2CppInterop.Runtime.Injection;
 using Il2CppSystem.IO;
 using RogueGenesia.Data;
 
-public class RarityReroll3 : BanishesOnAcquireCard
+public class RarityReroll3 : RarityRerollsOnAcquireCard
 {
     protected override int CardValue => 3;
     protected override CardRarity Rarity => CardRarity.Normal;

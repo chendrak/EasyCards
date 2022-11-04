@@ -7,9 +7,9 @@ using Il2CppInterop.Runtime.Injection;
 using Il2CppSystem.IO;
 using RogueGenesia.Data;
 
-public class RarityReroll10 : RerollsOnAcquireCard
+public class RarityReroll10 : RarityRerollsOnAcquireCard
 {
-    protected override int NumberOfRerolls => 10;
+    protected override int CardValue => 10;
     protected override CardRarity Rarity => CardRarity.Rare;
     protected override Dictionary<string, string> LocalizedNames => new() { { "en", "Rarity Rerolls +10" }, };
     protected override string TexturePath => Path.Combine(Paths.Assets, "placeholder.png");

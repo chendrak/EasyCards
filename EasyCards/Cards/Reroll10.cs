@@ -9,7 +9,7 @@ using RogueGenesia.Data;
 
 public class Reroll10 : RerollsOnAcquireCard
 {
-    protected override int NumberOfRerolls => 10;
+    protected override int CardValue => 10;
     protected override CardRarity Rarity => CardRarity.Epic;
     protected override Dictionary<string, string> LocalizedNames => new() { { "en", "Reroll +10" }, };
     protected override string TexturePath => Path.Combine(Paths.Assets, "placeholder.png");
