@@ -39,7 +39,7 @@ public static class Localization
         return GetTranslations(cardTemplate.NameLocalization);
     }
 
-    private static List<LocalizationData> GetDescriptionTranslations(CardTemplate cardTemplate)
+    public static List<LocalizationData> GetDescriptionTranslations(CardTemplate cardTemplate)
     {
         return GetTranslations(cardTemplate.DescriptionLocalization);
     }
