@@ -22,6 +22,7 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 #### 1.0.10
 
 * Some internal code clean up
+* Preparation for more advanced features that are in the pipeline
 
 #### 1.0.9
 
