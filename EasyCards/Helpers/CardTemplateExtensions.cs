@@ -78,7 +78,7 @@ public static class CardTemplateExtensions
             isMinRequirement = template.Stats.IsMinRequirement();
         }
 
-        var requirementList = ModGenesia.ModGenesia.MakeCardRequirement(cardRequirements?.ToIl2CppReferenceArray(), statRequirements, isMinRequirement);
+        var requirementList = ModGenesia.ModGenesia.MakeCardRequirement(cardRequirements.ToIl2CppReferenceArray(), statRequirements, isMinRequirement);
 
         return requirementList;
     }
