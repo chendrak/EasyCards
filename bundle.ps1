@@ -1,6 +1,6 @@
 $modname = "EasyCards"
 
-dotnet build "$modname\$modname.csproj" --configuration Release
+dotnet publish "$modname\$modname.csproj" --configuration Release
 
 # update manifest
 $xml = [Xml] (Get-Content ".\$modname\$modname.csproj")
@@ -17,7 +17,7 @@ $manifest.version_number = $modversion
 
 $manifest | ConvertTo-Json | Out-File ".\Thunderstore\manifest.json"
 
-$baseOutputDir = ".\$modname\bin\Release\net6.0\"
+$baseOutputDir = ".\$modname\bin\Release\net6.0\publish"
 
 New-Item -ItemType Directory ".\Thunderstore\$modname\" -Force
 New-Item -ItemType Directory "$baseOutputDir\Data\" -Force
