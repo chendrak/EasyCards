@@ -19,6 +19,10 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.0.11
+
+* Re-add missing dll - Thanks @PlushPaws for reporting
+
 #### 1.0.10
 
 * Some internal code clean up
