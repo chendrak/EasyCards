@@ -36,7 +36,7 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
             cardIdx++;
             Logger.LogDebug($"=== Card {cardIdx}: {card.name} ===");
 
-            var cardsToRemove = card.CardToRemove;
+            var cardsToRemove = card.CardRemoved;
             Logger.LogDebug($"Removes cards: {cardsToRemove.Count}");
             foreach (var cardToRemove in cardsToRemove)
             {
