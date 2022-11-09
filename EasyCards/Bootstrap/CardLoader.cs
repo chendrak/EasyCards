@@ -81,6 +81,9 @@ public sealed class CardLoader : ICardLoader
                 Logger.LogInformation(ex, $"Error adding {cardTemplate.Name}: {ex}");
             }
         }
+
+        var allCards = _cardRepository.GetAllCards().ToDictionary(card => card.name);
+        PostProcessRequirements(allCards, _successFullyLoadedCards);
     }
 
     private SoulCardCreationData ConvertCardTemplate(string modSource, CardTemplate cardTemplate)
@@ -147,6 +150,34 @@ public sealed class CardLoader : ICardLoader
         soulCardData.CardHardRequirement = cardTemplate.RequiresAll?.ToRequirementList();
 
         return soulCardData;
+    }
+
+        private void PostProcessRequirements(Dictionary<string, SoulCardScriptableObject> allCards,
+        Dictionary<string, CardTemplate> addedCards)
+    {
+        Logger.LogDebug($"=== Post processing requirements for {addedCards.Count} cards ===");
+
+        var addedCardNames = addedCards.Keys;
+        foreach (var cardName in addedCardNames)
+        {
+            Logger.LogDebug($"Processing {cardName}");
+            var cardTemplate = addedCards[cardName];
+            var cardScso = allCards[cardName];
+
+            if (cardTemplate.RequiresAny != null)
+            {
+                Logger.LogDebug($"\t{cardName} - RequiresAny");
+                cardScso.CardRequirement = cardTemplate.RequiresAny.ToRequirementList();
+                DebugHelper.LogRequirements(cardScso.CardRequirement, "\t\t");
+            }
+
+            if (cardTemplate.RequiresAll != null)
+            {
+                Logger.LogDebug($"\t{cardName} - RequiresAll");
+                cardScso.HardCardRequirement = cardTemplate.RequiresAll.ToRequirementList();
+                DebugHelper.LogRequirements(cardScso.HardCardRequirement, "\t\t");
+            }
+        }
     }
 
     private StatsType[] ConvertStringsToStatsTypes(List<string> statNames)
