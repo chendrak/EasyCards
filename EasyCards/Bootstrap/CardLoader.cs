@@ -160,8 +160,8 @@ public sealed class CardLoader : ICardLoader
         return soulCardData;
     }
 
-        private void PostProcessRequirements(Dictionary<string, SoulCardScriptableObject> allCards,
-        Dictionary<string, CardTemplate> addedCards)
+    private void PostProcessRequirements(Dictionary<string, SoulCardScriptableObject> allCards,
+    Dictionary<string, CardTemplate> addedCards)
     {
         // Logger.LogDebug($"=== Post processing requirements for {addedCards.Count} cards ===");
 
