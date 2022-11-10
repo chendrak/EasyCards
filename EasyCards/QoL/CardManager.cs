@@ -86,8 +86,8 @@ public static class CardManager
         }
         else
         {
-            var isSoftRequirementFulfilled = card.CardRequirement.IsRequirementFullfilled(false);
-            var isHardRequirementFulfilled = card.HardCardRequirement.IsRequirementFullfilled(true);
+            var isSoftRequirementFulfilled = card.CardRequirement?.IsRequirementFullfilled(false) ?? true;
+            var isHardRequirementFulfilled = card.HardCardRequirement?.IsRequirementFullfilled(true) ?? true;
 
             if (!isSoftRequirementFulfilled && !isHardRequirementFulfilled)
             {
@@ -160,8 +160,8 @@ public static class CardManager
             if (ExcludedCards.ContainsKey(card.name)) continue;
             if (BanishedCards.ContainsKey(card.name)) continue;
 
-            var isSoftRequirementFulfilled = card.CardRequirement.IsRequirementFullfilled(false);
-            var isHardRequirementFulfilled = card.HardCardRequirement.IsRequirementFullfilled(true);
+            var isSoftRequirementFulfilled = card.CardRequirement?.IsRequirementFullfilled(false) ?? true;
+            var isHardRequirementFulfilled = card.HardCardRequirement?.IsRequirementFullfilled(true) ?? true;
 
             if (CardsAvailableToThePlayer.ContainsKey(card.name))
             {
