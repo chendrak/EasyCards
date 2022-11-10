@@ -5,24 +5,26 @@ using UnityEngine.InputSystem;
 namespace EasyCards.Bootstrap;
 
 using BepInEx.Logging;
+using Logging;
 
 public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
 {
-    private readonly ICardRepository _cardRepository;
-    private static ManualLogSource Logger = EasyCards.Instance.Log;
+    private readonly ILoggerConfiguration loggerConfiguration;
+    private readonly ICardRepository cardRepository;
+    private readonly ManualLogSource Logger = EasyCards.Instance.Log;
 
-    public DebugHelper(ICardRepository cardRepository)
+    public DebugHelper(ILoggerConfiguration loggerConfiguration, ICardRepository cardRepository)
     {
-        _cardRepository = cardRepository;
+        this.loggerConfiguration = loggerConfiguration;
+        this.cardRepository = cardRepository;
         Logger = EasyCards.Instance.Log;
     }
-
 
     public void Initialize()
     {
     }
 
-    public void LogCard(SoulCardScriptableObject card)
+    private void LogCard(SoulCardScriptableObject card)
     {
         Logger.LogDebug($"=== Card: {card.name} / Localized Name: {card.GetLocalizedName()} ===");
 
@@ -72,8 +74,10 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
 
     private void OnDebugLogKeyPressed()
     {
+        if (!this.loggerConfiguration.IsLoggerEnabled()) return;
+
         Logger.LogDebug("OnDebugLogKeyPressed");
-        var allCards = _cardRepository.GetAllCards();
+        var allCards = this.cardRepository.GetAllCards();
 
         Logger.LogDebug($"=== Listing All Cards ({allCards.Length}) ===");
 
@@ -112,8 +116,10 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
 
 
     public bool Enabled => true;
-    public static void LogRequirements(SCSORequirementList requirementList, string prefix = "\t")
+    public void LogRequirements(SCSORequirementList requirementList, string prefix = "\t")
     {
+        if (!this.loggerConfiguration.IsLoggerEnabled()) return;
+
         if (requirementList == null)
             return;
 
