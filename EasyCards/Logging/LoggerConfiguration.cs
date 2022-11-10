@@ -10,10 +10,12 @@ public sealed class LoggerConfiguration : ILoggerConfiguration
     public LoggerConfiguration(ConfigFile configFile)
     {
         _logCardDebuggingConfigEntry = configFile.Bind("Debug", "LogCards", false,
-            "Logs details about the added cards at the end of initialization");
+            "Allows for card details to be logged");
     }
 
-    public bool IsLoggerEnabled(string category) => true;
+    public bool IsLoggerEnabled() => this._logCardDebuggingConfigEntry.Value;
+
+    public bool IsLoggerEnabled(string category) => this.IsLoggerEnabled();
 
     public bool IsLogLevelEnabled(string category, LogLevel logLevel) => IsLoggerEnabled(category) && (logLevel > LogLevel.Debug || _logCardDebuggingConfigEntry.Value);
 }

@@ -1,76 +1,125 @@
 using EasyCards.Services;
-using Microsoft.Extensions.Logging;
 using RogueGenesia.Data;
 using UnityEngine.InputSystem;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace EasyCards.Bootstrap;
 
+using BepInEx.Logging;
+using Logging;
+
 public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
 {
-    private readonly ICardRepository _cardRepository;
+    private readonly ILoggerConfiguration loggerConfiguration;
+    private readonly ICardRepository cardRepository;
+    private readonly ManualLogSource Logger = EasyCards.Instance.Log;
 
-    public DebugHelper(ILogger<DebugHelper> logger, ICardRepository cardRepository)
+    public DebugHelper(ILoggerConfiguration loggerConfiguration, ICardRepository cardRepository)
     {
-        _cardRepository = cardRepository;
-        Logger = logger;
+        this.loggerConfiguration = loggerConfiguration;
+        this.cardRepository = cardRepository;
+        Logger = EasyCards.Instance.Log;
     }
-
-    private ILogger<DebugHelper> Logger { get; }
 
     public void Initialize()
     {
     }
 
-    private void OnDebugLogKeyPressed()
+    private void LogCard(SoulCardScriptableObject card)
     {
-        if (!Logger.IsEnabled(LogLevel.Debug))
-            return;
-        var allCards = _cardRepository.GetAllCards();
+        Logger.LogDebug($"=== Card: {card.name} / Localized Name: {card.GetLocalizedName()} ===");
 
-        Logger.LogDebug("=== Listing All Cards ===");
-
-        var cardIdx = 0;
-        foreach (var card in allCards)
+        var cardsToRemove = card.CardRemoved;
+        Logger.LogDebug($"Removes cards: {cardsToRemove.Count}");
+        foreach (var cardToRemove in cardsToRemove)
         {
-            cardIdx++;
-            Logger.LogDebug($"=== Card {cardIdx}: {card.name} ===");
-
-            var cardsToRemove = card.CardRemoved;
-            Logger.LogDebug($"Removes cards: {cardsToRemove.Count}");
-            foreach (var cardToRemove in cardsToRemove)
-            {
-                Logger.LogDebug($"\t{cardToRemove.name}");
-            }
-
-            var cardsToBanish = card.CardExclusion;
-            Logger.LogDebug($"Banishes cards: {cardsToBanish.Count}");
-            foreach (var cardToBanish in cardsToBanish)
-            {
-                Logger.LogDebug($"\t{cardToBanish.name}");
-            }
-
-            var requiresAnyCard = card.CardRequirement;
-            Logger.LogDebug($"Requires ANY of the following cards:");
-            LogRequirements(requiresAnyCard);
-
-            var requiresAllCard = card.HardCardRequirement;
-            Logger.LogDebug($"Requires ALL of the following:");
-            LogRequirements(requiresAllCard);
+            Logger.LogDebug($"\t{cardToRemove.name}");
         }
 
-        Logger.LogDebug("=== Listing All Currently Excluded Cards ===");
+        var cardsToBanish = card.CardExclusion;
+        Logger.LogDebug($"Banishes cards: {cardsToBanish.Count}");
+        foreach (var cardToBanish in cardsToBanish)
+        {
+            Logger.LogDebug($"\t{cardToBanish.name}");
+        }
+
+        var CardExclusionString = card.CardExclusionString;
+        Logger.LogDebug($"CardExclusionString: {CardExclusionString.Count}");
+        foreach (var cardRef in CardExclusionString)
+        {
+            Logger.LogDebug($"\t{cardRef}");
+        }
+
+        var CardToRemoveString = card.CardToRemoveString;
+        Logger.LogDebug($"CardToRemoveString: {CardToRemoveString.Count}");
+        foreach (var cardRef in CardToRemoveString)
+        {
+            Logger.LogDebug($"\t{cardRef}");
+        }
+
+        var CardWithStatsToBan = card.CardWithStatsToBan;
+        Logger.LogDebug($"CardWithStatsToBan: {CardWithStatsToBan.Count}");
+        foreach (var cardRef in CardWithStatsToBan)
+        {
+            Logger.LogDebug($"\t{cardRef}");
+        }
+
+        var requiresAnyCard = card.CardRequirement;
+        Logger.LogDebug($"Requires ANY of the following cards:");
+        LogRequirements(requiresAnyCard);
+
+        var requiresAllCard = card.HardCardRequirement;
+        Logger.LogDebug($"Requires ALL of the following:");
+        LogRequirements(requiresAllCard);
+    }
+
+    private void OnDebugLogKeyPressed()
+    {
+        if (!this.loggerConfiguration.IsLoggerEnabled()) return;
+
+        Logger.LogDebug("OnDebugLogKeyPressed");
+        var allCards = this.cardRepository.GetAllCards();
+
+        Logger.LogDebug($"=== Listing All Cards ({allCards.Length}) ===");
+
+        foreach (var card in allCards)
+        {
+            LogCard(card);
+        }
 
         var excludedCards = SoulCardScriptableObject.GetExcludedSoulCard();
+
+        Logger.LogDebug($"=== Listing All Currently Excluded Cards ({excludedCards.Count}) ===");
+
         foreach (var excludedCard in excludedCards)
         {
             Logger.LogDebug($"\t{excludedCard.name}");
         }
+
+        var player = GameData.PlayerDatabase[0];
+
+        var heldSoulCards = player._soulCardList;
+        Logger.LogDebug($"=== Listing All Currently Held Soul Cards [{heldSoulCards.Count}] ===");
+
+        foreach (var heldSoulCard in heldSoulCards)
+        {
+            Logger.LogDebug($"\t{heldSoulCard._name}");
+        }
+
+        var heldSoulCardSoList = player._soulCardSOList;
+        Logger.LogDebug($"=== Listing All Currently Held Soul Card Scriptable Objects [{heldSoulCardSoList.Count}] ===");
+
+        foreach (var heldSoulCard in heldSoulCardSoList)
+        {
+            Logger.LogDebug($"\t{heldSoulCard.name}");
+        }
     }
 
-    public bool Enabled => Logger.IsEnabled(LogLevel.Debug);
+
+    public bool Enabled => true;
     public void LogRequirements(SCSORequirementList requirementList, string prefix = "\t")
     {
+        if (!this.loggerConfiguration.IsLoggerEnabled()) return;
+
         if (requirementList == null)
             return;
 

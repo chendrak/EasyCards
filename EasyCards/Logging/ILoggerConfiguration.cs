@@ -4,6 +4,7 @@ namespace EasyCards.Logging;
 
 public interface ILoggerConfiguration
 {
+    bool IsLoggerEnabled();
     bool IsLoggerEnabled(string category);
     bool IsLogLevelEnabled(string category, LogLevel logLevel);
 }
