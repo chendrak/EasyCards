@@ -58,11 +58,13 @@ public static class CardManager
     {
         LatestPlayerStats = stats;
 
+        AllCards = new List<SoulCardScriptableObject>();
         foreach (var card in cards)
         {
             AddCard(card);
         }
 
+        LogState($"Initialize()");
         OnPlayerStatsUpdated(stats);
     }
 
@@ -80,6 +82,16 @@ public static class CardManager
             if (card.SoulCardType == CardType.Weapon)
             {
                 WeaponsAvailableToThePlayer[card.name] = card;
+            }
+        }
+        else
+        {
+            var isSoftRequirementFulfilled = card.CardRequirement.IsRequirementFullfilled(false);
+            var isHardRequirementFulfilled = card.HardCardRequirement.IsRequirementFullfilled(true);
+
+            if (!isSoftRequirementFulfilled && !isHardRequirementFulfilled)
+            {
+                ExcludedCards[card.name] = card;
             }
         }
 
@@ -105,6 +117,8 @@ public static class CardManager
     {
         BanishedCards[card.name] = card;
         CardsAvailableToThePlayer.Remove(card.name);
+
+        LogState($"OnCardBanished({card.name})");
     }
 
     public static void OnCardSelected(SoulCardScriptableObject card)
@@ -134,6 +148,8 @@ public static class CardManager
                 }
             }
         }
+
+        LogState($"OnCardSelected({card.name})");
     }
 
     public static void OnPlayerStatsUpdated(PlayerStats stats)
@@ -164,10 +180,13 @@ public static class CardManager
                 if (card.IsWeapon()) WeaponsAvailableToThePlayer[card.name] = card;
             }
         }
+
+        LogState("OnPlayerStatsUpdated");
     }
 
-    private static void LogState()
+    private static void LogState(string source)
     {
+        Log.LogInfo($"Logging stats from {source}");
         var pd = GameData.PlayerDatabase[0];
         Log.LogInfo($"=== Held cards - CardManager: {CurrentlyHeldCards.Count} - Game: {pd._soulCardSOList.Count}");
         if (CurrentlyHeldCards.Count != pd._soulCardList.Count)
@@ -179,9 +198,9 @@ public static class CardManager
                 Log.LogInfo(cardName);
             }
             Log.LogInfo($"Game:");
-            foreach (var cardName in pd._soulCardSOList)
+            foreach (var card in pd._soulCardSOList)
             {
-                Log.LogInfo(cardName);
+                Log.LogInfo(card.name);
             }
         }
 
@@ -196,9 +215,9 @@ public static class CardManager
                 Log.LogInfo(cardName);
             }
             Log.LogInfo($"Game:");
-            foreach (var cardName in excludedCards)
+            foreach (var card in excludedCards)
             {
-                Log.LogInfo(cardName);
+                Log.LogInfo(card.name);
             }
         }
 
@@ -213,9 +232,9 @@ public static class CardManager
                 Log.LogInfo(cardName);
             }
             Log.LogInfo($"Game:");
-            foreach (var cardName in banishedCards)
+            foreach (var card in banishedCards)
             {
-                Log.LogInfo(cardName);
+                Log.LogInfo(card.name);
             }
         }
     }
