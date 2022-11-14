@@ -11,6 +11,7 @@ using RogueGenesia.Data;
 namespace EasyCards.Bootstrap;
 
 using BepInEx.Logging;
+using Extensions;
 using Logging;
 
 public sealed class CardLoader : ICardLoader
@@ -87,6 +88,7 @@ public sealed class CardLoader : ICardLoader
         }
 
         var allCards = _cardRepository.GetAllCards().ToDictionary(card => card.name);
+        PostProcessRemovals(allCards, _successFullyLoadedCards);
         PostProcessRequirements(allCards, _successFullyLoadedCards);
     }
 
@@ -148,16 +150,43 @@ public sealed class CardLoader : ICardLoader
         }
 
         soulCardData.CardExclusion = cardTemplate.BanishesCardsByName.ToArray();
-        soulCardData.CardToRemove = cardTemplate.RemovesCards.ToArray();
+        // soulCardData.CardToRemove = cardTemplate.RemovesCards.ToArray();
         if (cardTemplate.BanishesCardsWithStatsOfType.Count > 0)
         {
             soulCardData.CardWithStatsToBan = this.ConvertStringsToStatsTypes(cardTemplate.BanishesCardsWithStatsOfType);
         }
 
-        soulCardData.CardRequirement = cardTemplate.RequiresAny?.ToRequirementList();
-        soulCardData.CardHardRequirement = cardTemplate.RequiresAll?.ToRequirementList();
+        // soulCardData.CardRequirement = cardTemplate.RequiresAny?.ToRequirementList();
+        // soulCardData.CardHardRequirement = cardTemplate.RequiresAll?.ToRequirementList();
 
         return soulCardData;
+    }
+
+    private void PostProcessRemovals(Dictionary<string, SoulCardScriptableObject> allCards,
+        Dictionary<string, CardTemplate> addedCards)
+    {
+        Logger.LogDebug($"=== Post processing removals for {addedCards.Count} cards ===");
+
+        var addedCardNames = addedCards.Keys;
+        foreach (var cardName in addedCardNames)
+        {
+            Logger.LogDebug($"Processing {cardName}");
+            var cardTemplate = addedCards[cardName];
+            var cardScso = allCards[cardName];
+
+            var cardsToRemove = GetCardsForIdentifiers(allCards, cardTemplate.RemovesCards);
+
+            if (cardsToRemove.Count > 0)
+            {
+                Logger.LogDebug($"\tRemoves {cardsToRemove.Count} cards:");
+                foreach (var cardToRemove in cardsToRemove)
+                {
+                    Logger.LogDebug($"\t\t{cardToRemove.name}");
+                }
+            }
+
+            cardScso.CardToRemove = cardsToRemove.ToIl2CppReferenceArray();
+        }
     }
 
     private void PostProcessRequirements(Dictionary<string, SoulCardScriptableObject> allCards,
@@ -186,6 +215,23 @@ public sealed class CardLoader : ICardLoader
                 _debugHelper.LogRequirements(cardScso.HardCardRequirement, "\t\t");
             }
         }
+    }
+
+
+    private List<SoulCardScriptableObject> GetCardsForIdentifiers(
+        Dictionary<string, SoulCardScriptableObject> allCards, List<string> cardsToGet)
+    {
+        var result = new List<SoulCardScriptableObject>();
+        foreach (var cardToGet in cardsToGet)
+        {
+            var cardScso = allCards.GetValueOrDefault(cardToGet);
+            if (cardScso != null)
+            {
+                result.Add(cardScso);
+            }
+        }
+
+        return result;
     }
 
     private StatsType[] ConvertStringsToStatsTypes(List<string> statNames)

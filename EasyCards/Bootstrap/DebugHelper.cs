@@ -155,10 +155,17 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
         }
     }
 
-    public bool HandlesKey(Key key) => key == Key.L;
+    public bool HandlesKey(Key key) => key is Key.L or Key.O;
 
     public void OnInputEvent(Key key)
     {
-        OnDebugLogKeyPressed();
+        if (key == Key.L)
+        {
+            OnDebugLogKeyPressed();
+        }
+        // else if (key == Key.O)
+        // {
+        //     GameData.PlayerDatabase[0].AddSoulExp(100_000_000_000);
+        // }
     }
 }
