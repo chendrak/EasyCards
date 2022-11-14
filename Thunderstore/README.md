@@ -19,6 +19,10 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.0.14
+
+* Fix issue when loading multiple card packs. Thanks @Grand and @PlushPaws
+
 #### 1.0.13
 
 * Fixing removals... *flips table*

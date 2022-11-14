@@ -8,6 +8,6 @@ public sealed class CardRepository : ICardRepository
     private ImmutableArray<SoulCardScriptableObject>? _cardCache;
 
     public ImmutableArray<SoulCardScriptableObject> GetAllCards() =>
-        _cardCache ??= GameData.GetAllSoulBonus().ToImmutableArray();
+        _cardCache ??= GameData.GetAllCards().ToImmutableArray();
 
 }
