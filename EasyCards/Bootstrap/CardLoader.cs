@@ -52,6 +52,10 @@ public sealed class CardLoader : ICardLoader
                 Logger.LogError($"Unable to load cards from file {jsonFile}: {ex}");
             }
         }
+
+        var allCards = _cardRepository.GetAllCards().ToDictionary(card => card.name);
+        PostProcessRemovals(allCards, _successFullyLoadedCards);
+        PostProcessRequirements(allCards, _successFullyLoadedCards);
     }
 
     public Dictionary<string, CardTemplate> GetLoadedCards() => _successFullyLoadedCards;
@@ -86,10 +90,6 @@ public sealed class CardLoader : ICardLoader
                 Logger.LogError($"Error adding {cardTemplate.Name}: {ex}");
             }
         }
-
-        var allCards = _cardRepository.GetAllCards().ToDictionary(card => card.name);
-        PostProcessRemovals(allCards, _successFullyLoadedCards);
-        PostProcessRequirements(allCards, _successFullyLoadedCards);
     }
 
     private SoulCardCreationData ConvertCardTemplate(string modSource, CardTemplate cardTemplate)
