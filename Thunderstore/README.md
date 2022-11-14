@@ -19,6 +19,10 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.0.13
+
+* Fixing removals... *flips table*
+
 #### 1.0.12
 
 * Fixing requirements - Thanks @PlushPaws for reporting
@@ -98,6 +102,12 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
       // Required
       "NameLocalization": {
         "en": "My First Card"
+      },
+
+      // Translations for the your cards descriptions
+      // Optional
+      "DescriptionLocalization": {
+        "en": "My First Cards Description"
       },
 
       // For this card to show up, ANY of the below is required
