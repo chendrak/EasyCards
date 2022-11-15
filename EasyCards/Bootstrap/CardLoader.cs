@@ -13,6 +13,7 @@ namespace EasyCards.Bootstrap;
 using BepInEx.Logging;
 using Extensions;
 using Logging;
+using UnityEngine;
 
 public sealed class CardLoader : ICardLoader
 {
@@ -24,6 +25,7 @@ public sealed class CardLoader : ICardLoader
         _debugHelper = debugHelper;
         _spriteLoader = spriteLoader;
         _cardRepository = cardRepository;
+        this._placeholderSprite = spriteLoader.LoadSprite(Path.Combine(Paths.EasyCards, "placeholder.png"));
         this.loggerConfiguration = loggerConfiguration;
     }
 
@@ -35,23 +37,27 @@ public sealed class CardLoader : ICardLoader
     private readonly ISpriteLoader _spriteLoader;
     private readonly ICardRepository _cardRepository;
     private readonly ILoggerConfiguration loggerConfiguration;
+    private readonly Sprite _placeholderSprite;
 
     private readonly Dictionary<string, CardTemplate> _successFullyLoadedCards = new();
 
     public void Initialize()
     {
-        var jsonFiles = Directory.GetFiles(Paths.Data, "*.json");
-
-        // Load files using the old logic
-        foreach (var jsonFile in jsonFiles)
+        if (Directory.Exists(Paths.Data))
         {
-            try
+            var jsonFiles = Directory.GetFiles(Paths.Data, "*.json");
+
+            // Load files using the old logic
+            foreach (var jsonFile in jsonFiles)
             {
-                AddCardsFromFile(jsonFile, Paths.Assets);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"Unable to load cards from file {jsonFile}: {ex}");
+                try
+                {
+                    AddCardsFromFile(jsonFile, Paths.Assets);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError($"Unable to load cards from file {jsonFile}: {ex}");
+                }
             }
         }
 
@@ -130,7 +136,8 @@ public sealed class CardLoader : ICardLoader
         }
         else
         {
-            Logger.LogError($"Unable to load sprite from {texturePath}");
+            soulCardData.Texture = this._placeholderSprite;
+            Logger.LogError($"Unable to load sprite from {texturePath}. Assigning placeholder sprite.");
         }
 
         soulCardData.Rarity = (CardRarity)(int)cardTemplate.Rarity;

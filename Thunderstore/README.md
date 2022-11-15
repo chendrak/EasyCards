@@ -3,7 +3,20 @@
 #### Custom Cards Made Easy
 This mod allows you to easily add custom cards into the game by specifying them in `JSON` files.
 
-To add your own cards, create a new `.json` file (like `my cards.json`) and put the file into the `BepInEx\plugins\EasyCards\Data` folder.
+To add your own cards, create a new folder inside `BepInEx\plugins` and create a new `.cards.json` file (like `custompack.cards.json`) inside that folder.
+An example structure could look like this:
+
+```
+BepInEx
+  - plugins
+    - ChendraksCardPack
+      - ccp.cards.json
+      - Assets
+        - card1.png
+        - card2.png
+```
+
+EasyCards will scan for `*.cards.json` files in `BepInEx\plugins` subfolders.
 
 Then start up the game and go to `Stat -> Soul Cards`. If everything went well, your cards should show up.
 
@@ -18,6 +31,13 @@ maybe give you additional information.
 If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://discord.gg/WbrgtCaP4T) and ask there.
 
 ## Changelog
+
+#### 1.0.15
+
+* Update logic to support mod managers: EasyCards will now scan for `*.cards.json` in `BepInEx\plugins` subfolders.
+* Clean up directory structure
+* If a cards image can't be loaded, EasyCards will now assign the placeholder image by default
+* Updated this documentation with the changes
 
 #### 1.0.14
 
@@ -61,12 +81,13 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
   "ModSource": "Your Mod Name Here",
   "Stats": [
     {
-      // Internal name of your new card
+      // Internal name of your new card. This needs to be unique.
+      // Consider using a prefix for all your cards.
       // Required
-      "Name": "Card1", 
+      "Name": "CCP_Card1", 
       
       // The path to the image you want displayed on the card.
-      // This needs to be inside the `EasyCards\Assets` folder.
+      // This path is relative to where your json file is on your hard drive.
       // Note: Most of the games card assets are 32x32 pixels.
       // Required
       "TexturePath": "CustomCardPack/Card1.png",
