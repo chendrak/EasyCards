@@ -4,10 +4,10 @@
         <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>EasyCards</AssemblyName>
         <Description>Custom Cards Made Easy</Description>
-        <Version>1.0.14</Version>
+        <Version>1.0.15</Version>
         <LangVersion>latest</LangVersion>
         <RootNamespace>EasyCards</RootNamespace>
-        <PackageVersion>1.0.14</PackageVersion>
+        <PackageVersion>1.0.15</PackageVersion>
         <Nullable>enable</Nullable>
         <Authors>chendrak</Authors>
     </PropertyGroup>
@@ -50,11 +50,7 @@
         <Message Text="Deleting references and debug symbols from publish output" Importance="high" />
         <Delete Files="@(FilesToDelete)" />
     </Target>
-    <Target Name="GenerateJsonSchema" AfterTargets="Publish">
-        <Exec Command="$(ProjectDir)..\EasyCards.JsonSchemaGenerator\bin\$(Configuration)\net6.0\EasyCards.JsonSchemaGenerator $(PublishDir)Documentation\schema.json" ConsoleToMSBuild="true" />
-    </Target>
-    <Target Name="CreateDataDirectory" AfterTargets="Publish">
-        <Message Text="Creating Data directory" Importance="high" />
-        <MakeDir Directories="$(PublishDir)Data" ContinueOnError="true" />
-    </Target>
+<!--    <Target Name="GenerateJsonSchema" AfterTargets="Publish">-->
+<!--        <Exec Command="$(ProjectDir)..\EasyCards.JsonSchemaGenerator\bin\$(Configuration)\net6.0\EasyCards.JsonSchemaGenerator $(PublishDir)Documentation\schema.json" ConsoleToMSBuild="true" />-->
+<!--    </Target>-->
 </Project>

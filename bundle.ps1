@@ -19,10 +19,9 @@ $manifest | ConvertTo-Json | Out-File ".\Thunderstore\manifest.json"
 
 $baseOutputDir = ".\$modname\bin\Release\net6.0\publish"
 
-New-Item -ItemType Directory ".\Thunderstore\$modname\" -Force
-New-Item -ItemType Directory "$baseOutputDir\Data\" -Force
-Remove-Item -Path "$baseOutputDir\*.*" -Exclude "*.dll" # remove any file that is not a DLL in src folder
-Copy-Item -Path "$baseOutputDir\*.dll" -Destination ".\Thunderstore\$modname" # copy dlls to output folder
-Copy-Item -Path "$baseOutputDir\*" -Destination ".\Thunderstore\$modname" -Recurse -Force # Copy directories only
+New-Item -ItemType Directory ".\Thunderstore\plugins\" -Force
+Remove-Item -Path "$baseOutputDir\*.*" -Exclude "*.dll","*.png" # remove any file that is not a DLL in src folder
+Copy-Item -Path "$baseOutputDir\*.dll" -Destination ".\Thunderstore\plugins" # copy dlls to thunderstore folder
+Copy-Item -Path "$baseOutputDir\*" -Destination ".\Thunderstore\plugins" -Recurse -Force # Copy directories only
 Compress-Archive -Path ".\Thunderstore\*" -CompressionLevel "Optimal" -DestinationPath ".\$modname-$modversion.zip" -Force
-Remove-Item -Path ".\Thunderstore\$modname" -Recurse
+Remove-Item -Path ".\Thunderstore\plugins" -Recurse

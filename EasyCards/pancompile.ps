@@ -1,3 +1,0 @@
-gci -Recurse -Name -Include *.md|foreach{$html="DataToCopy\Documentation\"+$_.basename+".html";pandoc -f markdown -s $_.name -o $html}
-
-gci -Recurse -Name -Include *.md|foreach{$html="DataToCopy\Documentation\"+$_.basename+".html";echo $html}

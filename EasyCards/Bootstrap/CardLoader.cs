@@ -13,6 +13,7 @@ namespace EasyCards.Bootstrap;
 using BepInEx.Logging;
 using Extensions;
 using Logging;
+using UnityEngine;
 
 public sealed class CardLoader : ICardLoader
 {
@@ -24,6 +25,7 @@ public sealed class CardLoader : ICardLoader
         _debugHelper = debugHelper;
         _spriteLoader = spriteLoader;
         _cardRepository = cardRepository;
+        this._placeholderSprite = spriteLoader.LoadSprite(Path.Combine(Paths.EasyCards, "placeholder.png"));
         this.loggerConfiguration = loggerConfiguration;
     }
 
@@ -35,17 +37,38 @@ public sealed class CardLoader : ICardLoader
     private readonly ISpriteLoader _spriteLoader;
     private readonly ICardRepository _cardRepository;
     private readonly ILoggerConfiguration loggerConfiguration;
+    private readonly Sprite _placeholderSprite;
 
     private readonly Dictionary<string, CardTemplate> _successFullyLoadedCards = new();
 
     public void Initialize()
     {
-        var jsonFiles = Directory.GetFiles(Paths.Data, "*.json");
-        foreach (var jsonFile in jsonFiles)
+        if (Directory.Exists(Paths.Data))
+        {
+            var jsonFiles = Directory.GetFiles(Paths.Data, "*.json");
+
+            // Load files using the old logic
+            foreach (var jsonFile in jsonFiles)
+            {
+                try
+                {
+                    AddCardsFromFile(jsonFile, Paths.Assets);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError($"Unable to load cards from file {jsonFile}: {ex}");
+                }
+            }
+        }
+
+        // Scan for *.cards.json files in plugins subfolders
+        var cardJsonFiles = Directory.GetFiles(Paths.Plugins, "*.cards.json", SearchOption.AllDirectories);
+        foreach (var jsonFile in cardJsonFiles)
         {
             try
             {
-                AddCardsFromFile(jsonFile);
+                var assetPath = Path.GetDirectoryName(jsonFile);
+                AddCardsFromFile(jsonFile, assetPath!);
             }
             catch (Exception ex)
             {
@@ -60,7 +83,7 @@ public sealed class CardLoader : ICardLoader
 
     public Dictionary<string, CardTemplate> GetLoadedCards() => _successFullyLoadedCards;
 
-    public void AddCardsFromFile(string fileName)
+    public void AddCardsFromFile(string fileName, string assetBasePath)
     {
         if (!File.Exists(fileName))
         {
@@ -80,7 +103,7 @@ public sealed class CardLoader : ICardLoader
         {
             try
             {
-                var soulCardData = ConvertCardTemplate(modSource, cardTemplate);
+                var soulCardData = this.ConvertCardTemplate(cardTemplate, modSource, assetBasePath);
                 Logger.LogInfo($"Adding card {cardTemplate.Name}");
                 ModGenesia.ModGenesia.AddCustomStatCard(cardTemplate.Name, soulCardData);
                 _successFullyLoadedCards.Add(cardTemplate.Name, cardTemplate);
@@ -92,7 +115,7 @@ public sealed class CardLoader : ICardLoader
         }
     }
 
-    private SoulCardCreationData ConvertCardTemplate(string modSource, CardTemplate cardTemplate)
+    private SoulCardCreationData ConvertCardTemplate(CardTemplate cardTemplate, string modSource, string assetBasePath)
     {
         if (loggerConfiguration.IsLoggerEnabled())
         {
@@ -103,7 +126,7 @@ public sealed class CardLoader : ICardLoader
 
         soulCardData.ModSource = modSource;
 
-        var texturePath = Path.Combine(Paths.Assets, cardTemplate.TexturePath);
+        var texturePath = Path.Combine(assetBasePath, cardTemplate.TexturePath);
 
         var sprite = _spriteLoader.LoadSprite(texturePath);
 
@@ -113,7 +136,8 @@ public sealed class CardLoader : ICardLoader
         }
         else
         {
-            Logger.LogError($"Unable to load sprite from {texturePath}");
+            soulCardData.Texture = this._placeholderSprite;
+            Logger.LogError($"Unable to load sprite from {texturePath}. Assigning placeholder sprite.");
         }
 
         soulCardData.Rarity = (CardRarity)(int)cardTemplate.Rarity;
