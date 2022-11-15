@@ -41,11 +41,28 @@ public sealed class CardLoader : ICardLoader
     public void Initialize()
     {
         var jsonFiles = Directory.GetFiles(Paths.Data, "*.json");
+
+        // Load files using the old logic
         foreach (var jsonFile in jsonFiles)
         {
             try
             {
-                AddCardsFromFile(jsonFile);
+                AddCardsFromFile(jsonFile, Paths.Assets);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"Unable to load cards from file {jsonFile}: {ex}");
+            }
+        }
+
+        // Scan for *.cards.json files in plugins subfolders
+        var cardJsonFiles = Directory.GetFiles(Paths.Plugins, "*.cards.json", SearchOption.AllDirectories);
+        foreach (var jsonFile in cardJsonFiles)
+        {
+            try
+            {
+                var assetPath = Path.GetDirectoryName(jsonFile);
+                AddCardsFromFile(jsonFile, assetPath!);
             }
             catch (Exception ex)
             {
@@ -60,7 +77,7 @@ public sealed class CardLoader : ICardLoader
 
     public Dictionary<string, CardTemplate> GetLoadedCards() => _successFullyLoadedCards;
 
-    public void AddCardsFromFile(string fileName)
+    public void AddCardsFromFile(string fileName, string assetBasePath)
     {
         if (!File.Exists(fileName))
         {
@@ -80,7 +97,7 @@ public sealed class CardLoader : ICardLoader
         {
             try
             {
-                var soulCardData = ConvertCardTemplate(modSource, cardTemplate);
+                var soulCardData = this.ConvertCardTemplate(cardTemplate, modSource, assetBasePath);
                 Logger.LogInfo($"Adding card {cardTemplate.Name}");
                 ModGenesia.ModGenesia.AddCustomStatCard(cardTemplate.Name, soulCardData);
                 _successFullyLoadedCards.Add(cardTemplate.Name, cardTemplate);
@@ -92,7 +109,7 @@ public sealed class CardLoader : ICardLoader
         }
     }
 
-    private SoulCardCreationData ConvertCardTemplate(string modSource, CardTemplate cardTemplate)
+    private SoulCardCreationData ConvertCardTemplate(CardTemplate cardTemplate, string modSource, string assetBasePath)
     {
         if (loggerConfiguration.IsLoggerEnabled())
         {
@@ -103,7 +120,7 @@ public sealed class CardLoader : ICardLoader
 
         soulCardData.ModSource = modSource;
 
-        var texturePath = Path.Combine(Paths.Assets, cardTemplate.TexturePath);
+        var texturePath = Path.Combine(assetBasePath, cardTemplate.TexturePath);
 
         var sprite = _spriteLoader.LoadSprite(texturePath);
 
