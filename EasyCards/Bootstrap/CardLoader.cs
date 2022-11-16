@@ -182,6 +182,9 @@ public sealed class CardLoader : ICardLoader
             }
         }
 
+        soulCardData.DisableInRogMode = cardTemplate.DisabledInMode == DisabledInMode.Rogs;
+        soulCardData.DisableInSurvivorsMode = cardTemplate.DisabledInMode == DisabledInMode.Survivors;
+
         soulCardData.CardExclusion = cardTemplate.BanishesCardsByName.ToArray();
         // soulCardData.CardToRemove = cardTemplate.RemovesCards.ToArray();
         if (cardTemplate.BanishesCardsWithStatsOfType.Count > 0)

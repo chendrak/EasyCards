@@ -15,7 +15,7 @@ public class CardTemplate
     }
 
     public string Name { get; set; }
-    public string TexturePath { get; set; }
+    public string? TexturePath { get; set; }
 
     public TemplateCardRarity Rarity { get; set; }
 
@@ -32,6 +32,7 @@ public class CardTemplate
     public List<string> RemovesCards { get; set; } = new();
     public RequirementTemplate? RequiresAny { get; set; }
     public RequirementTemplate? RequiresAll { get; set; }
+    public DisabledInMode? DisabledInMode { get; set; }
 
     public override string ToString()
     {
