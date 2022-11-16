@@ -32,6 +32,12 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.0.16
+
+* Add ability to disable cards in rogs or survivors mode
+* Fix an issue that could happen if `TexturePath` wasn't set
+
+
 #### 1.0.15
 
 * Update logic to support mod managers: EasyCards will now scan for `*.cards.json` in `BepInEx\plugins` subfolders.
@@ -161,10 +167,14 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
       // This example banishes every card that modifies `DamageMitigation`
       // Optional
       "BanishesCardsWithStatsOfType": [ "DamageMitigation" ],
-      
+
       // When you select this card, remove all listed cards from your inventory 
       // Optional
-      "RemovesCards": [ "Katana", "VoidSpirit" ]
+      "RemovesCards": [ "Katana", "VoidSpirit" ],
+
+      // Allows you to disable the card in a Rogs or Survivors mode. 
+      // Optional
+      "DisabledInMode": "Rogs",
     }
   ]
 }
@@ -179,6 +189,11 @@ Possible values: `Tainted`, `Normal`, `Uncommon` , `Rare`, `Epic`, `Heroic`, `As
 Tags for your card. Think of them as grouping them.
 
 Possible values: `None`, `Order`, `Critical`, `Defence`, `Body`, `Might`, `Evolution`
+
+### DisabledInMode
+Represents the mode this card will be disabled in.
+
+Possible values: `Rogs`, `Survivors`
 
 ### Modifiers
 Specifies modifiers that the card applies to your stats.
