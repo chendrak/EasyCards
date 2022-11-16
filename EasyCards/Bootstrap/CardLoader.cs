@@ -126,19 +126,28 @@ public sealed class CardLoader : ICardLoader
 
         soulCardData.ModSource = modSource;
 
-        var texturePath = Path.Combine(assetBasePath, cardTemplate.TexturePath);
+        Sprite? sprite = null;
 
-        var sprite = _spriteLoader.LoadSprite(texturePath);
-
-        if (sprite)
+        if (cardTemplate.TexturePath != null)
         {
-            soulCardData.Texture = sprite;
+            var texturePath = Path.Combine(assetBasePath, cardTemplate.TexturePath);
+            sprite = _spriteLoader.LoadSprite(texturePath);
+            if (sprite)
+            {
+                soulCardData.Texture = sprite;
+            }
+            else
+            {
+                soulCardData.Texture = this._placeholderSprite;
+                Logger.LogError($"Unable to load sprite from {texturePath}. Assigning placeholder sprite.");
+            }
         }
         else
         {
+            Logger.LogError($"No sprite set for {cardTemplate.Name}. Assigning placeholder sprite.");
             soulCardData.Texture = this._placeholderSprite;
-            Logger.LogError($"Unable to load sprite from {texturePath}. Assigning placeholder sprite.");
         }
+
 
         soulCardData.Rarity = (CardRarity)(int)cardTemplate.Rarity;
 
@@ -172,6 +181,9 @@ public sealed class CardLoader : ICardLoader
                 soulCardData.DescriptionOverride.Add(localization);
             }
         }
+
+        soulCardData.DisableInRogMode = cardTemplate.DisabledInMode == DisabledInMode.Rogs;
+        soulCardData.DisableInSurvivorsMode = cardTemplate.DisabledInMode == DisabledInMode.Survivors;
 
         soulCardData.CardExclusion = cardTemplate.BanishesCardsByName.ToArray();
         // soulCardData.CardToRemove = cardTemplate.RemovesCards.ToArray();
