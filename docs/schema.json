@@ -29,7 +29,10 @@
           "type": "string"
         },
         "TexturePath": {
-          "type": "string"
+          "type": [
+            "null",
+            "string"
+          ]
         },
         "Rarity": {
           "$ref": "#/definitions/TemplateCardRarity"
@@ -105,6 +108,16 @@
             },
             {
               "$ref": "#/definitions/RequirementTemplate"
+            }
+          ]
+        },
+        "DisabledInMode": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/DisabledInMode"
             }
           ]
         }
@@ -312,6 +325,18 @@
           "format": "float"
         }
       }
+    },
+    "DisabledInMode": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Rogs",
+        "Survivors"
+      ],
+      "enum": [
+        "Rogs",
+        "Survivors"
+      ]
     }
   }
 }
