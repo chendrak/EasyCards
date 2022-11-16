@@ -4,10 +4,10 @@
         <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>EasyCards</AssemblyName>
         <Description>Custom Cards Made Easy</Description>
-        <Version>1.0.15</Version>
+        <Version>1.0.16</Version>
         <LangVersion>latest</LangVersion>
         <RootNamespace>EasyCards</RootNamespace>
-        <PackageVersion>1.0.15</PackageVersion>
+        <PackageVersion>1.0.16</PackageVersion>
         <Nullable>enable</Nullable>
         <Authors>chendrak</Authors>
     </PropertyGroup>
