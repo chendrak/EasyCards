@@ -6,10 +6,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="../EasyCards.EnumGenerator/EasyCards.EnumGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="../EasyCards.Common/EasyCards.Common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Il2CppInterop.Runtime" Version="1.4.0" />
     <PackageReference Include="RogueGenesia.Mod" Version="1.0.*" />
   </ItemGroup>

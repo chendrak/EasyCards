@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using BepInEx.Logging;
+using Common.Helpers;
 using Extensions;
 using Helpers;
 using ModGenesia;
@@ -38,6 +39,7 @@ public abstract class CustomSoulCard : SoulCard
         result.Texture = SpriteHelper.LoadSprite(this.TexturePath);
         result.MaxLevel = this.MaxLevel;
         result.NameOverride = Localization.GetTranslations(this.LocalizedNames).ToIl2CppList();
+        result.DescriptionOverride = Localization.GetTranslations(this.LocalizedDescriptions).ToIl2CppList();
         result.ModifyPlayerStat = false;
         return result;
     }

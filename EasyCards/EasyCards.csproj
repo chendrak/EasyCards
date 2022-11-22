@@ -21,6 +21,7 @@
 
     <ItemGroup>
         <ProjectReference Include="../EasyCards.Models/EasyCards.Models.csproj" />
+        <ProjectReference Include="../EasyCards.Models/EasyCards.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>

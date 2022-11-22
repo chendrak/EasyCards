@@ -2,16 +2,15 @@ namespace EasyCards.CardTypes;
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Effects;
 using Events;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;
 using UnityEngine;
 
-public abstract class EffectCard : CustomSoulCard
+public abstract class AbstractEffectCard : CustomSoulCard
 {
-    public EffectCard(IntPtr ptr) : base(ptr)
+    public AbstractEffectCard(IntPtr ptr) : base(ptr)
     {
         this.InitializeEffects();
     }

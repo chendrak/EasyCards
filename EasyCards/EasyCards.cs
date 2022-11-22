@@ -12,6 +12,7 @@ namespace EasyCards
     using System.Linq;
     using CardTypes;
     using Effects;
+    using Events;
     using Extensions;
     using Helpers;
 
@@ -33,6 +34,8 @@ namespace EasyCards
             CardLoader = Container.Instance.Resolve<ICardLoader>();
 
             this.AddCustomCards();
+
+            GameEvents.OnGameStartEvent += EffectHolder.ResetEffects;
         }
 
         public override string ModDescription()
@@ -43,8 +46,8 @@ namespace EasyCards
 
         public void AddCustomCards()
         {
-            this.LogCardsAndEffects();
-            this.RegisterEffects();
+            // this.LogCardsAndEffects();
+            // this.RegisterEffects();
 
             // AddCustomCard<LooseChange>();
             // AddCustomCard<GoldenPearl>();
@@ -64,7 +67,7 @@ namespace EasyCards
             // AddCustomCard<Reroll5>();
             // AddCustomCard<Reroll10>();
             // AddCustomCard<SpiritOfMidas>();
-            AddCustomCard<EffectTestCard>();
+            // AddCustomCard<EffectTestCard>();
         }
 
         private void WarmupTypeCacheIfNecessary()
@@ -134,8 +137,6 @@ namespace EasyCards
                 ctor,
                 soulCardCreationData
             );
-
-            so.DescriptionOverride = Localization.GetTranslations(card.LocalizedDescriptions).ToIl2CppList();
         }
     }
 }

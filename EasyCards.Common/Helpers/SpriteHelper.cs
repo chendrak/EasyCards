@@ -1,11 +1,11 @@
-namespace EasyCards.Helpers;
+namespace EasyCards.Common.Helpers;
 
 using System.IO;
 using UnityEngine;
 
 public static class SpriteHelper
 {
-    private static Texture2D? LoadPNGIntoTexture(string filePath)
+    public static Texture2D? LoadPNGIntoTexture(string filePath)
     {
         Texture2D? tex = null;
 

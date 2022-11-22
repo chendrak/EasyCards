@@ -8,7 +8,7 @@ using Il2CppInterop.Runtime.Injection;
 using Il2CppSystem.IO;
 using RogueGenesia.Data;
 
-public class EffectTestCard: EffectCard
+public class EffectTestCard: AbstractEffectCard
 {
     protected override float DropWeight => 9999f;
     protected override float LevelUpWeight => 9999f;
