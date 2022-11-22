@@ -53,10 +53,6 @@ public class ConfigurableEffect
                 Debug.Log($"AddGold: {amountToAdd}");
                 this.PlayerData.Gold += amountToAdd;
                 break;
-            case EffectAction.AddSoulCoin:
-                Debug.Log($"AddSoulCoin: {this.Properties.Amount}");
-                GameData.PersistantGameData.SoulCoin += this.Properties.Amount ?? 0;
-                break;
             case EffectAction.AddBanishes:
                 Debug.Log($"AddBanishes: {this.Properties.Amount}");
                 this.PlayerData.BanishLeft += (int?)this.Properties.Amount ?? 0;
@@ -101,46 +97,46 @@ public class ConfigurableEffect
 
                     if (config.Idle is { } idleCfg)
                     {
-                        var texturePath = Path.Combine(this.AssetBasePath, idleCfg.SpritePath);
+                        var texturePath = Path.Combine(this.AssetBasePath, idleCfg.TexturePath);
                         idleTexture = SpriteHelper.LoadPNGIntoTexture(texturePath);
                         if (idleTexture == null)
                         {
                             Debug.LogWarning($"Unable to load idle texture from: {texturePath}");
                         }
-                        idleFrameCount = new Vector2(idleCfg.Columns, idleCfg.Rows);
+                        idleFrameCount = new Vector2(idleCfg.FramesPerRow, idleCfg.Rows);
                     }
 
                     if (config.Run is { } runCfg)
                     {
-                        var texturePath = Path.Combine(this.AssetBasePath, runCfg.SpritePath);
+                        var texturePath = Path.Combine(this.AssetBasePath, runCfg.TexturePath);
                         runTexture = SpriteHelper.LoadPNGIntoTexture(texturePath);
                         if (runTexture == null)
                         {
                             Debug.LogWarning($"Unable to load run texture from: {texturePath}");
                         }
-                        runFrameCount = new Vector2(runCfg.Columns, runCfg.Rows);
+                        runFrameCount = new Vector2(runCfg.FramesPerRow, runCfg.Rows);
                     }
 
                     if (config.Victory is { } victoryCfg)
                     {
-                        var texturePath = Path.Combine(this.AssetBasePath, victoryCfg.SpritePath);
+                        var texturePath = Path.Combine(this.AssetBasePath, victoryCfg.TexturePath);
                         victoryTexture = SpriteHelper.LoadPNGIntoTexture(texturePath);
                         if (victoryTexture == null)
                         {
                             Debug.LogWarning($"Unable to load victory texture from: {texturePath}");
                         }
-                        victoryFrameCount = new Vector2(victoryCfg.Columns, victoryCfg.Rows);
+                        victoryFrameCount = new Vector2(victoryCfg.FramesPerRow, victoryCfg.Rows);
                     }
 
                     if (config.Death is { } deathCfg)
                     {
-                        var texturePath = Path.Combine(this.AssetBasePath, deathCfg.SpritePath);
+                        var texturePath = Path.Combine(this.AssetBasePath, deathCfg.TexturePath);
                         deathTexture = SpriteHelper.LoadPNGIntoTexture(texturePath);
                         if (deathTexture == null)
                         {
                             Debug.LogWarning($"Unable to load death texture from: {texturePath}");
                         }
-                        deathFrameCount = new Vector2(deathCfg.Columns, deathCfg.Rows);
+                        deathFrameCount = new Vector2(deathCfg.FramesPerRow, deathCfg.Rows);
                     }
 
                     ModGenesia.ReplaceRogSkin(
@@ -217,8 +213,8 @@ public class EffectProperties
 
 public struct SpriteConfiguration
 {
-    public string SpritePath;
-    public int Columns;
+    public string TexturePath;
+    public int FramesPerRow;
     public int Rows;
 }
 
@@ -260,7 +256,6 @@ public enum EffectTrigger
 public enum EffectAction
 {
     AddGold,
-    AddSoulCoin,
     AddBanishes,
     AddRerolls,
     AddRarityRerolls,

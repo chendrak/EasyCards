@@ -146,8 +146,10 @@ public class ConfigurableEffectCard : SoulCard
                     Debug.Log($"Killed Elite, applying effect: {onKillEffect}");
                     onKillEffect.Apply();
                 }
-                else if (onKillEffect.Trigger == EffectTrigger.OnKill)
+                else
                 {
+                    // Using else here makes sure the regular OnKill effect applies to ALL monsters if none of the
+                    // above match.
                     onKillEffect.Apply();
                 }
             }
