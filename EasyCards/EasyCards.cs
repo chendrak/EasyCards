@@ -80,45 +80,6 @@ namespace EasyCards
             }
         }
 
-        private void RegisterEffects()
-        {
-            Instance.Log.LogInfo($"Registering effects");
-            this.WarmupTypeCacheIfNecessary();
-            var effectTypes = this.cachedTypes
-                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(AbstractEffect)))
-                .ToArray();
-
-            Instance.Log.LogInfo($"Got {effectTypes.Length} effects");
-            foreach (var effectType in effectTypes)
-            {
-                Instance.Log.LogInfo($"Registering {effectType.Name}");
-                ClassInjector.RegisterTypeInIl2Cpp(effectType);
-            }
-        }
-
-        private void LogCardsAndEffects()
-        {
-            this.WarmupTypeCacheIfNecessary();
-            var effectTypes = this.cachedTypes
-                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(AbstractEffect)))
-                .ToList();
-
-            Instance.Log.LogInfo($"Got {effectTypes.Count} effects");
-            foreach (var effectType in effectTypes)
-            {
-                Instance.Log.LogInfo($"{effectType.FullName}");
-            }
-
-            var cardTypes = this.cachedTypes
-                .Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(CustomSoulCard))).ToList();
-
-            Instance.Log.LogInfo($"Got {cardTypes.Count} cards");
-            foreach (var cardType in cardTypes)
-            {
-                Instance.Log.LogInfo($"{cardType.FullName}");
-            }
-        }
-
         private static void AddCustomCard<T>() where T: CustomSoulCard
         {
             var classType = typeof(T);

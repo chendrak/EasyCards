@@ -21,12 +21,13 @@
 
     <ItemGroup>
         <ProjectReference Include="../EasyCards.Models/EasyCards.Models.csproj" />
-        <ProjectReference Include="../EasyCards.Models/EasyCards.Common.csproj" />
+        <ProjectReference Include="../EasyCards.Common/EasyCards.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <!-- Content to copy -->
         <Content Include="../DataToCopy/**/*" CopyToOutputDirectory="Always" CopyToPublishDirectory="Always" />
+        <Content Remove="..\DataToCopy\Assets\**" />
     </ItemGroup>
 
     <ItemGroup>
