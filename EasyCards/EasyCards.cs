@@ -13,8 +13,6 @@ namespace EasyCards
     using CardTypes;
     using Effects;
     using Events;
-    using Extensions;
-    using Helpers;
 
     [BepInDependency(DependencyGUID: "ModManager", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
@@ -33,8 +31,6 @@ namespace EasyCards
             Container.Instance.Resolve<IEasyCardsPluginLoader>().Load();
             CardLoader = Container.Instance.Resolve<ICardLoader>();
 
-            this.AddCustomCards();
-
             GameEvents.OnGameStartEvent += EffectHolder.ResetEffects;
         }
 
@@ -42,32 +38,6 @@ namespace EasyCards
         {
             var loadedCards = CardLoader.GetLoadedCards();
             return $"Loaded cards: {loadedCards.Count}";
-        }
-
-        public void AddCustomCards()
-        {
-            // this.LogCardsAndEffects();
-            // this.RegisterEffects();
-
-            // AddCustomCard<LooseChange>();
-            // AddCustomCard<GoldenPearl>();
-            // AddCustomCard<ChestOfGold>();
-            // AddCustomCard<BarrelOfGold>();
-
-            // AddCustomCard<Banish1>();
-            // AddCustomCard<Banish3>();
-            // AddCustomCard<Banish5>();
-            // AddCustomCard<Banish10>();
-            // AddCustomCard<RarityReroll1>();
-            // AddCustomCard<RarityReroll3>();
-            // AddCustomCard<RarityReroll5>();
-            // AddCustomCard<RarityReroll10>();
-            // AddCustomCard<Reroll1>();
-            // AddCustomCard<Reroll3>();
-            // AddCustomCard<Reroll5>();
-            // AddCustomCard<Reroll10>();
-            // AddCustomCard<SpiritOfMidas>();
-            // AddCustomCard<EffectTestCard>();
         }
 
         private void WarmupTypeCacheIfNecessary()
