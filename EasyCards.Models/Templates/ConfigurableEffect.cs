@@ -195,7 +195,6 @@ public class ConfigurableEffect
         this.Enabled = false;
     }
 
-    // public override string ToString() => $"{nameof(this.Name)}: {this.Name}, {nameof(this.Type)}: {this.Type}, {nameof(this.ActivationRequirement)}: {this.ActivationRequirement}, {nameof(this.Trigger)}: {this.Trigger}, {nameof(this.Action)}: {this.Action}, {nameof(this.Properties)}: {this.Properties}, {nameof(this.activationTime)}: {this.activationTime}, {nameof(this.Enabled)}: {this.Enabled}";
     public override string ToString() => this.Name;
 }
 
