@@ -10,7 +10,6 @@
         <PackageVersion>1.1.0</PackageVersion>
         <Nullable>enable</Nullable>
         <Authors>chendrak</Authors>
-      <PublishTrimmed>true</PublishTrimmed>
     </PropertyGroup>
 
     <ItemGroup>
