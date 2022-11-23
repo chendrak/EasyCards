@@ -96,9 +96,20 @@ public static class CardTemplateExtensions
     {
         var statsMod = new StatsModifier();
 
-        foreach (var modifier in cardTemplate.Modifiers)
+        // Add empty modifier so the game doesn't complain
+        if (cardTemplate.Modifiers.Count == 0)
         {
-            statsMod.ModifiersList.Add(modifier.CreateStatModifier());
+            var singMod = new SingularModifier { Value = 0.0f, ModifierType = ModifierType.Additional };
+            var statModifier = new StatModifier { Value = singMod, Key = StatsType.Damage.ToString() };
+
+            statsMod.ModifiersList.Add(statModifier);
+        }
+        else
+        {
+            foreach (var modifier in cardTemplate.Modifiers)
+            {
+                statsMod.ModifiersList.Add(modifier.CreateStatModifier());
+            }
         }
 
         return statsMod;
