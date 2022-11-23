@@ -42,7 +42,8 @@ public class ConfigurableEffect
 
     public void Apply()
     {
-        if (!this.Enabled) return;
+        if (!this.Enabled)
+            return;
 
         Debug.Log($"Applying effect: {this}");
 
@@ -71,7 +72,7 @@ public class ConfigurableEffect
                 break;
             case EffectAction.HealPercentage:
                 Debug.Log($"HealPercentage: {this.Properties.Amount}");
-                if (this.Properties.Percentage is {} percentage)
+                if (this.Properties.Percentage is { } percentage)
                 {
                     var playerMaxHealth = this.PlayerData._playerStats.MaxHealth.Value;
                     var healAmount = playerMaxHealth * (percentage / 100);
@@ -80,7 +81,7 @@ public class ConfigurableEffect
                 break;
             case EffectAction.ChangeCharacterSprites:
                 Debug.Log($"ChangeCharacterSprites");
-                if (this.Properties.CharacterSpriteConfiguration is {} config)
+                if (this.Properties.CharacterSpriteConfiguration is { } config)
                 {
                     Debug.Log($"Got config: {LoggingHelper.StructToString(config)}");
                     Texture2D? idleTexture = null;
@@ -160,7 +161,8 @@ public class ConfigurableEffect
 
     public void OnUpdate(PlayerEntity owner, float currentTime)
     {
-        if (!this.Enabled) return;
+        if (!this.Enabled)
+            return;
 
         switch (this.Type)
         {
@@ -177,7 +179,7 @@ public class ConfigurableEffect
             }
             case EffectType.Interval:
                 // Check for next trigger
-                if (this.Properties.Interval is {} interval)
+                if (this.Properties.Interval is { } interval)
                 {
                     if (currentTime >= this.activationTime + interval)
                     {

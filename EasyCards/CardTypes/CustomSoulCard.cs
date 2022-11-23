@@ -21,11 +21,11 @@ public abstract class CustomSoulCard : SoulCard
 
     protected virtual CardTag Tags => throw new NotImplementedException();
     protected virtual int MaxLevel => throw new NotImplementedException();
-    protected virtual Dictionary<string, string> LocalizedNames  => throw new NotImplementedException();
+    protected virtual Dictionary<string, string> LocalizedNames => throw new NotImplementedException();
     public virtual Dictionary<string, string> LocalizedDescriptions => throw new NotImplementedException();
     protected virtual string TexturePath => throw new NotImplementedException();
 
-    protected CustomSoulCard(IntPtr ptr) : base(ptr) {}
+    protected CustomSoulCard(IntPtr ptr) : base(ptr) { }
 
     public SoulCardCreationData GetSoulCardCreationData()
     {

@@ -134,7 +134,8 @@ public class ConfigurableEffectCard : SoulCard
             var monster = collisionDetection.LinkedMonster;
             foreach (var onKillEffect in this.OnKillEffects)
             {
-                if (!onKillEffect.Enabled) continue;
+                if (!onKillEffect.Enabled)
+                    continue;
 
                 if (onKillEffect.Trigger == EffectTrigger.OnBossKill && monster.Boss)
                 {

@@ -1,10 +1,9 @@
 using BepInEx;
 using EasyCards.Bootstrap;
-using ModManager;
-
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using ModManager;
 
 namespace EasyCards
 {
@@ -50,7 +49,7 @@ namespace EasyCards
             }
         }
 
-        private static void AddCustomCard<T>() where T: CustomSoulCard
+        private static void AddCustomCard<T>() where T : CustomSoulCard
         {
             var classType = typeof(T);
             ClassInjector.RegisterTypeInIl2Cpp(classType);
