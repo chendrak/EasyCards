@@ -32,7 +32,11 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
-#### 1.1.0-beta1
+#### 1.1.1
+
+* Revert to old packaging, since the new packaging didn't work for some people.
+
+#### 1.1.0
 
 * Add support for cards with effects.
 
