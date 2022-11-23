@@ -100,12 +100,12 @@ This effect will:
       "CharacterSpriteConfiguration": {
         "Idle": {
           "TexturePath": "PlushPaws/pikachu_idle.png",
-          "Columns": 4,
+          "FramesPerRow": 4,
           "Rows": 1,
         },
         "Run": {
           "TexturePath": "PlushPaws/pikachu_run.png",
-          "Columns": 4,
+          "FramesPerRow": 4,
           "Rows": 1,
         },
       }
