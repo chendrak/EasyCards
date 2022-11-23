@@ -71,7 +71,7 @@ public class ConfigurableEffect
                 this.PlayerData.HealPlayer(this.Properties.Amount ?? 0);
                 break;
             case EffectAction.HealPercentage:
-                Debug.Log($"HealPercentage: {this.Properties.Amount}");
+                Debug.Log($"HealPercentage: {this.Properties.Percentage}%");
                 if (this.Properties.Percentage is { } percentage)
                 {
                     var playerMaxHealth = this.PlayerData._playerStats.MaxHealth.Value;
