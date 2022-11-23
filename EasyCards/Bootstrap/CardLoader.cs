@@ -11,7 +11,12 @@ using RogueGenesia.Data;
 namespace EasyCards.Bootstrap;
 
 using BepInEx.Logging;
+using CardTypes;
+using Effects;
 using Extensions;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.Injection;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Logging;
 using UnityEngine;
 
@@ -43,6 +48,7 @@ public sealed class CardLoader : ICardLoader
 
     public void Initialize()
     {
+        RegisterCustomCardTypes();
         if (Directory.Exists(Paths.Data))
         {
             var jsonFiles = Directory.GetFiles(Paths.Data, "*.json");
@@ -81,6 +87,14 @@ public sealed class CardLoader : ICardLoader
         PostProcessRequirements(allCards, _successFullyLoadedCards);
     }
 
+    private void RegisterCustomCardTypes()
+    {
+        if (!ClassInjector.IsTypeRegisteredInIl2Cpp<ConfigurableEffectCard>())
+        {
+            ClassInjector.RegisterTypeInIl2Cpp<ConfigurableEffectCard>();
+        }
+    }
+
     public Dictionary<string, CardTemplate> GetLoadedCards() => _successFullyLoadedCards;
 
     public void AddCardsFromFile(string fileName, string assetBasePath)
@@ -111,6 +125,37 @@ public sealed class CardLoader : ICardLoader
             catch (Exception ex)
             {
                 Logger.LogError($"Error adding {cardTemplate.Name}: {ex}");
+            }
+        }
+
+        var effectCardType = typeof(ConfigurableEffectCard);
+        var ptr = IL2CPP.GetIl2CppClass(
+            "Assembly-CSharp.dll",
+            effectCardType.Namespace,
+            effectCardType.Name
+        );
+
+        var ctor = Il2CppType.TypeFromPointer(ptr).GetConstructor((Il2CppReferenceArray<Il2CppSystem.Type>)System.Array.Empty<Il2CppSystem.Type>());
+
+        foreach (var effectCardTemplate in templateFile.Effects)
+        {
+            try
+            {
+                var soulCardData = this.ConvertCardTemplate(effectCardTemplate, modSource, assetBasePath);
+                Logger.LogInfo($"Adding card {effectCardTemplate.Name}");
+                ModGenesia.ModGenesia.AddCustomCard(effectCardTemplate.Name, ctor, soulCardData);
+
+                foreach (var effect in effectCardTemplate.Effects)
+                {
+                    effect.AssetBasePath = assetBasePath;
+                    EffectHolder.AddEffect(effectCardTemplate.Name, effect);
+                }
+
+                _successFullyLoadedCards.Add(effectCardTemplate.Name, effectCardTemplate);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError($"Error adding {effectCardTemplate.Name}: {ex}");
             }
         }
     }

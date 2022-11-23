@@ -32,11 +32,14 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.0-beta1
+
+* Add support for cards with effects.
+
 #### 1.0.16
 
 * Add ability to disable cards in rogs or survivors mode
 * Fix an issue that could happen if `TexturePath` wasn't set
-
 
 #### 1.0.15
 
@@ -176,9 +179,84 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
       // Optional
       "DisabledInMode": "Rogs",
     }
-  ]
+  ],
+  "Effects": {
+      // All the same elements that available in "Stats" are available in here as well
+      "Effects": [
+          {
+              // The internal name for your effect. It's not used for anything outside of logging.
+              // If you don't provide one, it will be generated.
+              // Optional
+              "Name": "MyAwesomeEffect",
+              
+              // The type of the effect. See below for all possible values.
+              // Required
+              "Type": "OneTime",
+
+              // What is required for the effect to be enabled?
+              // Optional, defaults to None
+              "ActivationRequirement": "None",
+              
+              // The action to be taken when the effect is applied.
+              // Required
+              "Action": "HealAmount",
+              
+              // What needs to happen for the effect to apply? The effect needs to be enabled for this.
+              // Required for some Types
+              "Trigger": "OnEliteKill",
+              
+              // Allows you to configure certain aspects of an effect.
+              // Required
+              "Properties": {
+                  // The exact amount for Action.
+                  // Example: [Action = HealAmount, Amount = 10] would heal you for 10 when the effect is triggered.
+                  // Required for some Actions.
+                  "Amount": 1.0,
+
+                  // The percentage for the effects Action.
+                  // Example: [Action = HealPercentage, Percentage = 10] would heal you for 10% of your max hp when the effect is triggered.
+                  // Required for [Action = HealPercentage]
+                  "Percentage": 12,
+
+                  // The duration of the effect. The effect will be disabled after [Duration] expires.
+                  // Specified in seconds. Fractions of a second can be defined as 0.1 for 100ms.
+                  // Required for [Type = Duration]
+                  "Duration": 12,
+
+                  // Amount of time between effect activations.
+                  // Example: [Action = HealAmount, Amount = 20, Interval = 30] -> Heal you for 20 hp every 30s.
+                  // Specified in seconds. Fractions of a second can be defined as 0.1 for 100ms.
+                  // Required for [Type = Interval]
+                  "Interval": 30,
+
+                  // Allows you to change the characters' sprite
+                  "CharacterSpriteConfiguration": {
+                      // Replace the "Idle" animation
+                      "Idle": {
+                          // Path to the texture that contains the animation
+                          "TexturePath": "PlushPaws/pikachu_idle.png",
+                          // Number of frames per row
+                          "FramesPerRow": 4,
+                          // Number of rows
+                          "Rows": 1,
+                      },
+                      
+                      // Replace the "Run" animation. Contents are identical to "Idle".
+                      "Run": {},
+
+                      // Replace the "Victory" animation. Contents are identical to "Idle".
+                      "Victory": {},
+
+                      // Replace the "Death" animation. Contents are identical to "Idle".
+                      "Death": {},
+                  }
+          }
+      ],
+  }
 }
 ```
+
+## Available for all cards
 
 ### Rarity
 The rarity of the card.
@@ -271,3 +349,129 @@ That means, the above example translates to:
 `For this card to show up, the player must have AT LEAST 8999 Damage and AT LEAST 10 Corruption`.
 
 If we were to change the `RequirementType` to `Max`, it would change to `For this card to show up, the player must have at LESS THAN 8999 Damage and LESS THAN 10 Corruption`.
+
+## Effect Cards
+
+Effect cards contain configuration options that are available to all other types as well.
+
+Additionally, they can hold a list of effects. Effects can be configured as follows:
+
+### Effect
+
+#### Name
+An optional name for the effect. This is only used for debug logs and will be auto-generated if not provided. 
+
+#### Type
+Describes the type of this effect.
+
+_**Options:**_
+- `OneTime`: The effect is executed once, then disabled again
+- `Duration`: After activation, the effect is active for a certain amount of time, then disables itself. This type requires a `Trigger` in `Properties`
+- `Interval`: After activation, the effect repeats on an interval
+- `Trigger`: The effect is activated when a certain event happens
+
+#### ActivationRequirement
+What needs to happen for this effect to become active?
+
+_**Default:**_ `None`
+
+_**Options:**_
+- `None`: The effect is always active
+- `StageStart`: The effect will activate at the start of a stage in Rogs Mode. In Survival, this is the same as `None`
+- `StageEnd`: The effect will trigger at the end of a stage in Rogs Mode. Can not trigger in Survival. ***!!! NOT IMPLEMENTED YET !!!***
+- `EnemiesKilled`: The effect will activate when a certain amount of enemies was killed. ***!!! NOT IMPLEMENTED YET !!!***
+
+#### Trigger
+Describes what needs to happen for the effect to be applied.
+
+_**Options:**_
+- `OnStageStart`: Effect applied at the start of a stage in Rogs mode or immediately in Survivors mode.
+- `OnStageEnd`: Effect applies at the end of a stage in Rogs mode and never in Survivors mode. ***!!! NOT IMPLEMENTED YET !!!***
+- `OnKill`: Effect applies when any enemy is killed (that includes Elites and Bosses)
+- `OnEliteKill`: Effect applies ONLY when an elite enemy is killed.
+- `OnBossKill`: Effect applies ONLY when a boss enemy is killed.
+- `OnDash`: Effect applies when you dash
+- `OnDeath`: Effect applies when you die. **NOTE:** Attempting to heal yourself with this trigger will NOT revive you
+
+#### Action
+Describes what this effect will do
+
+_**Options:**_
+- `AddGold`: Gives you the amount of gold specified in `Properties.Amount`
+- `AddBanishes`: Gives you the amount of banishes specified in `Properties.Amount`
+- `AddRerolls`: Gives you the amount of rerolls specified in `Properties.Amount`
+- `AddRarityRerolls`: Gives you the amount of rarity rerolls specified in `Properties.Amount`
+- `HealAmount`: Heals you by the exact amount specified in `Properties.Amount`
+- `HealPercentage`: Heals you by the percentage of your max health specified in `Properties.Percentage`
+- `ChangeCharacterSprites`: Allows you to define alternate sprites for certain animations in `Properties.CharacterSpriteConfiguration`
+
+#### Properties
+Contains properties that are required for certain other aspects of an effect.
+
+```json
+"Properties": {
+  "Amount": 12000,
+  "Percentage": 95.5,
+  "Duration": 30,
+  "Interval": 30,
+  "CharacterSpriteConfiguration": { ... }
+}
+```
+
+_**Options:**_
+- `Amount`: An exact amount of something.
+  - **Type:** `Number` [1, 2.0, 1.222, etc]
+  - **Applies to actions:** `AddGold`, `AddBanishes`, `AddRerolls`, `AddRarityRerolls`, `HealAmount`
+
+
+- `Percentage`: An percentage of something.
+  - **Type:** `Number` [1, 2.0, 1.222, etc]
+  - **Applies to actions:** `HealPercentage` 
+
+
+- `Duration`: A duration in seconds.
+  - **Type:** `Number` [1, 2.0, 1.222, etc]
+  - **Applies to types:** `Duration`
+
+
+- `Interval`: An interval in seconds.
+  - **Type:** `Number` [1, 2.0, 1.222, etc]
+  - **Applies to types:** `Interval`
+
+
+- `CharacterSpriteConfiguration`: An interval in seconds.
+  - **Type:** `CharacterSpriteConfiguration` (see below)
+  - **Applies to types:** `OneTime`
+
+
+#### CharacterSpriteConfiguration
+Allows you to specify alternate animations for Rog. Each element is optional and only the ones specified are applied.
+
+```json
+"CharacterSpriteConfiguration": {
+    "Idle": {
+        "TexturePath": "PlushPaws/pikachu_idle.png",
+        "FramesPerRow": 4,
+        "Rows": 1,
+    },
+    "Run": { ... },
+    "Victory": { ... },
+    "Death": { ... },
+}
+```
+
+_**Options:**_
+- `Idle`: Allows you to replace the idle animation
+  - `TexturePath`: Path to the file that contains the frames for the animation. This is relative to the location of your `.cards.json` file.
+  - `FramesPerRow`: Number of frames per row in the texture defined above
+  - `Rows`: Number of rows on the texture
+- `Run`: Allows you to replace the run animation. Options is identical to `Idle`.
+- `Victory`: Allows you to replace the victory animation. Options is identical to `Idle`.
+- `Death`: Allows you to replace the death animation. Options is identical to `Idle`.
+
+### Limitations
+- Effects do not scale with level
+- `CharacterSpriteConfiguration` can only be used in conjunction with `OneTime` effects
+
+### Examples
+Examples for effect cards and a description of what they do can be found on [Github](https://github.com/shaacker/EasyCards/blob/master/Documentation/EffectCardExamples.md).

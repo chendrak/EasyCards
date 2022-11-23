@@ -166,6 +166,7 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
         // else if (key == Key.O)
         // {
         //     GameData.PlayerDatabase[0].AddSoulExp(100_000_000_000);
+        //     GameData.PlayerDatabase[0]._soulLevel.LevelUp();
         // }
     }
 }
