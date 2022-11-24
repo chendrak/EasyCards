@@ -32,6 +32,18 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.3
+
+* Reset character animations back to Rog after the end of a run
+* Fixed a small bug that would happen when you define a card without any modifiers
+* Fixed errors in the example effects
+
+#### 1.1.2
+
+* Moved Effects logic to stat cards and got rid of the `Effects` section
+* The `Stats` section in JSON files should now be called `StatCards`. Old files will still work.
+* Fixed a bug that would trigger boss & elite kill events on normal mobs
+
 #### 1.1.1
 
 * Revert to old packaging, since the new packaging didn't work for some people.
