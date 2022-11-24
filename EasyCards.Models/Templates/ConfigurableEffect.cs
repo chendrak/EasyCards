@@ -1,7 +1,7 @@
 namespace EasyCards.Models.Templates;
 
+using Common.Data;
 using Common.Helpers;
-using ModGenesia;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;
 using UnityEngine;
@@ -71,7 +71,7 @@ public class ConfigurableEffect
                 this.PlayerData.HealPlayer(this.Properties.Amount ?? 0);
                 break;
             case EffectAction.HealPercentage:
-                Debug.Log($"HealPercentage: {this.Properties.Amount}");
+                Debug.Log($"HealPercentage: {this.Properties.Percentage}%");
                 if (this.Properties.Percentage is { } percentage)
                 {
                     var playerMaxHealth = this.PlayerData._playerStats.MaxHealth.Value;
@@ -84,73 +84,8 @@ public class ConfigurableEffect
                 if (this.Properties.CharacterSpriteConfiguration is { } config)
                 {
                     Debug.Log($"Got config: {LoggingHelper.StructToString(config)}");
-                    Texture2D? idleTexture = null;
-                    var idleFrameCount = Vector2.zero;
-
-                    Texture2D? runTexture = null;
-                    var runFrameCount = Vector2.zero;
-
-                    Texture2D? victoryTexture = null;
-                    var victoryFrameCount = Vector2.zero;
-
-                    Texture2D? deathTexture = null;
-                    var deathFrameCount = Vector2.zero;
-
-                    if (config.Idle is { } idleCfg)
-                    {
-                        var texturePath = Path.Combine(this.AssetBasePath, idleCfg.TexturePath);
-                        idleTexture = SpriteHelper.LoadPNGIntoTexture(texturePath);
-                        if (idleTexture == null)
-                        {
-                            Debug.LogWarning($"Unable to load idle texture from: {texturePath}");
-                        }
-                        idleFrameCount = new Vector2(idleCfg.FramesPerRow, idleCfg.Rows);
-                    }
-
-                    if (config.Run is { } runCfg)
-                    {
-                        var texturePath = Path.Combine(this.AssetBasePath, runCfg.TexturePath);
-                        runTexture = SpriteHelper.LoadPNGIntoTexture(texturePath);
-                        if (runTexture == null)
-                        {
-                            Debug.LogWarning($"Unable to load run texture from: {texturePath}");
-                        }
-                        runFrameCount = new Vector2(runCfg.FramesPerRow, runCfg.Rows);
-                    }
-
-                    if (config.Victory is { } victoryCfg)
-                    {
-                        var texturePath = Path.Combine(this.AssetBasePath, victoryCfg.TexturePath);
-                        victoryTexture = SpriteHelper.LoadPNGIntoTexture(texturePath);
-                        if (victoryTexture == null)
-                        {
-                            Debug.LogWarning($"Unable to load victory texture from: {texturePath}");
-                        }
-                        victoryFrameCount = new Vector2(victoryCfg.FramesPerRow, victoryCfg.Rows);
-                    }
-
-                    if (config.Death is { } deathCfg)
-                    {
-                        var texturePath = Path.Combine(this.AssetBasePath, deathCfg.TexturePath);
-                        deathTexture = SpriteHelper.LoadPNGIntoTexture(texturePath);
-                        if (deathTexture == null)
-                        {
-                            Debug.LogWarning($"Unable to load death texture from: {texturePath}");
-                        }
-                        deathFrameCount = new Vector2(deathCfg.FramesPerRow, deathCfg.Rows);
-                    }
-
-                    ModGenesia.ReplaceRogSkin(
-                        avatarID: 0,
-                        idleAnimation: idleTexture,
-                        idleFrameCount: idleFrameCount,
-                        runningAnimation: runTexture,
-                        runningFrameCount: runFrameCount,
-                        victoryAnimation: victoryTexture,
-                        victoryFrameCount: victoryFrameCount,
-                        deathAnimation: deathTexture,
-                        deathFrameCount: deathFrameCount
-                    );
+                    var inGameProperties = config.ToInGameCharacterSpriteProperties(this.AssetBasePath);
+                    ModUtils.ApplyRogSkin(inGameProperties);
                 }
                 break;
             default:
@@ -225,6 +160,85 @@ public class CharacterSpriteProperties
     public SpriteConfiguration? Run;
     public SpriteConfiguration? Victory;
     public SpriteConfiguration? Death;
+
+    public InGameCharacterSpriteProperties ToInGameCharacterSpriteProperties(string assetBasePath)
+    {
+        var inGameSpriteProperties = new InGameCharacterSpriteProperties();
+
+        if (this.Idle is { } idleCfg)
+        {
+            var texturePath = Path.Combine(assetBasePath, idleCfg.TexturePath);
+            var texture = SpriteHelper.LoadPNGIntoTexture(texturePath);
+            if (texture == null)
+            {
+                Debug.LogWarning($"Unable to load idle texture from: {texturePath}");
+            }
+            else
+            {
+                inGameSpriteProperties.Idle = new InGameSpriteConfiguration
+                {
+                    Texture = texture,
+                    Dimensions = new Vector2(idleCfg.FramesPerRow, idleCfg.Rows)
+                };
+            }
+        }
+
+        if (this.Run is { } runCfg)
+        {
+            var texturePath = Path.Combine(assetBasePath, runCfg.TexturePath);
+            var texture = SpriteHelper.LoadPNGIntoTexture(texturePath);
+            if (texture == null)
+            {
+                Debug.LogWarning($"Unable to load run texture from: {texturePath}");
+            }
+            else
+            {
+                inGameSpriteProperties.Run = new InGameSpriteConfiguration
+                {
+                    Texture = texture,
+                    Dimensions = new Vector2(runCfg.FramesPerRow, runCfg.Rows)
+                };
+            }
+        }
+
+        if (this.Victory is { } victoryCfg)
+        {
+            var texturePath = Path.Combine(assetBasePath, victoryCfg.TexturePath);
+            var texture = SpriteHelper.LoadPNGIntoTexture(texturePath);
+            if (texture == null)
+            {
+                Debug.LogWarning($"Unable to load victory texture from: {texturePath}");
+            }
+            else
+            {
+                inGameSpriteProperties.Victory = new InGameSpriteConfiguration
+                {
+                    Texture = texture,
+                    Dimensions = new Vector2(victoryCfg.FramesPerRow, victoryCfg.Rows)
+                };
+            }
+        }
+
+        if (this.Death is { } deathCfg)
+        {
+            var texturePath = Path.Combine(assetBasePath, deathCfg.TexturePath);
+            var texture = SpriteHelper.LoadPNGIntoTexture(texturePath);
+            if (texture == null)
+            {
+                Debug.LogWarning($"Unable to load death texture from: {texturePath}");
+            }
+            else
+            {
+                inGameSpriteProperties.Idle = new InGameSpriteConfiguration
+                {
+                    Texture = texture,
+                    Dimensions = new Vector2(deathCfg.FramesPerRow, deathCfg.Rows)
+                };
+            }
+        }
+
+        return inGameSpriteProperties;
+    }
 }
 
 public enum EffectType

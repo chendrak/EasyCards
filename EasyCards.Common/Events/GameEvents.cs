@@ -48,7 +48,7 @@ public static class GameEvents
     [HarmonyPatch(typeof(GameData), nameof(GameData.OnPlayerFinalDeath))]
     private static void GameData_OnPlayerFinalDeathHandler() => OnPlayerFinalDeathEvent?.Invoke();
 
-    [HarmonyPrefix]
+    [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerEntity), nameof(PlayerEntity.OnDeath))]
     private static void PlayerEntity_OnDeathHandler() => OnDeathEvent?.Invoke();
 }

@@ -32,6 +32,18 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.3
+
+* Reset character animations back to Rog after the end of a run
+* Fixed a small bug that would happen when you define a card without any modifiers
+* Fixed errors in the example effects
+
+#### 1.1.2
+
+* Moved Effects logic to stat cards and got rid of the `Effects` section
+* The `Stats` section in JSON files should now be called `StatCards`. Old files will still work.
+* Fixed a bug that would trigger boss & elite kill events on normal mobs
+
 #### 1.1.1
 
 * Revert to old packaging, since the new packaging didn't work for some people.
@@ -92,7 +104,7 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
   // The name you want to show up in-game for your cards
   // Optional, will default to EasyCards if not provided
   "ModSource": "Your Mod Name Here",
-  "Stats": [
+  "StatCards": [
     {
       // Internal name of your new card. This needs to be unique.
       // Consider using a prefix for all your cards.
@@ -182,85 +194,81 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
       // Allows you to disable the card in a Rogs or Survivors mode. 
       // Optional
       "DisabledInMode": "Rogs",
-    }
-  ],
-  "Effects": {
-      // All the same elements that available in "Stats" are available in here as well
       "Effects": [
-          {
-              // The internal name for your effect. It's not used for anything outside of logging.
-              // If you don't provide one, it will be generated.
-              // Optional
-              "Name": "MyAwesomeEffect",
-              
-              // The type of the effect. See below for all possible values.
-              // Required
-              "Type": "OneTime",
-
-              // What is required for the effect to be enabled?
-              // Optional, defaults to None
-              "ActivationRequirement": "None",
-              
-              // The action to be taken when the effect is applied.
-              // Required
-              "Action": "HealAmount",
-              
-              // What needs to happen for the effect to apply? The effect needs to be enabled for this.
-              // Required for some Types
-              "Trigger": "OnEliteKill",
-              
-              // Allows you to configure certain aspects of an effect.
-              // Required
-              "Properties": {
-                  // The exact amount for Action.
-                  // Example: [Action = HealAmount, Amount = 10] would heal you for 10 when the effect is triggered.
-                  // Required for some Actions.
-                  "Amount": 1.0,
-
-                  // The percentage for the effects Action.
-                  // Example: [Action = HealPercentage, Percentage = 10] would heal you for 10% of your max hp when the effect is triggered.
-                  // Required for [Action = HealPercentage]
-                  "Percentage": 12,
-
-                  // The duration of the effect. The effect will be disabled after [Duration] expires.
-                  // Specified in seconds. Fractions of a second can be defined as 0.1 for 100ms.
-                  // Required for [Type = Duration]
-                  "Duration": 12,
-
-                  // Amount of time between effect activations.
-                  // Example: [Action = HealAmount, Amount = 20, Interval = 30] -> Heal you for 20 hp every 30s.
-                  // Specified in seconds. Fractions of a second can be defined as 0.1 for 100ms.
-                  // Required for [Type = Interval]
-                  "Interval": 30,
-
-                  // Allows you to change the characters' sprite
-                  "CharacterSpriteConfiguration": {
-                      // Replace the "Idle" animation
-                      "Idle": {
-                          // Path to the texture that contains the animation
-                          "TexturePath": "PlushPaws/pikachu_idle.png",
-                          // Number of frames per row
-                          "FramesPerRow": 4,
-                          // Number of rows
-                          "Rows": 1,
-                      },
-                      
-                      // Replace the "Run" animation. Contents are identical to "Idle".
-                      "Run": {},
-
-                      // Replace the "Victory" animation. Contents are identical to "Idle".
-                      "Victory": {},
-
-                      // Replace the "Death" animation. Contents are identical to "Idle".
-                      "Death": {},
-                  }
+      {
+          // The internal name for your effect. It's not used for anything outside of logging.
+          // If you don't provide one, it will be generated.
+          // Optional
+          "Name": "MyAwesomeEffect",
+      
+          // The type of the effect. See below for all possible values.
+          // Required
+          "Type": "OneTime",
+      
+          // What is required for the effect to be enabled?
+          // Optional, defaults to None
+          "ActivationRequirement": "None",
+      
+          // The action to be taken when the effect is applied.
+          // Required
+          "Action": "HealAmount",
+      
+          // What needs to happen for the effect to apply? The effect needs to be enabled for this.
+          // Required for some Types
+          "Trigger": "OnEliteKill",
+      
+          // Allows you to configure certain aspects of an effect.
+          // Required
+          "Properties": {
+            // The exact amount for Action.
+            // Example: [Action = HealAmount, Amount = 10] would heal you for 10 when the effect is triggered.
+            // Required for some Actions.
+            "Amount": 1.0,
+      
+            // The percentage for the effects Action.
+            // Example: [Action = HealPercentage, Percentage = 10] would heal you for 10% of your max hp
+            // when the effect is triggered.
+            // Required for [Action = HealPercentage]
+            "Percentage": 12,
+      
+            // The duration of the effect. The effect will be disabled after [Duration] expires.
+            // Specified in seconds. Fractions of a second can be defined as 0.1 for 100ms.
+            // Required for [Type = Duration]
+            "Duration": 12,
+      
+            // Amount of time between effect activations.
+            // Example: [Action = HealAmount, Amount = 20, Interval = 30] -> Heal you for 20 hp every 30s.
+            // Specified in seconds. Fractions of a second can be defined as 0.1 for 100ms.
+            // Required for [Type = Interval]
+            "Interval": 30,
+      
+            // Allows you to change the characters' sprite
+            "CharacterSpriteConfiguration": {
+              // Replace the "Idle" animation
+              "Idle": {
+                // Path to the texture that contains the animation
+                "TexturePath": "PlushPaws/pikachu_idle.png",
+                // Number of frames per row
+                "FramesPerRow": 4,
+                // Number of rows
+                "Rows": 1
+              },
+              // Replace the "Run" animation. Contents are identical to "Idle".
+              "Run": {},
+              // Replace the "Victory" animation. Contents are identical to "Idle".
+              "Victory": {},
+              // Replace the "Death" animation. Contents are identical to "Idle".
+              "Death": {}
+            }
           }
-      ],
-  }
+      }
+      ]
+    }
+  ]
 }
 ```
 
-## Available for all cards
+## Card Properties
 
 ### Rarity
 The rarity of the card.
@@ -354,13 +362,8 @@ That means, the above example translates to:
 
 If we were to change the `RequirementType` to `Max`, it would change to `For this card to show up, the player must have at LESS THAN 8999 Damage and LESS THAN 10 Corruption`.
 
-## Effect Cards
-
-Effect cards contain configuration options that are available to all other types as well.
-
-Additionally, they can hold a list of effects. Effects can be configured as follows:
-
-### Effect
+### Effects
+This is a list of effects that are applied to the card.
 
 #### Name
 An optional name for the effect. This is only used for debug logs and will be auto-generated if not provided. 

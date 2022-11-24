@@ -34,6 +34,8 @@ public class CardTemplate
     public RequirementTemplate? RequiresAll { get; set; }
     public DisabledInMode? DisabledInMode { get; set; }
 
+    public List<ConfigurableEffect> Effects { get; set; } = new();
+
     public override string ToString()
     {
         return $"{nameof(Name)}: {Name}, {nameof(TexturePath)}: {TexturePath}, {nameof(Rarity)}: {Rarity}, {nameof(Tags)}: {Tags}, {nameof(DropWeight)}: {DropWeight}, {nameof(LevelUpWeight)}: {LevelUpWeight}, {nameof(MaxLevel)}: {MaxLevel}, {nameof(Modifiers)}: {Modifiers}";

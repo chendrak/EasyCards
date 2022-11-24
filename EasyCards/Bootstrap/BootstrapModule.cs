@@ -9,5 +9,6 @@ namespace EasyCards.Bootstrap;
 [Register(typeof(HarmonyPatcher), Scope.SingleInstance, typeof(IHarmonyPatcher), typeof(IModuleBootstrap))]
 [Register(typeof(DebugHelper), Scope.SingleInstance, typeof(IDebugHelper), typeof(IModuleBootstrap), typeof(IInputEventSubscriber))]
 [Register(typeof(CardLoader), Scope.SingleInstance, typeof(ICardLoader), typeof(IModuleBootstrap))]
+[Register(typeof(ResourceHelper), Scope.SingleInstance, typeof(IResourceHelper), typeof(IModuleBootstrap))]
 [Register(typeof(InputBootstrapper), Scope.SingleInstance, typeof(IModuleBootstrap))]
 public sealed class BootstrapModule { }

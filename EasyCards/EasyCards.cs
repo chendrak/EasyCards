@@ -10,6 +10,7 @@ namespace EasyCards
     using System;
     using System.Linq;
     using CardTypes;
+    using Common.Helpers;
     using Effects;
     using Events;
 
@@ -27,6 +28,10 @@ namespace EasyCards
             // This must be set, before resolving anything from the container.
             // As the container uses this to expose BepInEx types.
             Instance = this;
+
+            // TODO: Get rid of this in favor of a more flexible approach
+            HarmonyPatchHelper.ApplyPatches();
+
             Container.Instance.Resolve<IEasyCardsPluginLoader>().Load();
             CardLoader = Container.Instance.Resolve<ICardLoader>();
 

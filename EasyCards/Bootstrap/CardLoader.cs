@@ -113,49 +113,46 @@ public sealed class CardLoader : ICardLoader
 
         var modSource = templateFile.ModSource ?? MyPluginInfo.PLUGIN_NAME;
 
-        foreach (var cardTemplate in templateFile.Stats)
-        {
-            try
-            {
-                var soulCardData = this.ConvertCardTemplate(cardTemplate, modSource, assetBasePath);
-                Logger.LogInfo($"Adding card {cardTemplate.Name}");
-                ModGenesia.ModGenesia.AddCustomStatCard(cardTemplate.Name, soulCardData);
-                _successFullyLoadedCards.Add(cardTemplate.Name, cardTemplate);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"Error adding {cardTemplate.Name}: {ex}");
-            }
-        }
-
         var effectCardType = typeof(ConfigurableEffectCard);
         var ptr = IL2CPP.GetIl2CppClass(
             "Assembly-CSharp.dll",
             effectCardType.Namespace,
             effectCardType.Name
         );
+        var effectCardConstructor = Il2CppType.TypeFromPointer(ptr).GetConstructor((Il2CppReferenceArray<Il2CppSystem.Type>)System.Array.Empty<Il2CppSystem.Type>());
 
-        var ctor = Il2CppType.TypeFromPointer(ptr).GetConstructor((Il2CppReferenceArray<Il2CppSystem.Type>)System.Array.Empty<Il2CppSystem.Type>());
+        var allCards = templateFile.Stats
+            .Concat(templateFile.StatCards)
+            .ToList();
 
-        foreach (var effectCardTemplate in templateFile.Effects)
+        foreach (var cardTemplate in allCards)
         {
             try
             {
-                var soulCardData = this.ConvertCardTemplate(effectCardTemplate, modSource, assetBasePath);
-                Logger.LogInfo($"Adding card {effectCardTemplate.Name}");
-                ModGenesia.ModGenesia.AddCustomCard(effectCardTemplate.Name, ctor, soulCardData);
+                var soulCardData = this.ConvertCardTemplate(cardTemplate, modSource, assetBasePath);
 
-                foreach (var effect in effectCardTemplate.Effects)
+                if (cardTemplate.Effects.Count == 0)
                 {
-                    effect.AssetBasePath = assetBasePath;
-                    EffectHolder.AddEffect(effectCardTemplate.Name, effect);
+                    Logger.LogInfo($"Adding stat card {cardTemplate.Name}");
+                    ModGenesia.ModGenesia.AddCustomStatCard(cardTemplate.Name, soulCardData);
+                }
+                else
+                {
+                    Logger.LogInfo($"Adding effect card {cardTemplate.Name}");
+                    ModGenesia.ModGenesia.AddCustomCard(cardTemplate.Name, effectCardConstructor, soulCardData);
+
+                    foreach (var effect in cardTemplate.Effects)
+                    {
+                        effect.AssetBasePath = assetBasePath;
+                        EffectHolder.AddEffect(cardTemplate.Name, effect);
+                    }
                 }
 
-                _successFullyLoadedCards.Add(effectCardTemplate.Name, effectCardTemplate);
+                _successFullyLoadedCards.Add(cardTemplate.Name, cardTemplate);
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Error adding {effectCardTemplate.Name}: {ex}");
+                Logger.LogError($"Error adding {cardTemplate.Name}: {ex}");
             }
         }
     }
