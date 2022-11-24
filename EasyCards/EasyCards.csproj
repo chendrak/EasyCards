@@ -38,14 +38,17 @@
     <Target Name="PostPublishCleanup" AfterTargets="Publish">
         <ItemGroup>
             <!-- These are files that are unnecessary for the game, or are just not needed -->
+            <FilesToDelete Include="$(PublishDir)0Harmony.dll" />
             <FilesToDelete Include="$(PublishDir)*Il2Cpp*.dll" />
             <FilesToDelete Include="$(PublishDir)*Unity*.dll" />
+            <FilesToDelete Include="$(PublishDir)Mono.*.dll" />
+            <FilesToDelete Include="$(PublishDir)MonoMod.*.dll" />
             <FilesToDelete Include="$(PublishDir)RogueGenesia.dll" />
             <FilesToDelete Include="$(PublishDir)ModGenesia*.dll" />
             <FilesToDelete Include="$(PublishDir)RogueGenesia*.dll" />
             <FilesToDelete Include="$(PublishDir)Newtonsoft.Json.dll" />
             <FilesToDelete Include="$(PublishDir)Iced.dll" />
-            <FilesToDelete Include="$(PublishDir)Microsoft.*.dll" />
+            <FilesToDelete Include="$(PublishDir)Microsoft*.dll" />
             <!-- This is skipped in debug configuration, to make debugging plugins easier -->
             <FilesToDelete Include="$(PublishDir)*.pdb" Condition="'$(Configuration)' == 'Release'" />
             <FilesToDelete Include="$(PublishDir)*.deps.json" />
