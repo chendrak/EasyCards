@@ -33,6 +33,7 @@ public class CardTemplate
     public RequirementTemplate? RequiresAny { get; set; }
     public RequirementTemplate? RequiresAll { get; set; }
     public DisabledInMode? DisabledInMode { get; set; }
+    public bool ShowStatsOnCard { get; set; } = true;
 
     public List<ConfigurableEffect> Effects { get; set; } = new();
 

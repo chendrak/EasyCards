@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using EasyCards.Extensions;
 using EasyCards.Models.Templates;
-using EasyCards.Models.Templates.Generated;
 using ModGenesia;
 using RogueGenesia.Data;
 
@@ -10,7 +9,7 @@ namespace EasyCards.Helpers;
 
 public static class CardTemplateExtensions
 {
-    public static StatsModifier ToStatsModifier(this StatRequirementTemplate template)
+    public static StatsModifier? ToStatsModifier(this StatRequirementTemplate template)
     {
         if (Enum.TryParse<StatRequirementType>(template.RequirementType, true, out _))
         {
@@ -36,7 +35,8 @@ public static class CardTemplateExtensions
         EasyCards.Instance.Log.LogWarning($"{template.RequirementType} is not a valid requirement type! Valid options are: [{EnumToStringHelper.NamesToString(typeof(StatRequirementType))}]");
         return null;
     }
-    public static StatModifier ToStatModifier(this StatRequirement template)
+
+    public static StatModifier? ToStatModifier(this StatRequirement template)
     {
         if (Enum.TryParse<StatsType>(template.Name, true, out _))
         {
@@ -101,7 +101,6 @@ public static class CardTemplateExtensions
         {
             var singMod = new SingularModifier { Value = 0.0f, ModifierType = ModifierType.Additional };
             var statModifier = new StatModifier { Value = singMod, Key = StatsType.Damage.ToString() };
-
             statsMod.ModifiersList.Add(statModifier);
         }
         else
