@@ -4,10 +4,10 @@
         <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>EasyCards</AssemblyName>
         <Description>Custom Cards Made Easy</Description>
-        <Version>1.1.3</Version>
+        <Version>1.1.4</Version>
         <LangVersion>latest</LangVersion>
         <RootNamespace>EasyCards</RootNamespace>
-        <PackageVersion>1.1.3</PackageVersion>
+        <PackageVersion>1.1.4</PackageVersion>
         <Nullable>enable</Nullable>
         <Authors>chendrak</Authors>
     </PropertyGroup>
@@ -34,7 +34,7 @@
         <HintPath>Libraries\ModManager.RogueGenesiaMod.dll</HintPath>
       </Reference>
     </ItemGroup>
-  
+
     <Target Name="PostPublishCleanup" AfterTargets="Publish">
         <ItemGroup>
             <!-- These are files that are unnecessary for the game, or are just not needed -->

@@ -35,7 +35,8 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 #### 1.1.4
 
 * Add ability to have stats shown on effect cards
-* Add option to disable showing stat changes on regular cards
+* Fixed bug where stats wouldn't apply to cards with effects
+* Fixed bug where applied skins wouldn't reset in all cases after a run 
 
 #### 1.1.3
 
