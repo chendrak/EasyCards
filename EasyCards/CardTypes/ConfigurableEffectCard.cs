@@ -73,7 +73,7 @@ public class ConfigurableEffectCard : SoulCard
     {
         this.InitializeEffects(this._name);
 
-        GameEvents.OnGameEndEvent += this.CleanUpEvents;
+        GameEvents.OnRunEndEvent += this.CleanUpEvents;
         GameEvents.OnPlayerFinalDeathEvent += this.CleanUpEvents;
 
         GameEvents.OnRogueLevelStartedEvent += this.OnRogueLevelStarted;
@@ -158,7 +158,7 @@ public class ConfigurableEffectCard : SoulCard
     private void CleanUpEvents()
     {
         this.Log.LogInfo($"CleanUpEvents");
-        GameEvents.OnGameEndEvent -= this.CleanUpEvents;
+        GameEvents.OnRunEndEvent -= this.CleanUpEvents;
         GameEvents.OnPlayerFinalDeathEvent -= this.CleanUpEvents;
 
         GameEvents.OnRogueLevelStartedEvent -= this.OnRogueLevelStarted;

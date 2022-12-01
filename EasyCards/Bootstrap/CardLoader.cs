@@ -202,6 +202,11 @@ public sealed class CardLoader : ICardLoader
 
         soulCardData.StatsModifier = cardTemplate.CreateStatsModifier();
 
+        // ModifyPlayerStat controls if stats are shown on a card.
+        // Make sure it's set to true if we have modifiers.
+        // Additionally, allow card creators to disable it.
+        soulCardData.ModifyPlayerStat = cardTemplate.Modifiers.Count > 0;
+
         if (cardTemplate.NameLocalization.Count > 0)
         {
             var nameLocalizations = Localization.GetNameTranslations(cardTemplate);

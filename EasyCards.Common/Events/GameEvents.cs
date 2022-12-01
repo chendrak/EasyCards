@@ -4,6 +4,7 @@ using HarmonyLib;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;
 using RogueGenesia.GameManager;
+using RogueGenesia.UI;
 
 [HarmonyPatch]
 public static class GameEvents
@@ -12,7 +13,7 @@ public static class GameEvents
     public delegate void OnRogueLevelEndedHandler();
     public delegate void OnStartNewGameHandler();
     public delegate void OnGameStartHandler();
-    public delegate void OnGameEndHandler();
+    public delegate void OnRunEndHandler();
     public delegate void OnPlayerFinalDeathHandler();
     public delegate void OnDeathHandler();
 
@@ -20,7 +21,7 @@ public static class GameEvents
     public static event OnRogueLevelEndedHandler OnRogueLevelEndedEvent;
     public static event OnStartNewGameHandler OnStartNewGameEvent;
     public static event OnGameStartHandler OnGameStartEvent;
-    public static event OnGameEndHandler OnGameEndEvent;
+    public static event OnRunEndHandler OnRunEndEvent;
     public static event OnPlayerFinalDeathHandler OnPlayerFinalDeathEvent;
     public static event OnDeathHandler OnDeathEvent;
 
@@ -41,8 +42,9 @@ public static class GameEvents
     private static void GameData_OnGameStart() => OnGameStartEvent?.Invoke();
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(GameData), nameof(GameData.OnGameEnd))]
-    private static void GameData_OnGameEnd() => OnGameEndEvent?.Invoke();
+    [HarmonyPatch(typeof(GameEndManager), nameof(GameEndManager.Awake))]
+    [HarmonyPatch(typeof(PauseMenu), nameof(PauseMenu.On_Confirm))]
+    private static void OnRunEnded() => OnRunEndEvent?.Invoke();
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(GameData), nameof(GameData.OnPlayerFinalDeath))]

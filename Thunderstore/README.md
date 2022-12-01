@@ -32,6 +32,12 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.4
+
+* Add ability to have stats shown on effect cards
+* Fixed bug where stats wouldn't apply to cards with effects
+* Fixed bug where applied skins wouldn't reset in all cases after a run 
+
 #### 1.1.3
 
 * Reset character animations back to Rog after the end of a run
@@ -194,6 +200,7 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
       // Allows you to disable the card in a Rogs or Survivors mode. 
       // Optional
       "DisabledInMode": "Rogs",
+        
       "Effects": [
       {
           // The internal name for your effect. It's not used for anything outside of logging.

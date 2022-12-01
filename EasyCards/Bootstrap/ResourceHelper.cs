@@ -8,7 +8,7 @@ public class ResourceHelper : IResourceHelper
     public void Initialize()
     {
         GameResources.Initialize();
-        GameEvents.OnGameEndEvent += this.OnRunEnded;
+        GameEvents.OnRunEndEvent += this.OnRunEnded;
     }
 
     private void OnRunEnded()
