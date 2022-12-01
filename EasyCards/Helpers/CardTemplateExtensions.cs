@@ -7,6 +7,8 @@ using RogueGenesia.Data;
 
 namespace EasyCards.Helpers;
 
+using Models.Templates.Generated;
+
 public static class CardTemplateExtensions
 {
     public static StatsModifier? ToStatsModifier(this StatRequirementTemplate template)
