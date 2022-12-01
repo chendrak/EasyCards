@@ -200,10 +200,6 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
       // Optional
       "DisabledInMode": "Rogs",
         
-      // Allows you to enable or disable showing stat changes on your card
-      // Optional, defaults to true
-      "ShowStatsOnCard": true,
-        
       "Effects": [
       {
           // The internal name for your effect. It's not used for anything outside of logging.
