@@ -47,13 +47,13 @@ public static class HarmonyPatchHelper
             {
                 if (namespaces.Any(namespaceRegex => Regex.IsMatch(classNamespace, namespaceRegex)))
                 {
-                    Debug.Log( $"Found a namespace match in {classWithHarmonyPatch.FullName}, applying patches...");
+                    Debug.Log($"Found a namespace match in {classWithHarmonyPatch.FullName}, applying patches...");
                     var harmonyForCurrentClass = Harmony.CreateAndPatchAll(classWithHarmonyPatch);
                     harmonyInstances.Add(harmonyForCurrentClass);
                 }
                 else
                 {
-                    Debug.Log( $"No matches for {classNamespace}");
+                    Debug.Log($"No matches for {classNamespace}");
                 }
             }
         }

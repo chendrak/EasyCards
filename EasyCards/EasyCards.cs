@@ -1,13 +1,13 @@
 using BepInEx;
 using EasyCards.Bootstrap;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.Injection;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using ModManager;
 using EasyCards.CardTypes;
 using EasyCards.Common.Helpers;
 using EasyCards.Effects;
 using EasyCards.Events;
+using Il2CppInterop.Runtime;
+using Il2CppInterop.Runtime.Injection;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using ModManager;
 
 namespace EasyCards
 {
