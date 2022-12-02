@@ -36,6 +36,7 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 * Add `OnTakeDamage` trigger
 * Add `DamageTaken` activation requirement
+* Add `EnemiesKilled` activation requirement
 
 #### 1.1.4
 
@@ -398,14 +399,15 @@ _**Options:**_
 - `None`: The effect is always active
 - `StageStart`: The effect will activate at the start of a stage in Rogs Mode. In Survival, this is the same as `None`
 - `StageEnd`: The effect will trigger at the end of a stage in Rogs Mode. Can not trigger in Survival. ***!!! NOT IMPLEMENTED YET !!!***
-- `EnemiesKilled`: The effect will activate when a certain amount of enemies was killed. ***!!! NOT IMPLEMENTED YET !!!***
+- `EnemiesKilled`: The effect will activate when a certain amount of enemies was killed.
 - `DamageTaken`: The effect will activate after you have taken a certain amount of damage from enemies. The required amount is defined in [ActivationRequirementProperties.TotalDamageTaken](#activationrequirementproperties)
 
 #### ActivationRequirementProperties
 Certain [ActivationRequirements](#activationrequirement) have parameters, which are defined here.
 
 _**Options:**_
-- `TotalDamageTaken`: For _ActivationRequirement.DamageTaken_: Specifies the if damage you need to take before the effect activates.
+- `TotalDamageTaken`: For `ActivationRequirement.DamageTake`: Specifies the amount of damage you need to take before the effect activates.
+- `EnemiesKilled`: For `ActivationRequirement.EnemiesKilled`: Specifies the number of enemies you need to kill before the effect activates.
 
 
 #### Trigger

@@ -17,6 +17,7 @@ public class ConfigurableEffect
     public EffectAction Action;
     public EffectProperties Properties;
 
+    private long enemiesKilled;
     private float activationTime;
     private float totalDamageTaken;
     public bool Enabled { get; private set; }
@@ -151,6 +152,34 @@ public class ConfigurableEffect
     }
 
     public override string ToString() => this.Name;
+
+    public void OnKill(Monster monster)
+    {
+        this.enemiesKilled++;
+
+        if (this.ActivationRequirement == EffectActivationRequirement.EnemiesKilled &&
+            this.enemiesKilled >+ this.ActivationRequirementProperties.EnemiesKilled)
+        {
+            this.Enable(Time.time);
+        }
+
+        if (!this.Enabled) return;
+
+        if (this.Trigger == EffectTrigger.OnBossKill && monster.Boss)
+        {
+            Debug.Log($"Killed boss, applying effect: {this}");
+            this.Apply();
+        }
+        else if (this.Trigger == EffectTrigger.OnEliteKill && monster.Elite)
+        {
+            Debug.Log($"Killed Elite, applying effect: {this}");
+            this.Apply();
+        }
+        else if (this.Trigger == EffectTrigger.OnKill)
+        {
+            this.Apply();
+        }
+    }
 }
 
 public class EffectProperties
@@ -279,6 +308,7 @@ public enum EffectActivationRequirement
 public struct EffectActivationRequirementProperties
 {
     public float? TotalDamageTaken;
+    public long? EnemiesKilled;
 }
 
 public enum EffectTrigger

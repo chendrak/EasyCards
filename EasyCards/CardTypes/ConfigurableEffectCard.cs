@@ -136,23 +136,7 @@ public class ConfigurableEffectCard : SoulCard
             var monster = collisionDetection.LinkedMonster;
             foreach (var onKillEffect in this.OnKillEffects)
             {
-                if (!onKillEffect.Enabled)
-                    continue;
-
-                if (onKillEffect.Trigger == EffectTrigger.OnBossKill && monster.Boss)
-                {
-                    Debug.Log($"Killed boss, applying effect: {onKillEffect}");
-                    onKillEffect.Apply();
-                }
-                else if (onKillEffect.Trigger == EffectTrigger.OnEliteKill && monster.Elite)
-                {
-                    Debug.Log($"Killed Elite, applying effect: {onKillEffect}");
-                    onKillEffect.Apply();
-                }
-                else if (onKillEffect.Trigger == EffectTrigger.OnKill)
-                {
-                    onKillEffect.Apply();
-                }
+                onKillEffect.OnKill(monster);
             }
         }
     }
