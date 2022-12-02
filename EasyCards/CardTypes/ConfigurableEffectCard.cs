@@ -6,7 +6,6 @@ using System.Linq;
 using BepInEx.Logging;
 using Effects;
 using Events;
-using Il2CppInterop.Runtime.Injection;
 using Models.Templates;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;
@@ -15,11 +14,6 @@ using UnityEngine;
 public class ConfigurableEffectCard : SoulCard
 {
     protected ManualLogSource Log = EasyCards.Instance.Log;
-
-    public ConfigurableEffectCard() : this(ClassInjector.DerivedConstructorPointer<ConfigurableEffectCard>())
-    {
-        ClassInjector.DerivedConstructorBody(this);
-    }
 
     public ConfigurableEffectCard(IntPtr ptr) : base(ptr) { }
 
@@ -46,12 +40,20 @@ public class ConfigurableEffectCard : SoulCard
         this.Log.LogInfo($"Number of effects: {this.Effects.Count}");
 
         this.OnKillEffects = this.Effects.Where(effect =>
-            effect.Trigger is EffectTrigger.OnKill or EffectTrigger.OnEliteKill or EffectTrigger.OnBossKill).ToList();
+            effect.Trigger is EffectTrigger.OnKill or EffectTrigger.OnEliteKill or EffectTrigger.OnBossKill ||
+            effect.ActivationRequirement == EffectActivationRequirement.EnemiesKilled).ToList();
+
+        this.Log.LogInfo($"OnKillEffects = [{string.Join(", ", this.OnKillEffects)}]");
+
         this.OnDashEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnDash).ToList();
         this.OnStageStartEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnStageStart).ToList();
         this.OnStageEndEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnStageEnd).ToList();
         this.OnDeathEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnDeath).ToList();
-        this.OnTakeDamageEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnTakeDamage).ToList();
+        this.OnTakeDamageEffects = this.Effects.Where(effect =>
+            effect.Trigger == EffectTrigger.OnTakeDamage ||
+            effect.ActivationRequirement == EffectActivationRequirement.DamageTaken).ToList();
+
+        this.Log.LogInfo($"OnTakeDamageEffects = [{string.Join(", ", this.OnTakeDamageEffects)}]");
 
         this.DurationEffects = this.Effects.Where(effect => effect.Type == EffectType.Duration).ToList();
         this.IntervalEffects = this.Effects.Where(effect => effect.Type == EffectType.Interval).ToList();
@@ -144,6 +146,8 @@ public class ConfigurableEffectCard : SoulCard
     public override void OnTakeDamage(PlayerEntity owner, IEntity damageOwner, ref float modifierDamageValue,
         float damageValue)
     {
+        // this.Log.LogInfo($"OnTakeDamage(modifierDamageValue = [{modifierDamageValue}], damageValue = [{damageValue}])");
+        this.Log.LogInfo($"{this._name}.OnTakeDamage");
         var totalDamage = damageValue * modifierDamageValue;
         foreach (var takeDamageEffect in this.OnTakeDamageEffects)
         {

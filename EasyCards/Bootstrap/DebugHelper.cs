@@ -4,8 +4,14 @@ using UnityEngine.InputSystem;
 
 namespace EasyCards.Bootstrap;
 
+using System.Linq;
+using System.Timers;
 using BepInEx.Logging;
+using Common.Helpers;
+using Il2CppInterop.Runtime.Injection;
 using Logging;
+using RogueGenesia;
+using RogueGenesia.GameManager;
 
 public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
 {
@@ -155,7 +161,7 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
         }
     }
 
-    public bool HandlesKey(Key key) => key is Key.L or Key.O;
+    public bool HandlesKey(Key key) => key is Key.L or Key.O or Key.P or Key.U or Key.M or Key.Y;
 
     public void OnInputEvent(Key key)
     {
@@ -163,10 +169,62 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
         {
             OnDebugLogKeyPressed();
         }
-        // else if (key == Key.O)
-        // {
-        //     // GameData.PlayerDatabase[0].AddSoulExp(100_000_000_000);
-        //     GameData.PlayerDatabase[0]._soulLevel.LevelUp();
-        // }
+        else if (key == Key.O)
+        {
+            // GameData.PlayerDatabase[0].AddSoulExp(100_000_000_000);
+            GameData.PlayerDatabase[0]._soulLevel.LevelUp();
+        }
+        else if (key == Key.M)
+        {
+            var cardsToAdd = new string[] { "Lust", "Benediction" };
+            var cards = GameData.GetAllCards();
+            foreach (var card in cards)
+            {
+                if (cardsToAdd.Contains(card.name))
+                {
+                    this.Logger.LogInfo($"Adding {card.name}");
+                    GameData.PlayerDatabase[0].AddSoulCardFromSO(card);
+                    GameManagerFight.instance.OnSelectLevelUp(card);
+                }
+            }
+        }
+        else if (key == Key.P)
+        {
+            // GameData.PlayerDatabase[0].AddSoulExp(100_000_000_000);
+            GameData.PlayerDatabase[0].RerollLeft = 999;
+            GameData.PlayerDatabase[0].RarityRerollLeft = 999;
+            GameData.PlayerDatabase[0].BanishLeft = 999;
+        }
+        else if (key == Key.Y)
+        {
+            this.Logger.LogInfo($"All Soul Cards on the player:");
+            foreach (var soulCard in GameData.PlayerDatabase[0]._soulCardList)
+            {
+                this.Logger.LogInfo($"{soulCard._name} - {LoggingHelper.StructToString(soulCard)}");
+            }
+
+            this.Logger.LogInfo($"All Soul Cards SOs on the player:");
+            foreach (var soulCardSo in GameData.PlayerDatabase[0]._soulCardSOList)
+            {
+                this.Logger.LogInfo($"{soulCardSo.name} - {LoggingHelper.StructToString(soulCardSo)}");
+                var sci = soulCardSo.ConstructSoulCard();
+                this.Logger.LogInfo($"Card from SO: {sci._name} - {LoggingHelper.StructToString(sci)}");
+            }
+        }
+        else if (key == Key.U)
+        {
+            var achievements = AchievementManager.GetAllAchievements();
+
+            foreach (var achievement in achievements)
+            {
+                if (!achievement.IsUnlocked)
+                {
+                    achievement.Unlock();
+                }
+            }
+
+            AchievementManager.SaveAchievements();
+            GameData.SavePersitentData();
+        }
     }
 }

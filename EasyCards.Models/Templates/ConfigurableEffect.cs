@@ -131,14 +131,16 @@ public class ConfigurableEffect
 
     public void OnTakeDamage(float damageTaken)
     {
+        Debug.Log($"{this}.OnTakeDamage({damageTaken})");
         if (this.Enabled && this.Trigger == EffectTrigger.OnTakeDamage)
         {
             this.Apply();
         }
 
         this.totalDamageTaken += damageTaken;
+        Debug.Log($"{this}.totalDamageTaken = {this.totalDamageTaken}");
         if (this.ActivationRequirement == EffectActivationRequirement.DamageTaken &&
-            this.totalDamageTaken > this.ActivationRequirementProperties.TotalDamageTaken)
+            this.totalDamageTaken >= this.ActivationRequirementProperties.TotalDamageTaken)
         {
             this.Enable(Time.time);
             this.totalDamageTaken = 0f;
@@ -157,10 +159,13 @@ public class ConfigurableEffect
     {
         this.enemiesKilled++;
 
+        Debug.Log($"{this}.OnKill: enemiesKilled = {this.enemiesKilled}");
+
         if (this.ActivationRequirement == EffectActivationRequirement.EnemiesKilled &&
-            this.enemiesKilled >+ this.ActivationRequirementProperties.EnemiesKilled)
+            this.enemiesKilled >= this.ActivationRequirementProperties.EnemiesKilled)
         {
             this.Enable(Time.time);
+            this.enemiesKilled = 0;
         }
 
         if (!this.Enabled) return;

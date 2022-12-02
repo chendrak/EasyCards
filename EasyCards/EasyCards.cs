@@ -28,6 +28,10 @@ namespace EasyCards
             CardLoader = Container.Instance.Resolve<ICardLoader>();
             GameEvents.OnGameStartEvent += EffectHolder.ResetEffects;
 
+            GameEvents.OnPlayerTakeDamageEvent += () => this.Log.LogInfo($"OnPlayerTakeDamageEvent()");
+
+            GameEvents.OnSoulCardTakeDamageEvent += () => this.Log.LogInfo($"OnSoulCardTakeDamageEvent()");
+
             HarmonyPatchHelper.ApplyPatches("EasyCards");
         }
 
