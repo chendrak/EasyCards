@@ -12,11 +12,13 @@ public class ConfigurableEffect
     public string AssetBasePath = "";
     public EffectType Type;
     public EffectActivationRequirement ActivationRequirement = EffectActivationRequirement.None;
+    public EffectActivationRequirementProperties ActivationRequirementProperties;
     public EffectTrigger Trigger;
     public EffectAction Action;
     public EffectProperties Properties;
 
     private float activationTime;
+    private float totalDamageTaken;
     public bool Enabled { get; private set; }
 
     public void Enable(float time)
@@ -123,6 +125,22 @@ public class ConfigurableEffect
                     }
                 }
                 break;
+        }
+    }
+
+    public void OnTakeDamage(float damageTaken)
+    {
+        if (this.Enabled && this.Trigger == EffectTrigger.OnTakeDamage)
+        {
+            this.Apply();
+        }
+
+        this.totalDamageTaken += damageTaken;
+        if (this.ActivationRequirement == EffectActivationRequirement.DamageTaken &&
+            this.ActivationRequirementProperties.TotalDamageTaken > this.totalDamageTaken)
+        {
+            this.Enable(Time.time);
+            this.totalDamageTaken = 0f;
         }
     }
 
@@ -255,6 +273,12 @@ public enum EffectActivationRequirement
     StageStart,
     StageEnd,
     EnemiesKilled,
+    DamageTaken
+}
+
+public struct EffectActivationRequirementProperties
+{
+    public float? TotalDamageTaken;
 }
 
 public enum EffectTrigger
@@ -266,6 +290,7 @@ public enum EffectTrigger
     OnBossKill,
     OnDash,
     OnDeath,
+    OnTakeDamage
 }
 
 public enum EffectAction

@@ -31,6 +31,7 @@ public class ConfigurableEffectCard : SoulCard
     private List<ConfigurableEffect> OnStageStartEffects { get; set; } = new();
     private List<ConfigurableEffect> OnStageEndEffects { get; set; } = new();
     private List<ConfigurableEffect> OnDeathEffects { get; set; } = new();
+    private List<ConfigurableEffect> OnTakeDamageEffects { get; set; } = new();
 
     // Type Lists
     private List<ConfigurableEffect> DurationEffects { get; set; } = new();
@@ -50,6 +51,7 @@ public class ConfigurableEffectCard : SoulCard
         this.OnStageStartEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnStageStart).ToList();
         this.OnStageEndEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnStageEnd).ToList();
         this.OnDeathEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnDeath).ToList();
+        this.OnTakeDamageEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnTakeDamage).ToList();
 
         this.DurationEffects = this.Effects.Where(effect => effect.Type == EffectType.Duration).ToList();
         this.IntervalEffects = this.Effects.Where(effect => effect.Type == EffectType.Interval).ToList();
@@ -152,6 +154,16 @@ public class ConfigurableEffectCard : SoulCard
                     onKillEffect.Apply();
                 }
             }
+        }
+    }
+
+    public override void OnTakeDamage(PlayerEntity owner, IEntity damageOwner, ref float modifierDamageValue,
+        float damageValue)
+    {
+        var totalDamage = damageValue * modifierDamageValue;
+        foreach (var takeDamageEffect in this.OnTakeDamageEffects)
+        {
+            takeDamageEffect.OnTakeDamage(totalDamage);
         }
     }
 
