@@ -137,7 +137,7 @@ public class ConfigurableEffect
 
         this.totalDamageTaken += damageTaken;
         if (this.ActivationRequirement == EffectActivationRequirement.DamageTaken &&
-            this.ActivationRequirementProperties.TotalDamageTaken > this.totalDamageTaken)
+            this.totalDamageTaken > this.ActivationRequirementProperties.TotalDamageTaken)
         {
             this.Enable(Time.time);
             this.totalDamageTaken = 0f;
