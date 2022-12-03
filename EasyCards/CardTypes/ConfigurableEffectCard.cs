@@ -43,8 +43,6 @@ public class ConfigurableEffectCard : SoulCard
             effect.Trigger is EffectTrigger.OnKill or EffectTrigger.OnEliteKill or EffectTrigger.OnBossKill ||
             effect.ActivationRequirement == EffectActivationRequirement.EnemiesKilled).ToList();
 
-        this.Log.LogInfo($"OnKillEffects = [{string.Join(", ", this.OnKillEffects)}]");
-
         this.OnDashEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnDash).ToList();
         this.OnStageStartEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnStageStart).ToList();
         this.OnStageEndEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnStageEnd).ToList();
@@ -52,8 +50,6 @@ public class ConfigurableEffectCard : SoulCard
         this.OnTakeDamageEffects = this.Effects.Where(effect =>
             effect.Trigger == EffectTrigger.OnTakeDamage ||
             effect.ActivationRequirement == EffectActivationRequirement.DamageTaken).ToList();
-
-        this.Log.LogInfo($"OnTakeDamageEffects = [{string.Join(", ", this.OnTakeDamageEffects)}]");
 
         this.DurationEffects = this.Effects.Where(effect => effect.Type == EffectType.Duration).ToList();
         this.IntervalEffects = this.Effects.Where(effect => effect.Type == EffectType.Interval).ToList();
