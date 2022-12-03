@@ -11,13 +11,10 @@ namespace EasyCards.Bootstrap;
 
 using BepInEx.Logging;
 using CardTypes;
-using Common.Helpers;
 using Effects;
 using Extensions;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
-using Il2CppSystem;
 using Logging;
 using UnityEngine;
 using Enum = System.Enum;
@@ -117,30 +114,7 @@ public sealed class CardLoader : ICardLoader
         var modSource = templateFile.ModSource ?? MyPluginInfo.PLUGIN_NAME;
 
         var effectCardType = Il2CppType.Of<ConfigurableEffectCard>();
-
-        var ctors = effectCardType.GetConstructors();
-
-        Logger.LogInfo($"=== Got {ctors.Count} ctors");
-
-        foreach (var ctor in ctors)
-        {
-            Logger.LogInfo($"= New Ctor {ctor.Name}");
-
-            var parameters = ctor.GetParameters();
-            foreach (var parameterInfo in parameters)
-            {
-                Logger.LogInfo($"\t{parameterInfo.Name} -> {parameterInfo.ParameterType.Name} / {parameterInfo.GetIl2CppType()}");
-            }
-
-            var parameterTypes = ctor.GetParameterTypes();
-            foreach (var parameterType in parameterTypes)
-            {
-                Logger.LogInfo($"\t{parameterType.Name} -> {parameterType.FullName}");
-            }
-        }
-
         var effectCardConstructor = effectCardType.GetConstructors().First();
-        ClassInjector.Dump<ConfigurableEffectCard>();
 
         var allCards = templateFile.Stats
             .Concat(templateFile.StatCards)
@@ -160,15 +134,7 @@ public sealed class CardLoader : ICardLoader
                 else
                 {
                     Logger.LogInfo($"Adding effect card {cardTemplate.Name}");
-                    var so = ModGenesia.ModGenesia.AddCustomCard(cardTemplate.Name, effectCardConstructor, soulCardData);
-
-                    if (so)
-                    {
-                        var soulCard = so.ConstructSoulCard();
-                        Logger.LogInfo($"\tAdded card {cardTemplate.Name}");
-                        Logger.LogInfo($"\tSoulCard: {LoggingHelper.StructToString(soulCard)}");
-                        Logger.LogInfo($"\tSoulCard SO: {LoggingHelper.StructToString(so)}");
-                    }
+                    ModGenesia.ModGenesia.AddCustomCard(cardTemplate.Name, effectCardConstructor, soulCardData);
 
                     foreach (var effect in cardTemplate.Effects)
                     {
