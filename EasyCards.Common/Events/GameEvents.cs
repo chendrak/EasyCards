@@ -11,14 +11,20 @@ using UnityEngine;
 public static class GameEvents
 {
     public delegate void OnRogueLevelStartedHandler();
+
     public delegate void OnRogueLevelEndedHandler();
+
     public delegate void OnStartNewGameHandler();
+
     public delegate void OnGameStartHandler();
+
     public delegate void OnRunEndHandler();
+
     public delegate void OnPlayerFinalDeathHandler();
+
     public delegate void OnDeathHandler();
-    public delegate void OnPlayerTakeDamageHandler();
-    public delegate void OnSoulCardTakeDamageHandler();
+
+    public delegate void OnPlayerTakeDamageHandler(DamageInformation damageInfo);
 
     public static event OnRogueLevelStartedHandler OnRogueLevelStartedEvent;
     public static event OnRogueLevelEndedHandler OnRogueLevelEndedEvent;
@@ -28,7 +34,6 @@ public static class GameEvents
     public static event OnPlayerFinalDeathHandler OnPlayerFinalDeathEvent;
     public static event OnDeathHandler OnDeathEvent;
     public static event OnPlayerTakeDamageHandler OnPlayerTakeDamageEvent;
-    public static event OnSoulCardTakeDamageHandler OnSoulCardTakeDamageEvent;
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(GameManagerRogue), nameof(GameManagerRogue.Awake))]
@@ -61,39 +66,9 @@ public static class GameEvents
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerEntity), nameof(PlayerEntity.TakeDamage))]
-    private static void PlayerEntity_OnTakeDamageHandler(DamageInformation damageInfo)
+    private static void PlayerEntity_TakeDamageHandler(DamageInformation damageInfo)
     {
-        Debug.Log($"PlayerEntity_OnTakeDamageHandler({damageInfo})");
-        OnPlayerTakeDamageEvent?.Invoke();
+        Debug.Log($"PlayerEntity_TakeDamageHandler({damageInfo})");
+        OnPlayerTakeDamageEvent?.Invoke(damageInfo);
     }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(Monster), nameof(Monster.DealDamageToPlayer))]
-    private static void Monster_DealDamageToPlayerHandler()
-    {
-        Debug.Log("Monster_DealDamageToPlayerHandler");
-        OnPlayerTakeDamageEvent?.Invoke();
-    }
-
-    // [HarmonyPostfix]
-    // [HarmonyPatch(typeof(Lust), nameof(Lust.OnTakeDamage))]
-    // private static void Lust_OnTakeDamageHandler()
-    // {
-    //     Debug.Log($"Lust_OnTakeDamageHandler()");
-    // }
-    //
-    // [HarmonyPostfix]
-    // [HarmonyPatch(typeof(Benediction), nameof(Benediction.OnTakeDamage))]
-    // private static void Benediction_OnTakeDamageHandler()
-    // {
-    //     Debug.Log($"Benediction_OnTakeDamageHandler()");
-    // }
-
-    // [HarmonyPostfix]
-    // [HarmonyPatch(typeof(SoulCard), nameof(SoulCard.OnTakeDamage))]
-    // private static void SoulCard_OnTakeDamageHandler()
-    // {
-    //     Debug.Log("SoulCard_OnTakeDamageHandler()");
-    //     // OnSoulCardTakeDamageEvent?.Invoke(owner, damageOwner, modifierDamageValue, damageValue);
-    // }
 }

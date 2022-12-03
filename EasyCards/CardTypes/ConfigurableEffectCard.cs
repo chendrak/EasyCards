@@ -83,6 +83,17 @@ public class ConfigurableEffectCard : SoulCard
         GameEvents.OnRogueLevelStartedEvent += this.OnRogueLevelStarted;
         GameEvents.OnRogueLevelEndedEvent += this.OnRogueLevelEnded;
         GameEvents.OnDeathEvent += this.OnDeath;
+
+        GameEvents.OnPlayerTakeDamageEvent += this.OnPlayerTakeDamage;
+    }
+
+    private void OnPlayerTakeDamage(DamageInformation damageInfo)
+    {
+        this.Log.LogInfo($"{this._name}.OnTakeDamage");
+        foreach (var takeDamageEffect in this.OnTakeDamageEffects)
+        {
+            takeDamageEffect.OnTakeDamage(damageInfo.DamageValue);
+        }
     }
 
     private void OnDeath()
@@ -143,17 +154,6 @@ public class ConfigurableEffectCard : SoulCard
         }
     }
 
-    public override void OnTakeDamage(PlayerEntity owner, IEntity damageOwner, ref float modifierDamageValue,
-        float damageValue)
-    {
-        // this.Log.LogInfo($"OnTakeDamage(modifierDamageValue = [{modifierDamageValue}], damageValue = [{damageValue}])");
-        this.Log.LogInfo($"{this._name}.OnTakeDamage");
-        var totalDamage = damageValue * modifierDamageValue;
-        foreach (var takeDamageEffect in this.OnTakeDamageEffects)
-        {
-            takeDamageEffect.OnTakeDamage(totalDamage);
-        }
-    }
 
     private void CleanUpEvents()
     {
@@ -163,5 +163,7 @@ public class ConfigurableEffectCard : SoulCard
 
         GameEvents.OnRogueLevelStartedEvent -= this.OnRogueLevelStarted;
         GameEvents.OnRogueLevelEndedEvent -= this.OnRogueLevelEnded;
+
+        GameEvents.OnPlayerTakeDamageEvent -= this.OnPlayerTakeDamage;
     }
 }
