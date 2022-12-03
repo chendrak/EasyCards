@@ -11,19 +11,12 @@ using UnityEngine;
 public static class GameEvents
 {
     public delegate void OnRogueLevelStartedHandler();
-
     public delegate void OnRogueLevelEndedHandler();
-
     public delegate void OnStartNewGameHandler();
-
     public delegate void OnGameStartHandler();
-
     public delegate void OnRunEndHandler();
-
     public delegate void OnPlayerFinalDeathHandler();
-
     public delegate void OnDeathHandler();
-
     public delegate void OnPlayerTakeDamageHandler(DamageInformation damageInfo);
 
     public static event OnRogueLevelStartedHandler OnRogueLevelStartedEvent;
