@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,9 +15,10 @@ using Effects;
 using Extensions;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using Logging;
 using UnityEngine;
+using Enum = System.Enum;
+using Exception = System.Exception;
 
 public sealed class CardLoader : ICardLoader
 {
@@ -113,13 +113,8 @@ public sealed class CardLoader : ICardLoader
 
         var modSource = templateFile.ModSource ?? MyPluginInfo.PLUGIN_NAME;
 
-        var effectCardType = typeof(ConfigurableEffectCard);
-        var ptr = IL2CPP.GetIl2CppClass(
-            "Assembly-CSharp.dll",
-            effectCardType.Namespace,
-            effectCardType.Name
-        );
-        var effectCardConstructor = Il2CppType.TypeFromPointer(ptr).GetConstructor((Il2CppReferenceArray<Il2CppSystem.Type>)System.Array.Empty<Il2CppSystem.Type>());
+        var effectCardType = Il2CppType.Of<ConfigurableEffectCard>();
+        var effectCardConstructor = effectCardType.GetConstructors().First();
 
         var allCards = templateFile.Stats
             .Concat(templateFile.StatCards)

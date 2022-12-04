@@ -6,7 +6,6 @@ using System.Linq;
 using BepInEx.Logging;
 using Effects;
 using Events;
-using Il2CppInterop.Runtime.Injection;
 using Models.Templates;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;
@@ -15,11 +14,6 @@ using UnityEngine;
 public class ConfigurableEffectCard : SoulCard
 {
     protected ManualLogSource Log = EasyCards.Instance.Log;
-
-    public ConfigurableEffectCard() : this(ClassInjector.DerivedConstructorPointer<ConfigurableEffectCard>())
-    {
-        ClassInjector.DerivedConstructorBody(this);
-    }
 
     public ConfigurableEffectCard(IntPtr ptr) : base(ptr) { }
 
@@ -31,6 +25,7 @@ public class ConfigurableEffectCard : SoulCard
     private List<ConfigurableEffect> OnStageStartEffects { get; set; } = new();
     private List<ConfigurableEffect> OnStageEndEffects { get; set; } = new();
     private List<ConfigurableEffect> OnDeathEffects { get; set; } = new();
+    private List<ConfigurableEffect> OnTakeDamageEffects { get; set; } = new();
 
     // Type Lists
     private List<ConfigurableEffect> DurationEffects { get; set; } = new();
@@ -45,11 +40,16 @@ public class ConfigurableEffectCard : SoulCard
         this.Log.LogInfo($"Number of effects: {this.Effects.Count}");
 
         this.OnKillEffects = this.Effects.Where(effect =>
-            effect.Trigger is EffectTrigger.OnKill or EffectTrigger.OnEliteKill or EffectTrigger.OnBossKill).ToList();
+            effect.Trigger is EffectTrigger.OnKill or EffectTrigger.OnEliteKill or EffectTrigger.OnBossKill ||
+            effect.ActivationRequirement == EffectActivationRequirement.EnemiesKilled).ToList();
+
         this.OnDashEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnDash).ToList();
         this.OnStageStartEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnStageStart).ToList();
         this.OnStageEndEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnStageEnd).ToList();
         this.OnDeathEffects = this.Effects.Where(effect => effect.Trigger == EffectTrigger.OnDeath).ToList();
+        this.OnTakeDamageEffects = this.Effects.Where(effect =>
+            effect.Trigger == EffectTrigger.OnTakeDamage ||
+            effect.ActivationRequirement == EffectActivationRequirement.DamageTaken).ToList();
 
         this.DurationEffects = this.Effects.Where(effect => effect.Type == EffectType.Duration).ToList();
         this.IntervalEffects = this.Effects.Where(effect => effect.Type == EffectType.Interval).ToList();
@@ -79,6 +79,17 @@ public class ConfigurableEffectCard : SoulCard
         GameEvents.OnRogueLevelStartedEvent += this.OnRogueLevelStarted;
         GameEvents.OnRogueLevelEndedEvent += this.OnRogueLevelEnded;
         GameEvents.OnDeathEvent += this.OnDeath;
+
+        GameEvents.OnPlayerTakeDamageEvent += this.OnPlayerTakeDamage;
+    }
+
+    private void OnPlayerTakeDamage(DamageInformation damageInfo)
+    {
+        this.Log.LogInfo($"{this._name}.OnTakeDamage");
+        foreach (var takeDamageEffect in this.OnTakeDamageEffects)
+        {
+            takeDamageEffect.OnTakeDamage(damageInfo.DamageValue);
+        }
     }
 
     private void OnDeath()
@@ -134,26 +145,11 @@ public class ConfigurableEffectCard : SoulCard
             var monster = collisionDetection.LinkedMonster;
             foreach (var onKillEffect in this.OnKillEffects)
             {
-                if (!onKillEffect.Enabled)
-                    continue;
-
-                if (onKillEffect.Trigger == EffectTrigger.OnBossKill && monster.Boss)
-                {
-                    Debug.Log($"Killed boss, applying effect: {onKillEffect}");
-                    onKillEffect.Apply();
-                }
-                else if (onKillEffect.Trigger == EffectTrigger.OnEliteKill && monster.Elite)
-                {
-                    Debug.Log($"Killed Elite, applying effect: {onKillEffect}");
-                    onKillEffect.Apply();
-                }
-                else if (onKillEffect.Trigger == EffectTrigger.OnKill)
-                {
-                    onKillEffect.Apply();
-                }
+                onKillEffect.OnKill(monster);
             }
         }
     }
+
 
     private void CleanUpEvents()
     {
@@ -163,5 +159,7 @@ public class ConfigurableEffectCard : SoulCard
 
         GameEvents.OnRogueLevelStartedEvent -= this.OnRogueLevelStarted;
         GameEvents.OnRogueLevelEndedEvent -= this.OnRogueLevelEnded;
+
+        GameEvents.OnPlayerTakeDamageEvent -= this.OnPlayerTakeDamage;
     }
 }

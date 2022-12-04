@@ -4,8 +4,14 @@ using UnityEngine.InputSystem;
 
 namespace EasyCards.Bootstrap;
 
+using System.Linq;
+using System.Timers;
 using BepInEx.Logging;
+using Common.Helpers;
+using Il2CppInterop.Runtime.Injection;
 using Logging;
+using RogueGenesia;
+using RogueGenesia.GameManager;
 
 public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
 {
@@ -155,7 +161,7 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
         }
     }
 
-    public bool HandlesKey(Key key) => key is Key.L or Key.O;
+    public bool HandlesKey(Key key) => key is Key.L or Key.O or Key.P or Key.U;
 
     public void OnInputEvent(Key key)
     {
@@ -167,6 +173,28 @@ public sealed class DebugHelper : IDebugHelper, IInputEventSubscriber
         // {
         //     // GameData.PlayerDatabase[0].AddSoulExp(100_000_000_000);
         //     GameData.PlayerDatabase[0]._soulLevel.LevelUp();
+        // }
+        // else if (key == Key.P)
+        // {
+        //     // GameData.PlayerDatabase[0].AddSoulExp(100_000_000_000);
+        //     GameData.PlayerDatabase[0].RerollLeft = 999;
+        //     GameData.PlayerDatabase[0].RarityRerollLeft = 999;
+        //     GameData.PlayerDatabase[0].BanishLeft = 999;
+        // }
+        // else if (key == Key.U)
+        // {
+        //     var achievements = AchievementManager.GetAllAchievements();
+        //
+        //     foreach (var achievement in achievements)
+        //     {
+        //         if (!achievement.IsUnlocked)
+        //         {
+        //             achievement.Unlock();
+        //         }
+        //     }
+        //
+        //     AchievementManager.SaveAchievements();
+        //     GameData.SavePersitentData();
         // }
     }
 }

@@ -32,6 +32,12 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.5
+
+* Add `OnTakeDamage` trigger
+* Add `DamageTaken` activation requirement
+* Add `EnemiesKilled` activation requirement
+
 #### 1.1.4
 
 * Add ability to have stats shown on effect cards
@@ -393,7 +399,16 @@ _**Options:**_
 - `None`: The effect is always active
 - `StageStart`: The effect will activate at the start of a stage in Rogs Mode. In Survival, this is the same as `None`
 - `StageEnd`: The effect will trigger at the end of a stage in Rogs Mode. Can not trigger in Survival. ***!!! NOT IMPLEMENTED YET !!!***
-- `EnemiesKilled`: The effect will activate when a certain amount of enemies was killed. ***!!! NOT IMPLEMENTED YET !!!***
+- `EnemiesKilled`: The effect will activate when a certain amount of enemies was killed.
+- `DamageTaken`: The effect will activate after you have taken a certain amount of damage from enemies. The required amount is defined in [ActivationRequirementProperties.TotalDamageTaken](#activationrequirementproperties)
+
+#### ActivationRequirementProperties
+Certain [ActivationRequirements](#activationrequirement) have parameters, which are defined here.
+
+_**Options:**_
+- `TotalDamageTaken`: For `ActivationRequirement.DamageTake`: Specifies the amount of damage you need to take before the effect activates.
+- `EnemiesKilled`: For `ActivationRequirement.EnemiesKilled`: Specifies the number of enemies you need to kill before the effect activates.
+
 
 #### Trigger
 Describes what needs to happen for the effect to be applied.
@@ -406,6 +421,7 @@ _**Options:**_
 - `OnBossKill`: Effect applies ONLY when a boss enemy is killed.
 - `OnDash`: Effect applies when you dash
 - `OnDeath`: Effect applies when you die. **NOTE:** Attempting to heal yourself with this trigger will NOT revive you
+- `OnTakeDamage`: Effect applies when you take damage from any source.
 
 #### Action
 Describes what this effect will do
