@@ -1,0 +1,594 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "TemplateFile",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "ModSource": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "Stats": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/CardTemplate"
+      }
+    },
+    "StatCards": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/CardTemplate"
+      }
+    }
+  },
+  "definitions": {
+    "CardTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Schema": {
+          "type": "string"
+        },
+        "Name": {
+          "type": "string"
+        },
+        "TexturePath": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "Rarity": {
+          "$ref": "#/definitions/TemplateCardRarity"
+        },
+        "Tags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TemplateCardTag"
+          }
+        },
+        "DropWeight": {
+          "type": "number",
+          "format": "float"
+        },
+        "LevelUpWeight": {
+          "type": "number",
+          "format": "float"
+        },
+        "MaxLevel": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "Modifiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ModifierTemplate"
+          }
+        },
+        "NameLocalization": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "DescriptionLocalization": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "BanishesCardsByName": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "BanishesCardsWithStatsOfType": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "RemovesCards": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "RequiresAny": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/RequirementTemplate"
+            }
+          ]
+        },
+        "RequiresAll": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/RequirementTemplate"
+            }
+          ]
+        },
+        "DisabledInMode": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/DisabledInMode"
+            }
+          ]
+        },
+        "Effects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ConfigurableEffect"
+          }
+        }
+      }
+    },
+    "TemplateCardRarity": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Tainted",
+        "Normal",
+        "Uncommon",
+        "Rare",
+        "Epic",
+        "Heroic",
+        "Ascended",
+        "Synergy",
+        "Evolution",
+        "NONE"
+      ],
+      "enum": [
+        "Tainted",
+        "Normal",
+        "Uncommon",
+        "Rare",
+        "Epic",
+        "Heroic",
+        "Ascended",
+        "Synergy",
+        "Evolution",
+        "NONE"
+      ]
+    },
+    "TemplateCardTag": {
+      "type": "string",
+      "description": "",
+      "x-enumFlags": true,
+      "x-enumNames": [
+        "None",
+        "Order",
+        "Critical",
+        "Defence",
+        "Body",
+        "Might",
+        "Evolution"
+      ],
+      "enum": [
+        "None",
+        "Order",
+        "Critical",
+        "Defence",
+        "Body",
+        "Might",
+        "Evolution"
+      ]
+    },
+    "ModifierTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ModifierValue": {
+          "type": "number",
+          "format": "float"
+        },
+        "ModifierType": {
+          "$ref": "#/definitions/TemplateModifierType"
+        },
+        "Stat": {
+          "$ref": "#/definitions/TemplateStatsType"
+        }
+      }
+    },
+    "TemplateModifierType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Additional",
+        "Multiplier",
+        "Compound"
+      ],
+      "enum": [
+        "Additional",
+        "Multiplier",
+        "Compound"
+      ]
+    },
+    "TemplateStatsType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "MaxHealth",
+        "HealthRegen",
+        "Defence",
+        "DamageMitigation",
+        "XPMultiplier",
+        "PickUpDistance",
+        "AdditionalProjectile",
+        "ProjectilePiercing",
+        "ProjectileLifeTime",
+        "ProjectileSpeed",
+        "ProjectileSize",
+        "AreaSize",
+        "KnockBack",
+        "MoveSpeed",
+        "AttackCoolDown",
+        "AttackDelay",
+        "Damage",
+        "CriticalChance",
+        "CriticalMultiplier",
+        "DashSpeed",
+        "DashDuration",
+        "DashDelay",
+        "DashCoolDown",
+        "DashCharge",
+        "DashChargePerCoolDown",
+        "GoldMultiplier",
+        "SoulCoinMultiplier",
+        "DefencePiercing",
+        "Corruption"
+      ],
+      "enum": [
+        "MaxHealth",
+        "HealthRegen",
+        "Defence",
+        "DamageMitigation",
+        "XPMultiplier",
+        "PickUpDistance",
+        "AdditionalProjectile",
+        "ProjectilePiercing",
+        "ProjectileLifeTime",
+        "ProjectileSpeed",
+        "ProjectileSize",
+        "AreaSize",
+        "KnockBack",
+        "MoveSpeed",
+        "AttackCoolDown",
+        "AttackDelay",
+        "Damage",
+        "CriticalChance",
+        "CriticalMultiplier",
+        "DashSpeed",
+        "DashDuration",
+        "DashDelay",
+        "DashCoolDown",
+        "DashCharge",
+        "DashChargePerCoolDown",
+        "GoldMultiplier",
+        "SoulCoinMultiplier",
+        "DefencePiercing",
+        "Corruption"
+      ]
+    },
+    "RequirementTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Cards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CardRequirementTemplate"
+          }
+        },
+        "Stats": {
+          "$ref": "#/definitions/StatRequirementTemplate"
+        }
+      }
+    },
+    "CardRequirementTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Level": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "StatRequirementTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "StatRequirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/StatRequirement"
+          }
+        },
+        "RequirementType": {
+          "type": "string"
+        }
+      }
+    },
+    "StatRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Value": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "DisabledInMode": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "Rogs",
+        "Survivors"
+      ],
+      "enum": [
+        "Rogs",
+        "Survivors"
+      ]
+    },
+    "ConfigurableEffect": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "AssetBasePath": {
+          "type": "string"
+        },
+        "Type": {
+          "$ref": "#/definitions/EffectType"
+        },
+        "ActivationRequirement": {
+          "$ref": "#/definitions/EffectActivationRequirement"
+        },
+        "ActivationRequirementProperties": {
+          "$ref": "#/definitions/EffectActivationRequirementProperties"
+        },
+        "Trigger": {
+          "$ref": "#/definitions/EffectTrigger"
+        },
+        "Action": {
+          "$ref": "#/definitions/EffectAction"
+        },
+        "Properties": {
+          "$ref": "#/definitions/EffectProperties"
+        },
+        "Enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "EffectType": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "OneTime",
+        "Duration",
+        "Interval",
+        "Trigger"
+      ],
+      "enum": [
+        "OneTime",
+        "Duration",
+        "Interval",
+        "Trigger"
+      ]
+    },
+    "EffectActivationRequirement": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "None",
+        "StageStart",
+        "StageEnd",
+        "EnemiesKilled",
+        "DamageTaken"
+      ],
+      "enum": [
+        "None",
+        "StageStart",
+        "StageEnd",
+        "EnemiesKilled",
+        "DamageTaken"
+      ]
+    },
+    "EffectActivationRequirementProperties": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "TotalDamageTaken": {
+          "type": [
+            "null",
+            "number"
+          ],
+          "format": "float"
+        },
+        "EnemiesKilled": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "int64"
+        }
+      }
+    },
+    "EffectTrigger": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "OnStageStart",
+        "OnStageEnd",
+        "OnKill",
+        "OnEliteKill",
+        "OnBossKill",
+        "OnDash",
+        "OnDeath",
+        "OnTakeDamage"
+      ],
+      "enum": [
+        "OnStageStart",
+        "OnStageEnd",
+        "OnKill",
+        "OnEliteKill",
+        "OnBossKill",
+        "OnDash",
+        "OnDeath",
+        "OnTakeDamage"
+      ]
+    },
+    "EffectAction": {
+      "type": "string",
+      "description": "",
+      "x-enumNames": [
+        "AddGold",
+        "AddBanishes",
+        "AddRerolls",
+        "AddRarityRerolls",
+        "HealAmount",
+        "HealPercentage",
+        "ChangeCharacterSprites"
+      ],
+      "enum": [
+        "AddGold",
+        "AddBanishes",
+        "AddRerolls",
+        "AddRarityRerolls",
+        "HealAmount",
+        "HealPercentage",
+        "ChangeCharacterSprites"
+      ]
+    },
+    "EffectProperties": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Amount": {
+          "type": [
+            "null",
+            "number"
+          ],
+          "format": "float"
+        },
+        "Percentage": {
+          "type": [
+            "null",
+            "number"
+          ],
+          "format": "float"
+        },
+        "Duration": {
+          "type": [
+            "null",
+            "number"
+          ],
+          "format": "float"
+        },
+        "Interval": {
+          "type": [
+            "null",
+            "number"
+          ],
+          "format": "float"
+        },
+        "CharacterSpriteConfiguration": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/CharacterSpriteProperties"
+            }
+          ]
+        }
+      }
+    },
+    "CharacterSpriteProperties": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Idle": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/SpriteConfiguration"
+            }
+          ]
+        },
+        "Run": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/SpriteConfiguration"
+            }
+          ]
+        },
+        "Victory": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/SpriteConfiguration"
+            }
+          ]
+        },
+        "Death": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/SpriteConfiguration"
+            }
+          ]
+        }
+      }
+    },
+    "SpriteConfiguration": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "TexturePath": {
+          "type": "string"
+        },
+        "FramesPerRow": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "Rows": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    }
+  }
+}

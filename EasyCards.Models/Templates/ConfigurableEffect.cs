@@ -164,7 +164,8 @@ public class ConfigurableEffect
             this.enemiesKilled = 0;
         }
 
-        if (!this.Enabled) return;
+        if (!this.Enabled)
+            return;
 
         if (this.Trigger == EffectTrigger.OnBossKill && monster.Boss)
         {
