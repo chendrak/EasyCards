@@ -13,7 +13,7 @@ public static class GameEvents
     public delegate void OnRogueLevelStartedHandler();
     public delegate void OnRogueLevelEndedHandler();
     public delegate void OnStartNewGameHandler();
-    public delegate void OnGameStartHandler();
+    public delegate void OnGameLaunchHandler();
     public delegate void OnRunEndHandler();
     public delegate void OnPlayerFinalDeathHandler();
     public delegate void OnDeathHandler();
@@ -22,7 +22,7 @@ public static class GameEvents
     public static event OnRogueLevelStartedHandler OnRogueLevelStartedEvent;
     public static event OnRogueLevelEndedHandler OnRogueLevelEndedEvent;
     public static event OnStartNewGameHandler OnStartNewGameEvent;
-    public static event OnGameStartHandler OnGameStartEvent;
+    public static event OnGameLaunchHandler OnGameLaunchEvent;
     public static event OnRunEndHandler OnRunEndEvent;
     public static event OnPlayerFinalDeathHandler OnPlayerFinalDeathEvent;
     public static event OnDeathHandler OnDeathEvent;
@@ -41,8 +41,8 @@ public static class GameEvents
     private static void GameData_OnStartNewGame() => OnStartNewGameEvent?.Invoke();
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(GameData), nameof(GameData.OnGameStart))]
-    private static void GameData_OnGameStart() => OnGameStartEvent?.Invoke();
+    [HarmonyPatch(typeof(GameData), nameof(GameData.OnGameLaunch))]
+    private static void GameData_OnGameStart() => OnGameLaunchEvent?.Invoke();
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(GameEndManager), nameof(GameEndManager.Awake))]

@@ -37,7 +37,7 @@ namespace EasyCards
 
             Container.Instance.Resolve<IEasyCardsPluginLoader>().Load();
             CardLoader = Container.Instance.Resolve<ICardLoader>();
-            GameEvents.OnGameStartEvent += EffectHolder.ResetEffects;
+            GameEvents.OnGameLaunchEvent += EffectHolder.ResetEffects;
 
             HarmonyPatchHelper.ApplyPatches("EasyCards");
         }

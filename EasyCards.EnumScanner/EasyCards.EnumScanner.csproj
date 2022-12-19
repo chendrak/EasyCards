@@ -6,11 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-    <PackageReference Include="Il2CppInterop.Runtime" Version="1.4.0" />
+    <PackageReference Include="Il2CppInterop.Runtime" Version="1.4.*" />
     <PackageReference Include="RogueGenesia.Mod" Version="1.0.*" />
   </ItemGroup>
 
