@@ -41,7 +41,7 @@ public class ConfigurableEffect
         this.Enabled = false;
     }
 
-    private PlayerData PlayerData => GameData.PlayerDatabase[0];
+    private AvatarData PlayerData => GameData.PlayerDatabase[0];
 
     public void Apply()
     {

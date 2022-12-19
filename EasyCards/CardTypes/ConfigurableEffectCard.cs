@@ -69,7 +69,7 @@ public class ConfigurableEffectCard : SoulCard
         }
     }
 
-    public override void Init(PlayerData owner)
+    public override void Init(AvatarData owner)
     {
         this.InitializeEffects(this._name);
 
@@ -137,7 +137,7 @@ public class ConfigurableEffectCard : SoulCard
         }
     }
 
-    public override void OnKill(PlayerData owner, IEntity killedEntity)
+    public override void OnKill(AvatarData owner, IEntity killedEntity)
     {
         var collisionDetection = killedEntity.GetLinkedGameObject().GetComponent<MonsterCollisionDetection>();
         if (collisionDetection != null)

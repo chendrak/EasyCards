@@ -11,7 +11,7 @@ public static class GameResources
 
     public static void Initialize()
     {
-        GameEvents.OnGameStartEvent += OnGameStarted;
+        GameEvents.OnGameLaunchEvent += OnGameStarted;
     }
 
     private static void OnGameStarted()

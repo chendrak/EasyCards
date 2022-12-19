@@ -32,6 +32,19 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.6
+
+**BREAKING CHANGES:**
+
+* The most recent beta introduced a lot of internal changes. This update makes the mod compatible with that most recent version.
+* For existing card packs to be compatible again, the `Tags` element in each card needs to be empty OR be removed.
+
+**Additional changes:**
+
+* The mod now checks the game version for compatibility and won't load on an unsupported version. Meaning: This version will only work on the current beta!
+* Update Card Tag documentation to the new ones in the game
+* Added `CardDropChance_*` modifiers documentation
+
 #### 1.1.5
 
 * Add `OnTakeDamage` trigger
@@ -291,7 +304,7 @@ Possible values: `Tainted`, `Normal`, `Uncommon` , `Rare`, `Epic`, `Heroic`, `As
 ### Tags
 Tags for your card. Think of them as grouping them.
 
-Possible values: `None`, `Order`, `Critical`, `Defence`, `Body`, `Might`, `Evolution`
+Possible values: `None`, `Moon`, `Sun`, `Fire`, `Wind`, `Hunt`, `Wild`, `Void`, `Dark`, `Metal`
 
 ### DisabledInMode
 Represents the mode this card will be disabled in.
@@ -317,7 +330,7 @@ Example:
 #### Stat
 A stat that your card modifies.
 
-Possible values: `MaxHealth`, `HealthRegen`, `Defence`, `DamageMitigation`, `XPMultiplier`, `PickUpDistance`, `AdditionalProjectile`, `ProjectilePiercing`, `ProjectileLifeTime`, `ProjectileSpeed`, `ProjectileSize`, `AreaSize`, `KnockBack`, `MoveSpeed`, `AttackCoolDown`, `AttackDelay`, `Damage`, `CriticalChance`, `CriticalMultiplier`, `DashSpeed`, `DashDuration`, `DashDelay`, `DashCoolDown`, `DashCharge`, `DashChargePerCoolDown`, `GoldMultiplier`, `SoulCoinMultiplier`, `DefencePiercing`, `Corruption`
+Possible values: `MaxHealth`, `HealthRegen`, `Defence`, `DamageMitigation`, `XPMultiplier`, `PickUpDistance`, `AdditionalProjectile`, `ProjectilePiercing`, `ProjectileLifeTime`, `ProjectileSpeed`, `ProjectileSize`, `AreaSize`, `KnockBack`, `MoveSpeed`, `AttackCoolDown`, `AttackDelay`, `Damage`, `CriticalChance`, `CriticalMultiplier`, `DashSpeed`, `DashDuration`, `DashDelay`, `DashCoolDown`, `DashCharge`, `DashChargePerCoolDown`, `GoldMultiplier`, `SoulCoinMultiplier`, `DefencePiercing`, `Corruption`, `AnachronisticDurationMultiplier`, `CardDropChance_Tainted`, `CardDropChance_Normal`, `CardDropChance_Uncommon`, `CardDropChance_Rare`, `CardDropChance_Epic`, `CardDropChance_Heroic`, `CardDropChance_Ascended`, `CardDropChance_Synergy`, `CardDropChance_Evolution`, `CardDropChance_Moon`, `CardDropChance_Sun`, `CardDropChance_Fire`, `CardDropChance_Wind`, `CardDropChance_Hunt`, `CardDropChance_Wild`, `CardDropChance_Void`, `CardDropChance_Dark`, `CardDropChance_Metal`
 
 #### ModifierType
 _How_ does your card modify a stat?
