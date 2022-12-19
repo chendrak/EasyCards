@@ -20,7 +20,7 @@ namespace EasyCards
         internal static EasyCards Instance { get; private set; }
         private static ICardLoader CardLoader { get; set; }
 
-        private readonly Version MinimumRequiredGameVersion = new(0, 8, 0);
+        private readonly Version MinimumRequiredGameVersion = new(0, 7, 2, preRelease: ".0b-beta");
 
         public override void Load()
         {

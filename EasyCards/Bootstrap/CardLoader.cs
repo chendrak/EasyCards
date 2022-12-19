@@ -19,6 +19,7 @@ using Logging;
 using UnityEngine;
 using Enum = System.Enum;
 using Exception = System.Exception;
+using ModGenesia = ModGenesia.ModGenesia;
 
 public sealed class CardLoader : ICardLoader
 {
@@ -129,12 +130,12 @@ public sealed class CardLoader : ICardLoader
                 if (cardTemplate.Effects.Count == 0)
                 {
                     Logger.LogInfo($"Adding stat card {cardTemplate.Name}");
-                    ModGenesia.ModGenesia.AddCustomStatCard(cardTemplate.Name, soulCardData);
+                    ModGenesia.AddCustomStatCard(cardTemplate.Name, soulCardData);
                 }
                 else
                 {
                     Logger.LogInfo($"Adding effect card {cardTemplate.Name}");
-                    ModGenesia.ModGenesia.AddCustomCard(cardTemplate.Name, effectCardConstructor, soulCardData);
+                    ModGenesia.AddCustomCard(cardTemplate.Name, effectCardConstructor, soulCardData);
 
                     foreach (var effect in cardTemplate.Effects)
                     {
