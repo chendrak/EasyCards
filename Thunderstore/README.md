@@ -35,6 +35,7 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 #### 1.1.7
 
 * Fix some internals that help with creating cards
+* To log all cards' information, you can now press `CTRL + SHIFT + L`, as opposed to having to enable it in the config. 
 
 #### 1.1.6
 
