@@ -1,4 +1,4 @@
-namespace EasyCards.Events;
+namespace EasyCards.Common.Events;
 
 using HarmonyLib;
 using RogueGenesia.Actors.Survival;

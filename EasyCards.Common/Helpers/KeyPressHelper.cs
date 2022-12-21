@@ -2,47 +2,63 @@ namespace EasyCards.Common.Helpers;
 
 using System;
 using System.Collections.Generic;
+using BepInEx.Unity.IL2CPP;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
-public struct KeyPressData
+[Flags]
+public enum Modifiers
 {
-    internal List<Key> KeysToPress;
-
-    public KeyPressData(params Key[] keysToPress)
-    {
-        this.KeysToPress = keysToPress.ToList();
-    }
+    None = 0,
+    Shift = 1,
+    Ctrl = 2,
+    Alt = 4,
 }
 
 public static class KeyPressHelper
 {
-    private static Dictionary<KeyPressData, Action> _keypressActions = new();
+    private static KeyPressBehaviour _behaviour;
 
     static KeyPressHelper()
     {
-        UnityUpdateHelper.OnUnityUpdate += OnUpdate;
+        _behaviour = IL2CPPChainloader.AddUnityComponent<KeyPressBehaviour>();
     }
 
-    public static void RegisterKey(Key key, Action action)
+    public static void RegisterKey(Key key, Modifiers modifiers, Action action)
     {
-        RegisterKeyCombo(new KeyPressData(key), action);
+        _behaviour.RegisterKeyCombo(key, modifiers, action);
     }
+}
 
-    public static void RegisterKeyCombo(KeyPressData data, Action action)
+class KeyPressBehaviour : MonoBehaviour
+{
+    internal static Dictionary<KeyPressData, Action> _keypressActions = new();
+
+    internal void RegisterKeyCombo(Key key, Modifiers modifiers, Action action)
     {
+        var data = new KeyPressData(key, modifiers);
         _keypressActions[data] = action;
     }
 
-    private static void OnUpdate()
+    private void FixedUpdate()
     {
         var kb = Keyboard.current;
 
         foreach (var keypressAction in _keypressActions)
         {
-            var keys = keypressAction.Key;
-            if (keys.KeysToPress.All(key => kb[key].wasPressedThisFrame)) {
+            var data = keypressAction.Key;
+            if (kb[data.Key].wasPressedThisFrame && AreModifiersHeld(data.Modifiers)) {
                 keypressAction.Value.Invoke();
             }
         }
+    }
+
+    private bool AreModifiersHeld(Modifiers modifiers)
+    {
+        var kb = Keyboard.current;
+        if ((modifiers & Modifiers.Shift) == Modifiers.Shift && !kb.shiftKey.isPressed) return false;
+        if ((modifiers & Modifiers.Ctrl) == Modifiers.Ctrl && !kb.ctrlKey.isPressed) return false;
+        if ((modifiers & Modifiers.Alt) == Modifiers.Alt && !kb.altKey.isPressed) return false;
+        return true;
     }
 }

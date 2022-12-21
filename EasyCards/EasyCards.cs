@@ -1,9 +1,9 @@
 using BepInEx;
 using EasyCards.Bootstrap;
 using EasyCards.CardTypes;
+using EasyCards.Common.Events;
 using EasyCards.Common.Helpers;
 using EasyCards.Effects;
-using EasyCards.Events;
 using EasyCards.Helpers;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;

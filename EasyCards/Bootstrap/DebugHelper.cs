@@ -12,7 +12,7 @@ public static class DebugHelper
 
     public static void Initialize()
     {
-        KeyPressHelper.RegisterKeyCombo(new KeyPressData(Key.LeftCtrl, Key.LeftShift, Key.L), OnDebugLogKeyPressed);
+        KeyPressHelper.RegisterKey(Key.L, Modifiers.Ctrl | Modifiers.Shift, OnDebugLogKeyPressed);
     }
 
     private static void LogCard(SoulCardScriptableObject card)

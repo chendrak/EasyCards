@@ -1,7 +1,7 @@
 namespace EasyCards.Bootstrap;
 
+using Common.Events;
 using Common.Helpers;
-using Events;
 
 public static class ResourceHelper
 {
