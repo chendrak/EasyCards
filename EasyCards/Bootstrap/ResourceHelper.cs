@@ -3,15 +3,15 @@ namespace EasyCards.Bootstrap;
 using Common.Helpers;
 using Events;
 
-public class ResourceHelper : IResourceHelper
+public static class ResourceHelper
 {
-    public void Initialize()
+    public static void Initialize()
     {
         GameResources.Initialize();
-        GameEvents.OnRunEndEvent += this.OnRunEnded;
+        GameEvents.OnRunEndEvent += OnRunEnded;
     }
 
-    private void OnRunEnded()
+    private static void OnRunEnded()
     {
         // Restore original sprite
         ModUtils.ApplyRogSkin(GameResources.DefaultCharacterSpriteProperties);

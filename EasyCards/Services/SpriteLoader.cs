@@ -1,19 +1,14 @@
 using System.IO;
-using Microsoft.Extensions.Logging;
 using UnityEngine;
+using BepInEx.Logging;
 
 namespace EasyCards.Services;
 
-public sealed class SpriteLoader : ISpriteLoader
+public static class SpriteLoader
 {
-    public SpriteLoader(ILogger<SpriteLoader> logger)
-    {
-        Logger = logger;
-    }
+    private static ManualLogSource Logger = EasyCards.Instance.Log;
 
-    private ILogger<SpriteLoader> Logger { get; }
-
-    private Texture2D? LoadPNGIntoTexture(string filePath)
+    public static Texture2D? LoadPNGIntoTexture(string filePath)
     {
         Texture2D? tex = null;
 
@@ -30,7 +25,7 @@ public sealed class SpriteLoader : ISpriteLoader
         return tex;
     }
 
-    public Sprite? LoadSprite(string filePath)
+    public static Sprite? LoadSprite(string filePath)
     {
         var tex = LoadPNGIntoTexture(filePath);
         return tex ? Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f) : null;

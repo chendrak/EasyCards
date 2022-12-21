@@ -18,7 +18,6 @@ namespace EasyCards
     public class EasyCards : RogueGenesiaMod
     {
         internal static EasyCards Instance { get; private set; }
-        private static ICardLoader CardLoader { get; set; }
 
         private readonly Version MinimumRequiredGameVersion = new(0, 7, 2, preRelease: ".0b-beta");
 
@@ -35,11 +34,15 @@ namespace EasyCards
             // As the container uses this to expose BepInEx types.
             Instance = this;
 
-            Container.Instance.Resolve<IEasyCardsPluginLoader>().Load();
-            CardLoader = Container.Instance.Resolve<ICardLoader>();
+            DebugHelper.Initialize();
+            ResourceHelper.Initialize();
+
             GameEvents.OnGameLaunchEvent += EffectHolder.ResetEffects;
 
             HarmonyPatchHelper.ApplyPatches("EasyCards");
+
+            // This should be the last thing we initialize, so the cards get loaded at the very end
+            CardLoader.Initialize();
         }
 
         public override string ModDescription()

@@ -32,6 +32,10 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.7
+
+* Fix some internals that help with creating cards
+
 #### 1.1.6
 
 **BREAKING CHANGES:**
