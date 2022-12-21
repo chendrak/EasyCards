@@ -1,10 +1,10 @@
 namespace EasyCards.Bootstrap;
 
-using RogueGenesia.Data;
-using UnityEngine.InputSystem;
 using BepInEx.Logging;
 using Common.Helpers;
+using RogueGenesia.Data;
 using Services;
+using UnityEngine.InputSystem;
 
 public static class DebugHelper
 {

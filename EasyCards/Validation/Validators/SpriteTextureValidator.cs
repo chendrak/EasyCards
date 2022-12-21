@@ -1,7 +1,7 @@
 namespace EasyCards.Services;
 
-using Validation;
 using UnityEngine;
+using Validation;
 
 public sealed class SpriteTextureValidator : ValidatorBase<Texture2D>
 {

@@ -47,7 +47,8 @@ class KeyPressBehaviour : MonoBehaviour
         foreach (var keypressAction in _keypressActions)
         {
             var data = keypressAction.Key;
-            if (kb[data.Key].wasPressedThisFrame && AreModifiersHeld(data.Modifiers)) {
+            if (kb[data.Key].wasPressedThisFrame && AreModifiersHeld(data.Modifiers))
+            {
                 keypressAction.Value.Invoke();
             }
         }
@@ -56,9 +57,12 @@ class KeyPressBehaviour : MonoBehaviour
     private bool AreModifiersHeld(Modifiers modifiers)
     {
         var kb = Keyboard.current;
-        if ((modifiers & Modifiers.Shift) == Modifiers.Shift && !kb.shiftKey.isPressed) return false;
-        if ((modifiers & Modifiers.Ctrl) == Modifiers.Ctrl && !kb.ctrlKey.isPressed) return false;
-        if ((modifiers & Modifiers.Alt) == Modifiers.Alt && !kb.altKey.isPressed) return false;
+        if ((modifiers & Modifiers.Shift) == Modifiers.Shift && !kb.shiftKey.isPressed)
+            return false;
+        if ((modifiers & Modifiers.Ctrl) == Modifiers.Ctrl && !kb.ctrlKey.isPressed)
+            return false;
+        if ((modifiers & Modifiers.Alt) == Modifiers.Alt && !kb.altKey.isPressed)
+            return false;
         return true;
     }
 }
