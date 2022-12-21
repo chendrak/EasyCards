@@ -3,11 +3,11 @@ using RogueGenesia.Data;
 
 namespace EasyCards.Services;
 
-public sealed class CardRepository : ICardRepository
+public static class CardRepository
 {
-    private ImmutableArray<SoulCardScriptableObject>? _cardCache;
+    private static ImmutableArray<SoulCardScriptableObject>? _cardCache;
 
-    public ImmutableArray<SoulCardScriptableObject> GetAllCards() =>
+    public static ImmutableArray<SoulCardScriptableObject> GetAllCards() =>
         _cardCache ??= GameDataGetter.GetAllCards().ToImmutableArray();
 
 }

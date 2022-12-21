@@ -3,9 +3,11 @@ using Native = System.Text.Json.JsonSerializer;
 
 namespace EasyCards.Services
 {
-    public sealed class JsonDeserializer : IJsonDeserializer
+    public static class JsonDeserializer
     {
-        public JsonDeserializer()
+        private static JsonSerializerOptions Options;
+
+        static JsonDeserializer()
         {
             Options = new()
             {
@@ -19,11 +21,6 @@ namespace EasyCards.Services
         }
 
 
-        public T Deserialize<T>(string json)
-        {
-            return Native.Deserialize<T>(json, Options);
-        }
-
-        public JsonSerializerOptions Options;
+        public static T Deserialize<T>(string json) => Native.Deserialize<T>(json, Options);
     }
 }
