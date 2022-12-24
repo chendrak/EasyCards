@@ -19,7 +19,7 @@ public class CardTemplate
 
     public TemplateCardRarity Rarity { get; set; }
 
-    public List<TemplateCardTag> Tags { get; set; } = new();
+    public List<TemplateCardTag> CardTags { get; set; } = new();
     public float DropWeight { get; set; }
     public float LevelUpWeight { get; set; }
     public int MaxLevel { get; set; }
@@ -38,6 +38,6 @@ public class CardTemplate
 
     public override string ToString()
     {
-        return $"{nameof(Name)}: {Name}, {nameof(TexturePath)}: {TexturePath}, {nameof(Rarity)}: {Rarity}, {nameof(Tags)}: {Tags}, {nameof(DropWeight)}: {DropWeight}, {nameof(LevelUpWeight)}: {LevelUpWeight}, {nameof(MaxLevel)}: {MaxLevel}, {nameof(Modifiers)}: {Modifiers}";
+        return $"{nameof(Name)}: {Name}, {nameof(TexturePath)}: {TexturePath}, {nameof(Rarity)}: {Rarity}, {nameof(this.CardTags)}: {this.CardTags}, {nameof(DropWeight)}: {DropWeight}, {nameof(LevelUpWeight)}: {LevelUpWeight}, {nameof(MaxLevel)}: {MaxLevel}, {nameof(Modifiers)}: {Modifiers}";
     }
 }

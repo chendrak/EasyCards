@@ -32,6 +32,10 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.9
+
+* Fixed an issue with loading existing card packs 
+
 #### 1.1.8
 
 * Fixed another internal issue 
@@ -156,8 +160,8 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
       "Rarity": "Epic",
       
       // The tags the card has. See the list below for options.
-      // Required
-      "Tags": [ "Might", "Critical" ],
+      // Optional
+      "CardTags": [ "Moon", "Sun" ],
       
       // How likely is this card to drop?
       // Required
@@ -308,7 +312,7 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 ### Rarity
 The rarity of the card.
 
-Possible values: `Tainted`, `Normal`, `Uncommon` , `Rare`, `Epic`, `Heroic`, `Ascended`, `Evolution`
+Possible values: `Tainted`, `Normal`, `Uncommon` , `Rare`, `Epic`, `Heroic`, `Ascended`, `Synergy`, `Evolution`
 
 ### Tags
 Tags for your card. Think of them as grouping them.

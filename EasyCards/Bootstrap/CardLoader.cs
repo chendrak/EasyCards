@@ -170,7 +170,7 @@ public static class CardLoader
 
         soulCardData.Rarity = (CardRarity)(int)cardTemplate.Rarity;
 
-        var tags = (CardTag)cardTemplate.Tags.Aggregate(0, (current, tag) => current | (int)tag);
+        var tags = (CardTag)cardTemplate.CardTags.Aggregate(0, (current, tag) => current | (int)tag);
 
         soulCardData.Tags = tags;
         soulCardData.DropWeight = cardTemplate.DropWeight;
