@@ -18,14 +18,9 @@ namespace EasyCards.Weapons
         public LeechRing(IntPtr ptr) : base(ptr)
         {
             this.ComboCount = 1;
-            this.Damage = 0.01f;
+            this.Damage = 3f;
             this.DelayBetweenCombo = 0.6f;
             this.WeaponRange = 1f;
-        }
-
-        public LeechRing() : base(ClassInjector.DerivedConstructorPointer<LeechRing>())
-        {
-            ClassInjector.DerivedConstructorBody(this);
         }
 
         public override void OnAttack(PlayerEntity Owner, AttackInformation attackInformation)

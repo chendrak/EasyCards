@@ -5,16 +5,19 @@ using System.IO;
 using System.Linq;
 using BepInEx.Logging;
 using CardTypes;
+using Common.Helpers;
 using Effects;
 using Extensions;
 using Helpers;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
+using Il2CppSystem.Reflection;
 using Models.Templates;
 using ModGenesia;
 using RogueGenesia.Data;
 using Services;
 using UnityEngine;
+using Weapons;
 using Enum = System.Enum;
 using Exception = System.Exception;
 using ModGenesia = ModGenesia.ModGenesia;
@@ -35,6 +38,9 @@ public static class CardLoader
     public static void Initialize()
     {
         RegisterCustomCardTypes();
+
+        AddCodedCards();
+
         if (Directory.Exists(Paths.Data))
         {
             var jsonFiles = Directory.GetFiles(Paths.Data, "*.json");
@@ -73,12 +79,76 @@ public static class CardLoader
         PostProcessRequirements(allCards, _successFullyLoadedCards);
     }
 
+    private static void AddCodedCards()
+    {
+        // if (AddXpRing())
+        // {
+        //     Logger.LogInfo("XP Ring added");
+        // }
+
+        if (AddLeechRing())
+        {
+            Logger.LogInfo("Leech Ring added");
+        }
+    }
+
+    private static ConstructorInfo GetConstructorForType<T>() where T : Il2CppSystem.Object
+    {
+        var customType = Il2CppType.Of<T>();
+        return customType.GetConstructors().First();
+    }
+
+    private static SoulCardScriptableObject AddXpRing()
+    {
+        SoulCardCreationData sccd = new SoulCardCreationData
+        {
+            Rarity = CardRarity.Normal,
+            Texture = SpriteHelper.LoadSprite(Path.Combine(Paths.Assets, "XPRing.png")),
+            MaxLevel = 7,
+            ModSource = MyPluginInfo.PLUGIN_NAME,
+            NameOverride = Localization.GetTranslations(new Dictionary<string, string>
+            {
+                ["en"] = "XP Ring"
+            }).ToIl2CppList(),
+            DropWeight = 100,
+            LevelUpWeight = 100,
+        };
+
+        return ModGenesia.AddCustomWeapon("XPRing", GetConstructorForType<XPRing>(), sccd);
+    }
+
+    private static SoulCardScriptableObject AddLeechRing()
+    {
+        SoulCardCreationData sccd = new SoulCardCreationData
+        {
+            Rarity = CardRarity.Normal,
+            Texture = SpriteHelper.LoadSprite(Path.Combine(Paths.Assets, "LeechRing.png")),
+            MaxLevel = 7,
+            ModSource = MyPluginInfo.PLUGIN_NAME,
+            NameOverride = Localization.GetTranslations(new Dictionary<string, string>
+            {
+                ["en"] = "Leech Ring"
+            }).ToIl2CppList(),
+            DropWeight = 100,
+            LevelUpWeight = 100,
+        };
+
+        return ModGenesia.AddCustomWeapon("XPRing", GetConstructorForType<LeechRing>(), sccd);
+    }
+
+    private static void RegisterType<T>() where T : Il2CppSystem.Object
+    {
+        if (!ClassInjector.IsTypeRegisteredInIl2Cpp<T>())
+        {
+            ClassInjector.RegisterTypeInIl2Cpp<T>();
+        }
+    }
+
     private static void RegisterCustomCardTypes()
     {
-        if (!ClassInjector.IsTypeRegisteredInIl2Cpp<ConfigurableEffectCard>())
-        {
-            ClassInjector.RegisterTypeInIl2Cpp<ConfigurableEffectCard>();
-        }
+        RegisterType<ConfigurableEffectCard>();
+        RegisterType<LeechRing>();
+        RegisterType<XPRing>();
     }
 
     public static Dictionary<string, CardTemplate> GetLoadedCards() => _successFullyLoadedCards;
