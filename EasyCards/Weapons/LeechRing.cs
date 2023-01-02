@@ -3,7 +3,6 @@ namespace EasyCards.Weapons
     using System;
     using Common.Helpers;
     using Helpers;
-    using Il2CppInterop.Runtime.Injection;
     using Il2CppInterop.Runtime.InteropTypes;
     using RogueGenesia.Actors.Survival;
     using RogueGenesia.Data;
@@ -31,16 +30,17 @@ namespace EasyCards.Weapons
                     Owner.transform.position + new Vector3(0.0f, 0.5f, 0.0f), Quaternion.identity);
                 this.AuraFX.transform.SetParent(Owner.transform);
                 Material material = this.AuraFX.GetComponentInChildren<MeshRenderer>().material;
-                material.color = new Color(91f / 256f, 27f / 128f, 61f / 128f, 1f);
-                material.SetColor("Base_Color", new Color(91f / 256f, 27f / 128f, 61f / 128f, 1f));
-                material.SetColor("Color_1", new Color(91f / 256f, 27f / 128f, 61f / 128f, 1f));
-                material.SetColor("Emissive", new Color(91f / 256f, 27f / 128f, 61f / 128f, 1f));
+                var leechFxColor = new Color(91f / 256f, 27f / 128f, 61f / 128f, 1f);
+                material.color = leechFxColor;
+                material.SetColor("Base_Color", leechFxColor);
+                material.SetColor("Color_1", leechFxColor);
+                material.SetColor("Emissive", leechFxColor);
                 material.SetTexture("_MainTex", (Texture)SpriteHelper.LoadPNGIntoTexture("LeechFXMask.png"));
             }
 
-            float num1 = this.WeaponRange * Owner.GetPlayerStats.AreaSize.Value;
-            float num2 = num1 * 2f;
-            this.AuraFX.transform.localScale = new Vector3(num2, num2, num2);
+            float actualAreaSize = this.WeaponRange * Owner.GetPlayerStats.AreaSize.Value;
+            float doubleAreaSize = actualAreaSize * 2f;
+            this.AuraFX.transform.localScale = new Vector3(doubleAreaSize, doubleAreaSize, doubleAreaSize);
             Vector3 position1 = Owner.transform.position;
             DamageMultiplierData multiplierNoCrit = Owner.GetDamageMultiplierNoCrit;
             DamageInformation damageInformation = new DamageInformation();
@@ -57,7 +57,7 @@ namespace EasyCards.Weapons
                 {
                     Monster enemy = EnemyManager.GetEnemy(index);
                     Vector3 position2 = enemy.GetLinkedGameObject().transform.position;
-                    float num3 = enemy.Scale * 0.5f + num1;
+                    float num3 = enemy.Scale * 0.5f + actualAreaSize;
                     float num4 = num3 * num3;
                     Vector3 vector3_2 = position1;
                     vector3_1 = position2 - vector3_2;
@@ -79,7 +79,7 @@ namespace EasyCards.Weapons
                     if (!((UnityEngine.Object)component == (UnityEngine.Object)null) &&
                         !(component.Pointer == IntPtr.Zero))
                     {
-                        float num5 = component.transform.localScale.x * 0.5f + num1;
+                        float num5 = component.transform.localScale.x * 0.5f + actualAreaSize;
                         float num6 = num5 * num5;
                         vector3_1 = component.transform.position - position1;
                         if (vector3_1.sqrMagnitude <= num6)
