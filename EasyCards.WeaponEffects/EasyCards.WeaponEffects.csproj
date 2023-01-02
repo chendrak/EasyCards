@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.664" IncludeAssets="compile" />
+    <PackageReference Include="HarmonyX" Version="2.10.1" />
+    <PackageReference Include="Il2CppInterop.Runtime" Version="1.4.*" />
+    <PackageReference Include="RogueGenesia.Mod" Version="1.0.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../EasyCards.Models/EasyCards.Models.csproj" />
+    <ProjectReference Include="../EasyCards.Common/EasyCards.Common.csproj" />
+  </ItemGroup>
+
+</Project>
