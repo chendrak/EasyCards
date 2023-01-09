@@ -4,14 +4,16 @@ using EasyCards.Common.Helpers;
 using EasyCards.Effects;
 using EasyCards.Helpers;
 using ModManager;
-using SemanticVersioning;
 
 namespace EasyCards
 {
+    using System;
     using System.IO;
     using BepInEx;
     using Mono.Cecil;
     using Services;
+    using UnityEngine.InputSystem;
+    using Version = SemanticVersioning.Version;
 
     [BepInDependency(DependencyGUID: "ModManager", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
@@ -42,10 +44,20 @@ namespace EasyCards
 
             WeaponEffectLoader.Initialize(CreateAssemblyResolver());
 
+            WeaponToEffectMapper.RegisterWeaponToEffectMapping("TestWeapon", "TestEffect");
+
+            KeyPressHelper.RegisterKey(Key.F6, Modifiers.None, ReloadWeaponEffects);
+
             HarmonyPatchHelper.ApplyPatches("EasyCards");
 
             // This should be the last thing we initialize, so the cards get loaded at the very end
             CardLoader.Initialize();
+        }
+
+        private void ReloadWeaponEffects()
+        {
+            var weaponEffectDirectory = Path.Combine(Paths.EasyCards, "weapon-effects");
+            WeaponEffectLoader.LoadWeaponEffectsFromPath(weaponEffectDirectory);
         }
 
         private static DefaultAssemblyResolver CreateAssemblyResolver()

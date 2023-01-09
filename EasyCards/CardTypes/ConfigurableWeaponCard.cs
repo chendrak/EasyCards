@@ -1,6 +1,7 @@
 namespace EasyCards.CardTypes;
 
 using System;
+using Common.Logging;
 using Models.Templates;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;
@@ -15,6 +16,12 @@ public class ConfigurableWeaponCard : Weapon
     {
         WeaponEffectRegistry.OnWeaponEffectRegisteredEvent += OnWeaponEffectRegistered;
         WeaponEffectRegistry.OnWeaponEffectUnregisteredEvent += OnWeaponEffectUnregistered;
+        this.WeaponEffectName = WeaponToEffectMapper.GetEffectNameForWeapon(this.WeaponName);
+    }
+
+    public override void Init(PlayerEntity Owner)
+    {
+        SetWeaponEffect(WeaponToEffectMapper.GetEffectForWeapon(this.GetType().Name));
     }
 
     private void OnWeaponEffectUnregistered(Type type)
@@ -29,13 +36,21 @@ public class ConfigurableWeaponCard : Weapon
     {
         if (type.Name == this.WeaponEffectName)
         {
-
+            SetWeaponEffect(WeaponEffectRegistry.GetEffectForType(type));
         }
     }
 
-    public void SetWeaponEffect(WeaponEffect? effect) => this.WeaponEffect = effect;
+    public virtual void SetWeaponEffect(WeaponEffect? effect)
+    {
+        Log.Info($"Setting Weapon Effect: {effect}");
+        this.WeaponEffect = effect;
+        while (this.WeaponEffect?.Level < this.Level)
+        {
+            this.WeaponEffect?.LevelUp();
+        }
+    }
 
-    public override void OnAttack(PlayerEntity Owner, AttackInformation attackInformation) => this.WeaponEffect?.OnAttack(Owner, attackInformation);
+    public override void OnAttack(PlayerEntity Owner, AttackInformation attackInformation) => this.WeaponEffect?.OnAttack(this, Owner, attackInformation);
 
     public override void OnTakeDamage(PlayerEntity Owner, IEntity damageOwner, ref float modifierDamageValue,
         float damageValue) =>
@@ -45,7 +60,14 @@ public class ConfigurableWeaponCard : Weapon
     {
         this.WeaponEffect?.OnRemove();
         this.WeaponEffect = null;
+
+        WeaponEffectRegistry.OnWeaponEffectRegisteredEvent -= OnWeaponEffectRegistered;
+        WeaponEffectRegistry.OnWeaponEffectUnregisteredEvent -= OnWeaponEffectUnregistered;
     }
 
-    public override void LevelUp() => this.WeaponEffect?.LevelUp();
+    public override void LevelUp()
+    {
+        base.LevelUp();
+        this.WeaponEffect?.LevelUp();
+    }
 }

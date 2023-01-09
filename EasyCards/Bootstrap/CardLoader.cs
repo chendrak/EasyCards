@@ -86,10 +86,15 @@ public static class CardLoader
         //     Logger.LogInfo("XP Ring added");
         // }
 
-        if (AddLeechRing())
-        {
-            Logger.LogInfo("Leech Ring added");
-        }
+        // if (AddLeechRing())
+        // {
+        //     Logger.LogInfo("Leech Ring added");
+        // }
+
+        // if (AddDevilBlade())
+        // {
+        //     Logger.LogInfo("Devil Blade added");
+        // }
     }
 
     private static ConstructorInfo GetConstructorForType<T>() where T : Il2CppSystem.Object
@@ -106,15 +111,32 @@ public static class CardLoader
             Texture = SpriteHelper.LoadSprite(Path.Combine(Paths.Assets, "XPRing.png")),
             MaxLevel = 7,
             ModSource = MyPluginInfo.PLUGIN_NAME,
-            NameOverride = Localization.GetTranslations(new Dictionary<string, string>
-            {
-                ["en"] = "XP Ring"
-            }).ToIl2CppList(),
+            NameOverride =
+                Localization.GetTranslations(new Dictionary<string, string> { ["en"] = "XP Ring" }).ToIl2CppList(),
             DropWeight = 100,
             LevelUpWeight = 100,
         };
 
         return ModGenesia.AddCustomWeapon("XPRing", GetConstructorForType<XPRing>(), sccd);
+    }
+
+    private static SoulCardScriptableObject AddDevilBlade()
+    {
+        SoulCardCreationData sccd = new SoulCardCreationData
+        {
+            Rarity = CardRarity.Normal,
+            Texture = SpriteHelper.LoadSprite(Path.Combine(Paths.Assets, "DevilBlade.png")),
+            MaxLevel = 7,
+            ModSource = MyPluginInfo.PLUGIN_NAME,
+            NameOverride = Localization.GetTranslations(new Dictionary<string, string>
+            {
+                ["en"] = "Devil Blade"
+            }).ToIl2CppList(),
+            DropWeight = 100,
+            LevelUpWeight = 100,
+        };
+
+        return ModGenesia.AddCustomWeapon("DevilBlade", GetConstructorForType<DevilBlade>(), sccd);
     }
 
     private static SoulCardScriptableObject AddLeechRing()
@@ -149,6 +171,7 @@ public static class CardLoader
         RegisterType<ConfigurableEffectCard>();
         RegisterType<LeechRing>();
         RegisterType<XPRing>();
+        RegisterType<DevilBlade>();
     }
 
     public static Dictionary<string, CardTemplate> GetLoadedCards() => _successFullyLoadedCards;

@@ -1,18 +1,31 @@
 namespace EasyCards.Models.Templates;
 
-using System.Reflection;
 using Common.Extensions;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using Il2CppSystem;
+using Il2CppSystem.Reflection;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;
+using ArgumentOutOfRangeException = System.ArgumentOutOfRangeException;
+using Type = System.Type;
 
 public class WeaponProjectileConfig
 {
-    public ProjectileAIType ProjectileAIType;
-    public ProjectileTargetingType ProjectileTargetingType;
+    public ProjectileTargetingType ProjectileTargetingType { get; private init; }
+    public readonly ConstructorInfo ctor;
+
+    public WeaponProjectileConfig(ProjectileAIType aiType, ProjectileTargetingType targetingType)
+    {
+        this.ctor = ProjectileAiMapper.MapTypeToAIConstructor(aiType);
+        this.ProjectileTargetingType = targetingType;
+    }
 
     public DefaultProjectilAI SpawnProjectile(Weapon weapon, PlayerEntity owner, AttackInformation attackInformation)
     {
+        var emptyArray = new Il2CppReferenceArray<Object>(0);
+        var projectile = this.ctor.Invoke(emptyArray) as DefaultProjectilAI;
 
+        return projectile;
     }
 }
 
@@ -60,7 +73,7 @@ public static class ProjectileAiMapper
                 throw new ArgumentOutOfRangeException(nameof(aiType), aiType, null);
         }
 
-        return type.GetEmptyCtor();
+        return type.GetEmptyIl2CppCtor();
     }
 }
 

@@ -47,4 +47,17 @@ public static class WeaponEffectRegistry
 
         return null;
     }
+
+    public static WeaponEffect? GetEffectForName(string weaponEffectName)
+    {
+        foreach (var (type, ctor) in WeaponEffectTypeToConstructor)
+        {
+            if (type.Name == weaponEffectName)
+            {
+                return ctor.Invoke(Array.Empty<object>()) as WeaponEffect;
+            }
+        }
+
+        return null;
+    }
 }

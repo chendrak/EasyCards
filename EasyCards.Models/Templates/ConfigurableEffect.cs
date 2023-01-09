@@ -2,6 +2,7 @@ namespace EasyCards.Models.Templates;
 
 using Common.Data;
 using Common.Helpers;
+using Common.Logging;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;
 using UnityEngine;
@@ -86,7 +87,7 @@ public class ConfigurableEffect
                 Debug.Log($"ChangeCharacterSprites");
                 if (this.Properties.CharacterSpriteConfiguration is { } config)
                 {
-                    Debug.Log($"Got config: {LoggingHelper.StructToString(config)}");
+                    Debug.Log($"Got config: {Log.StructToString(config)}");
                     var inGameProperties = config.ToInGameCharacterSpriteProperties(this.AssetBasePath);
                     ModUtils.ApplyRogSkin(inGameProperties);
                 }

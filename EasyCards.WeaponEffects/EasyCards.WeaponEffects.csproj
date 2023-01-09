@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Aura" />
     <Folder Include="Helpers" />
   </ItemGroup>
 
