@@ -16,7 +16,7 @@ foreach (var @enum in enums)
     var baseType = @enum.GetEnumUnderlyingType();
     var enumNames = @enum.GetEnumNames();
     var rawValues = @enum.GetEnumValues();
-    var enumNamesAndValues = enumNames.Zip(rawValues.Cast<object>().Select(Convert.ToUInt64));
+    var enumNamesAndValues = enumNames.Zip(rawValues.Cast<object>().Select(obj => Convert.ToInt64(obj)));
     var isFlags = @enum.GetCustomAttribute<FlagsAttribute>() is not null;
     var definition = new EnumDefinition(name, baseType.Name, isFlags,
         enumNamesAndValues.Where(i => !i.First.StartsWith("PLACEHOLDER", StringComparison.OrdinalIgnoreCase)).Select(keyValuePair => new EnumMemberDefinition(keyValuePair.First, keyValuePair.Second))
