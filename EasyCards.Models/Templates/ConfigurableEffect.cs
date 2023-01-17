@@ -83,13 +83,7 @@ public class ConfigurableEffect
                 }
                 break;
             case EffectAction.ChangeCharacterSprites:
-                Debug.Log($"ChangeCharacterSprites");
-                if (this.Properties.CharacterSpriteConfiguration is { } config)
-                {
-                    Debug.Log($"Got config: {LoggingHelper.StructToString(config)}");
-                    var inGameProperties = config.ToInGameCharacterSpriteProperties(this.AssetBasePath);
-                    ModUtils.ApplyRogSkin(inGameProperties);
-                }
+                // Functionality removed
                 break;
             default:
                 Debug.LogWarning($"Unsupported action {this.Action}");
@@ -191,103 +185,7 @@ public class EffectProperties
     public float? Duration;
     public float? Interval;
 
-    public CharacterSpriteProperties? CharacterSpriteConfiguration;
-
     public override string ToString() => $"{nameof(this.Amount)}: {this.Amount}, {nameof(this.Percentage)}: {this.Percentage}, {nameof(this.Duration)}: {this.Duration}, {nameof(this.Interval)}: {this.Interval}";
-}
-
-public struct SpriteConfiguration
-{
-    public string TexturePath;
-    public int FramesPerRow;
-    public int Rows;
-}
-
-public class CharacterSpriteProperties
-{
-    public SpriteConfiguration? Idle;
-    public SpriteConfiguration? Run;
-    public SpriteConfiguration? Victory;
-    public SpriteConfiguration? Death;
-
-    public InGameCharacterSpriteProperties ToInGameCharacterSpriteProperties(string assetBasePath)
-    {
-        var inGameSpriteProperties = new InGameCharacterSpriteProperties();
-
-        if (this.Idle is { } idleCfg)
-        {
-            var texturePath = Path.Combine(assetBasePath, idleCfg.TexturePath);
-            var texture = SpriteHelper.LoadPNGIntoTexture(texturePath);
-            if (texture == null)
-            {
-                Debug.LogWarning($"Unable to load idle texture from: {texturePath}");
-            }
-            else
-            {
-                inGameSpriteProperties.Idle = new InGameSpriteConfiguration
-                {
-                    Texture = texture,
-                    Dimensions = new Vector2(idleCfg.FramesPerRow, idleCfg.Rows)
-                };
-            }
-        }
-
-        if (this.Run is { } runCfg)
-        {
-            var texturePath = Path.Combine(assetBasePath, runCfg.TexturePath);
-            var texture = SpriteHelper.LoadPNGIntoTexture(texturePath);
-            if (texture == null)
-            {
-                Debug.LogWarning($"Unable to load run texture from: {texturePath}");
-            }
-            else
-            {
-                inGameSpriteProperties.Run = new InGameSpriteConfiguration
-                {
-                    Texture = texture,
-                    Dimensions = new Vector2(runCfg.FramesPerRow, runCfg.Rows)
-                };
-            }
-        }
-
-        if (this.Victory is { } victoryCfg)
-        {
-            var texturePath = Path.Combine(assetBasePath, victoryCfg.TexturePath);
-            var texture = SpriteHelper.LoadPNGIntoTexture(texturePath);
-            if (texture == null)
-            {
-                Debug.LogWarning($"Unable to load victory texture from: {texturePath}");
-            }
-            else
-            {
-                inGameSpriteProperties.Victory = new InGameSpriteConfiguration
-                {
-                    Texture = texture,
-                    Dimensions = new Vector2(victoryCfg.FramesPerRow, victoryCfg.Rows)
-                };
-            }
-        }
-
-        if (this.Death is { } deathCfg)
-        {
-            var texturePath = Path.Combine(assetBasePath, deathCfg.TexturePath);
-            var texture = SpriteHelper.LoadPNGIntoTexture(texturePath);
-            if (texture == null)
-            {
-                Debug.LogWarning($"Unable to load death texture from: {texturePath}");
-            }
-            else
-            {
-                inGameSpriteProperties.Idle = new InGameSpriteConfiguration
-                {
-                    Texture = texture,
-                    Dimensions = new Vector2(deathCfg.FramesPerRow, deathCfg.Rows)
-                };
-            }
-        }
-
-        return inGameSpriteProperties;
-    }
 }
 
 public enum EffectType

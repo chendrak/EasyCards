@@ -1,6 +1,6 @@
 namespace EasyCards.Models.Templates;
 
-public class StatRequirement
+public class RequiredStat
 {
     public string Name { get; set; }
     public float Value { get; set; }

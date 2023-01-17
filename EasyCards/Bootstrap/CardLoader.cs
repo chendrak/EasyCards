@@ -17,7 +17,6 @@ using Services;
 using UnityEngine;
 using Enum = System.Enum;
 using Exception = System.Exception;
-using ModGenesia = ModGenesia.ModGenesia;
 
 public static class CardLoader
 {
@@ -115,12 +114,12 @@ public static class CardLoader
                 if (cardTemplate.Effects.Count == 0)
                 {
                     Logger.LogInfo($"Adding stat card {cardTemplate.Name}");
-                    ModGenesia.AddCustomStatCard(cardTemplate.Name, soulCardData);
+                    CardAPI.AddCustomStatCard(cardTemplate.Name, soulCardData);
                 }
                 else
                 {
                     Logger.LogInfo($"Adding effect card {cardTemplate.Name}");
-                    ModGenesia.AddCustomCard(cardTemplate.Name, effectCardConstructor, soulCardData);
+                    CardAPI.AddCustomCard(cardTemplate.Name, effectCardConstructor, soulCardData);
 
                     foreach (var effect in cardTemplate.Effects)
                     {
@@ -245,7 +244,7 @@ public static class CardLoader
                 }
             }
 
-            cardScso.CardToRemove = cardsToRemove.ToIl2CppReferenceArray();
+            cardScso.CardRemoved = cardsToRemove.ToIl2CppReferenceArray();
         }
     }
 
