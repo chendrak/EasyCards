@@ -44,22 +44,22 @@ namespace EasyCards.EnumGenerator
                     StringComparer.OrdinalIgnoreCase);
         }
 
-        private static Func<ulong, string> CreateFunctionPointer(MethodInfo methodInfo)
+        private static Func<long, string> CreateFunctionPointer(MethodInfo methodInfo)
         {
             // We need this conversion, because some enums may have negative values, which we can't represent with an unsigned.
             // We also can't guarantee that the enum value will fit within an int64 either.
-            // ex: enum SomeEnum : ulong { Max = ulong.MaxValue }
-            var input = Expression.Parameter(typeof(ulong), "i");
-            return Expression.Lambda<Func<ulong, string>>(
+            // ex: enum SomeEnum : long { Max = long.MaxValue }
+            var input = Expression.Parameter(typeof(long), "i");
+            return Expression.Lambda<Func<long, string>>(
                 Expression.Call(null, methodInfo, input), input).Compile();
         }
 
-        public static string MakeString<T>(ulong arg) where T : struct
+        public static string MakeString<T>(long arg) where T : struct
         {
             return Convert.ChangeType(arg, typeof(T)).ToString();
         }
 
-        private static readonly Dictionary<string, Func<ulong, string>> EnumBaseTypeFormatter;
+        private static readonly Dictionary<string, Func<long, string>> EnumBaseTypeFormatter;
         private static readonly Dictionary<string, Type> EnumBaseTypeLookup;
 
         public void Initialize(GeneratorInitializationContext context) { }
