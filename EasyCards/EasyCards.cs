@@ -8,9 +8,9 @@ using EasyCards.Helpers;
 using Il2CppInterop.Runtime;
 using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
+using ModGenesia;
 using ModManager;
 using SemanticVersioning;
-using ModGenesia;
 
 namespace EasyCards
 {
