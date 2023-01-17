@@ -10,6 +10,7 @@ using Il2CppInterop.Runtime.Injection;
 using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using ModManager;
 using SemanticVersioning;
+using ModGenesia;
 
 namespace EasyCards
 {
@@ -35,8 +36,6 @@ namespace EasyCards
             Instance = this;
 
             DebugHelper.Initialize();
-            ResourceHelper.Initialize();
-
             GameEvents.OnGameLaunchEvent += EffectHolder.ResetEffects;
 
             HarmonyPatchHelper.ApplyPatches("EasyCards");
@@ -65,7 +64,7 @@ namespace EasyCards
 
             var ctor = Il2CppType.TypeFromPointer(ptr)
                 .GetConstructor((Il2CppReferenceArray<Il2CppSystem.Type>)System.Array.Empty<Il2CppSystem.Type>());
-            var so = ModGenesia.ModGenesia.AddCustomCard(
+            var so = CardAPI.AddCustomCard(
                 card.Name,
                 ctor,
                 soulCardCreationData

@@ -83,32 +83,3 @@ This effect will:
     }
   }
 ```
-
-### Be someone else
-This effect will:
-- Activate as soon as you choose the card
-- Replace the idle animation with a pikachu idle animation
-- Replace the run animation with a pikachu run animation
-
-```json
-  {
-    "Name": "BePikachu",
-    "Type": "OneTime",
-    "ActivationRequirement": "None",
-    "Action": "ChangeCharacterSprites",
-    "Properties": {
-      "CharacterSpriteConfiguration": {
-        "Idle": {
-          "TexturePath": "PlushPaws/pikachu_idle.png",
-          "FramesPerRow": 4,
-          "Rows": 1,
-        },
-        "Run": {
-          "TexturePath": "PlushPaws/pikachu_run.png",
-          "FramesPerRow": 4,
-          "Rows": 1,
-        },
-      }
-    }
-  }
-```

@@ -108,36 +108,36 @@ public static class DebugHelper
 
     internal static void LogRequirements(SCSORequirementList requirementList, string prefix = "\t")
     {
-        if (requirementList == null)
-            return;
-
-        var cardRequirements = requirementList.CardRequirement;
-        if (cardRequirements is { Count: > 0 })
-        {
-            Logger.LogInfo($"{prefix}Cards:");
-            foreach (var cardRequirement in cardRequirements)
-            {
-                Logger.LogInfo($"{prefix}{prefix}{cardRequirement.RequiredCard.name}, Lvl {cardRequirement.RequiredCardLevel}");
-            }
-        }
-
-        var statReqs = requirementList.StatsRequirement;
-        if (statReqs is { Count: > 0 })
-        {
-            Logger.LogInfo($"{prefix}Stats:");
-            foreach (var statReq in statReqs)
-            {
-                Logger.LogInfo($"{prefix}{prefix}Modifiers:");
-                foreach (var statModifier in statReq.RequiredStats.ModifiersList)
-                {
-                    Logger.LogInfo(
-                        $"{prefix}{prefix}{prefix}{statModifier.Key}: {statModifier.Value.Value} ({statModifier.Value.ModifierType})");
-                }
-
-                var typeString = statReq.RequireMore ? "Min" : "Max";
-
-                Logger.LogInfo($"{prefix}{prefix}{prefix}Type: {typeString}");
-            }
-        }
+        // if (requirementList == null)
+        //     return;
+        //
+        // var cardRequirements = requirementList.CardRequirement;
+        // if (cardRequirements is { Count: > 0 })
+        // {
+        //     Logger.LogInfo($"{prefix}Cards:");
+        //     foreach (var cardRequirement in cardRequirements)
+        //     {
+        //         Logger.LogInfo($"{prefix}{prefix}{cardRequirement.RequiredCard.name}, Lvl {cardRequirement.RequiredCardLevel}");
+        //     }
+        // }
+        //
+        // var statReqs = requirementList.StatsRequirement;
+        // if (statReqs is { Count: > 0 })
+        // {
+        //     Logger.LogInfo($"{prefix}Stats:");
+        //     foreach (var statReq in statReqs)
+        //     {
+        //         Logger.LogInfo($"{prefix}{prefix}Modifiers:");
+        //         foreach (var statModifier in statReq.RequiredStats.ModifiersList)
+        //         {
+        //             Logger.LogInfo(
+        //                 $"{prefix}{prefix}{prefix}{statModifier.Key}: {statModifier.Value.Value} ({statModifier.Value.ModifierType})");
+        //         }
+        //
+        //         var typeString = statReq.ComparisionType == StatRequirement.EComparisionType.LesserOrEqual ? "Min" : "Max";
+        //
+        //         Logger.LogInfo($"{prefix}{prefix}{prefix}Type: {typeString}");
+        //     }
+        // }
     }
 }

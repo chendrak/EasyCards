@@ -11,49 +11,41 @@ using Models.Templates.Generated;
 
 public static class CardTemplateExtensions
 {
-    public static StatsModifier? ToStatsModifier(this StatRequirementTemplate template)
+    public static List<StatRequirement>? ToStatRequirementList(this StatRequirementTemplate template, bool isMinRequirement)
     {
         if (Enum.TryParse<StatRequirementType>(template.RequirementType, true, out _))
         {
-            var statsModifier = new StatsModifier();
+            var statsRequirements = new List<StatRequirement>();
 
-            var statModifiers = new List<StatModifier>();
-            foreach (var statRequirement in template.StatRequirements)
+            foreach (var requiredStat in template.StatRequirements)
             {
-                var convertedRequirement = statRequirement.ToStatModifier();
+                var convertedRequirement = requiredStat.ToStatRequirement(isMinRequirement);
                 if (convertedRequirement != null)
                 {
-                    statModifiers.Add(convertedRequirement);
+                    statsRequirements.Add(convertedRequirement);
                 }
             }
-            foreach (var statModifier in statModifiers)
-            {
-                statsModifier.ModifiersList.Add(statModifier);
-            }
-
-            return statsModifier;
+            return statsRequirements;
         }
 
         EasyCards.Instance.Log.LogWarning($"{template.RequirementType} is not a valid requirement type! Valid options are: [{EnumToStringHelper.NamesToString(typeof(StatRequirementType))}]");
         return null;
     }
 
-    public static StatModifier? ToStatModifier(this StatRequirement template)
+    public static StatRequirement? ToStatRequirement(this RequiredStat template, bool isMinRequirement)
     {
         if (Enum.TryParse<StatsType>(template.Name, true, out _))
         {
-            var statModifier = new StatModifier();
+            var statReq = new StatRequirement
+            {
+                Key = template.Name,
+                Value = template.Value,
+                ComparisionType = isMinRequirement
+                    ? StatRequirement.EComparisionType.GreaterOrEqual
+                    : StatRequirement.EComparisionType.LesserOrEqual
+            };
 
-            var singularModifier = new SingularModifier();
-
-            // This is just a placeholder, as it is not used in the comparison
-            singularModifier.ModifierType = ModifierType.Additional;
-            singularModifier.Value = template.Value;
-
-            statModifier.Key = template.Name;
-            statModifier.Value = singularModifier;
-
-            return statModifier;
+            return statReq;
         }
 
         EasyCards.Instance.Log.LogWarning($"{template.Name} is not a valid stat name! Valid options are: [{EnumToStringHelper.NamesToString(typeof(StatsType))}]");
@@ -70,18 +62,16 @@ public static class CardTemplateExtensions
             cardRequirements = template.Cards.ConvertAll(template => template.ToModCardRequirement());
         }
 
-        StatsModifier statRequirements = null;
+        List<StatRequirement> statRequirements = new();
 
         var isMinRequirement = true;
 
         if (template.Stats != null)
         {
-            statRequirements = template.Stats.ToStatsModifier();
-            isMinRequirement = template.Stats.IsMinRequirement();
+            statRequirements = template.Stats.ToStatRequirementList(template.Stats.IsMinRequirement());
         }
 
-        var requirementList = ModGenesia.ModGenesia.MakeCardRequirement(cardRequirements.ToIl2CppReferenceArray(), statRequirements, isMinRequirement);
-
+        var requirementList = CardAPI.MakeCardRequirement(cardRequirements.ToIl2CppReferenceArray(), statRequirements.ToIl2CppReferenceArray());
         return requirementList;
     }
     public static ModCardRequirement ToModCardRequirement(this CardRequirementTemplate template)

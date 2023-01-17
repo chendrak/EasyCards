@@ -32,6 +32,11 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.10
+
+* Fix for most recent game updates
+* Due to internal changes in the game with the release of avatars, the ability to change the character sprite using a card has been removed.
+
 #### 1.1.9
 
 * Fixed an issue with loading existing card packs 
@@ -279,26 +284,7 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
             // Example: [Action = HealAmount, Amount = 20, Interval = 30] -> Heal you for 20 hp every 30s.
             // Specified in seconds. Fractions of a second can be defined as 0.1 for 100ms.
             // Required for [Type = Interval]
-            "Interval": 30,
-      
-            // Allows you to change the characters' sprite
-            "CharacterSpriteConfiguration": {
-              // Replace the "Idle" animation
-              "Idle": {
-                // Path to the texture that contains the animation
-                "TexturePath": "PlushPaws/pikachu_idle.png",
-                // Number of frames per row
-                "FramesPerRow": 4,
-                // Number of rows
-                "Rows": 1
-              },
-              // Replace the "Run" animation. Contents are identical to "Idle".
-              "Run": {},
-              // Replace the "Victory" animation. Contents are identical to "Idle".
-              "Victory": {},
-              // Replace the "Death" animation. Contents are identical to "Idle".
-              "Death": {}
-            }
+            "Interval": 30
           }
       }
       ]
@@ -459,7 +445,6 @@ _**Options:**_
 - `AddRarityRerolls`: Gives you the amount of rarity rerolls specified in `Properties.Amount`
 - `HealAmount`: Heals you by the exact amount specified in `Properties.Amount`
 - `HealPercentage`: Heals you by the percentage of your max health specified in `Properties.Percentage`
-- `ChangeCharacterSprites`: Allows you to define alternate sprites for certain animations in `Properties.CharacterSpriteConfiguration`
 
 #### Properties
 Contains properties that are required for certain other aspects of an effect.
@@ -470,7 +455,6 @@ Contains properties that are required for certain other aspects of an effect.
   "Percentage": 95.5,
   "Duration": 30,
   "Interval": 30,
-  "CharacterSpriteConfiguration": { ... }
 }
 ```
 
@@ -494,40 +478,12 @@ _**Options:**_
   - **Type:** `Number` [1, 2.0, 1.222, etc]
   - **Applies to types:** `Interval`
 
-
-- `CharacterSpriteConfiguration`: An interval in seconds.
-  - **Type:** `CharacterSpriteConfiguration` (see below)
-  - **Applies to types:** `OneTime`
-
-
+    
 #### CharacterSpriteConfiguration
-Allows you to specify alternate animations for Rog. Each element is optional and only the ones specified are applied.
-
-```json
-"CharacterSpriteConfiguration": {
-    "Idle": {
-        "TexturePath": "PlushPaws/pikachu_idle.png",
-        "FramesPerRow": 4,
-        "Rows": 1,
-    },
-    "Run": { ... },
-    "Victory": { ... },
-    "Death": { ... },
-}
-```
-
-_**Options:**_
-- `Idle`: Allows you to replace the idle animation
-  - `TexturePath`: Path to the file that contains the frames for the animation. This is relative to the location of your `.cards.json` file.
-  - `FramesPerRow`: Number of frames per row in the texture defined above
-  - `Rows`: Number of rows on the texture
-- `Run`: Allows you to replace the run animation. Options is identical to `Idle`.
-- `Victory`: Allows you to replace the victory animation. Options is identical to `Idle`.
-- `Death`: Allows you to replace the death animation. Options is identical to `Idle`.
+**NOTE:** This functionality has been deprecated and now does nothing! 
 
 ### Limitations
 - Effects do not scale with level
-- `CharacterSpriteConfiguration` can only be used in conjunction with `OneTime` effects
 
 ### Examples
 Examples for effect cards and a description of what they do can be found on [Github](https://github.com/shaacker/EasyCards/blob/master/Documentation/EffectCardExamples.md).
