@@ -1,7 +1,5 @@
 namespace EasyCards.Models.Templates;
 
-using Common.Data;
-using Common.Helpers;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;
 using UnityEngine;

@@ -1,7 +1,7 @@
 namespace EasyCards.Bootstrap;
 
 using BepInEx.Logging;
-using Common.Helpers;
+using Helpers;
 using RogueGenesia.Data;
 using Services;
 using UnityEngine.InputSystem;
@@ -75,7 +75,7 @@ public static class DebugHelper
             LogCard(card);
         }
 
-        if (GameData.GameState is EGameState.MainMenu or EGameState.GameEnd)
+        if (GameData.GameState is EGameState.MainMenu or EGameState.GameOver)
             return;
 
         var excludedCards = SoulCardScriptableObject.GetExcludedSoulCard();

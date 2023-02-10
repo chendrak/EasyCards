@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>EasyCards</AssemblyName>
         <Description>Custom Cards Made Easy</Description>
-        <Version>1.1.10</Version>
+        <Version>1.1.11</Version>
         <LangVersion>latest</LangVersion>
         <RootNamespace>EasyCards</RootNamespace>
         <Nullable>enable</Nullable>
@@ -12,14 +12,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.664" IncludeAssets="compile" />
-        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
+        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.662" />
+        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.*" />
         <PackageReference Include="RogueGenesia.Mod" Version="1.0.*" IncludeAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="../EasyCards.Models/EasyCards.Models.csproj" />
-        <ProjectReference Include="../EasyCards.Common/EasyCards.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -36,23 +35,15 @@
     <Target Name="PostPublishCleanup" AfterTargets="Publish">
         <ItemGroup>
             <!-- These are files that are unnecessary for the game, or are just not needed -->
-            <FilesToDelete Include="$(PublishDir)0Harmony.dll" />
-            <FilesToDelete Include="$(PublishDir)*Il2Cpp*.dll" />
-            <FilesToDelete Include="$(PublishDir)*Unity*.dll" />
-            <FilesToDelete Include="$(PublishDir)Mono.*.dll" />
-            <FilesToDelete Include="$(PublishDir)MonoMod.*.dll" />
-            <FilesToDelete Include="$(PublishDir)RogueGenesia.dll" />
-            <FilesToDelete Include="$(PublishDir)ModGenesia*.dll" />
-            <FilesToDelete Include="$(PublishDir)RogueGenesia*.dll" />
-            <FilesToDelete Include="$(PublishDir)Newtonsoft.Json.dll" />
-            <FilesToDelete Include="$(PublishDir)Iced.dll" />
-            <FilesToDelete Include="$(PublishDir)Microsoft*.dll" />
+            <FilesToDelete Include="$(PublishDir)*.dll" Exclude="$(PublishDir)$(TargetName)*.dll;$(PublishDir)ModManager.RogueGenesiaMod.dll;$(PublishDir)UniverseLib.IL2CPP.Interop.dll" />
             <!-- This is skipped in debug configuration, to make debugging plugins easier -->
             <FilesToDelete Include="$(PublishDir)*.pdb" Condition="'$(Configuration)' == 'Release'" />
             <FilesToDelete Include="$(PublishDir)*.deps.json" />
+            <DirectoriesToDelete Include="$(PublishDir)runtimes" />
         </ItemGroup>
         <Message Text="Deleting references and debug symbols from publish output" Importance="high" />
         <Delete Files="@(FilesToDelete)" />
+        <RemoveDir Directories="@(DirectoriesToDelete)" />
     </Target>
 <!--    <Target Name="GenerateJsonSchema" AfterTargets="Publish">-->
 <!--        <Exec Command="$(ProjectDir)..\EasyCards.JsonSchemaGenerator\bin\$(Configuration)\net6.0\EasyCards.JsonSchemaGenerator $(PublishDir)Documentation\schema.json" ConsoleToMSBuild="true" />-->

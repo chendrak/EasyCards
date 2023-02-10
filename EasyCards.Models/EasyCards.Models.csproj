@@ -7,10 +7,9 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../EasyCards.EnumGenerator/EasyCards.EnumGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="../EasyCards.Common/EasyCards.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Il2CppInterop.Runtime" Version="1.4.*" />
+    <PackageReference Include="Il2CppInterop.Runtime" Version="1.3.0" />
     <PackageReference Include="RogueGenesia.Mod" Version="1.0.*" />
   </ItemGroup>
 </Project>
