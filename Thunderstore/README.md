@@ -32,6 +32,10 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.11
+
+* Fix for the mod not working in more recent versions of the game.
+
 #### 1.1.10
 
 * Fix for most recent game updates
