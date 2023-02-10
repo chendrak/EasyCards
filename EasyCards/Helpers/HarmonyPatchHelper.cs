@@ -1,5 +1,8 @@
 namespace EasyCards.Common.Helpers;
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using HarmonyLib;

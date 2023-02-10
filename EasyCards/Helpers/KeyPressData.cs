@@ -1,4 +1,4 @@
-namespace EasyCards.Common.Helpers;
+namespace EasyCards.Helpers;
 
 using UnityEngine.InputSystem;
 

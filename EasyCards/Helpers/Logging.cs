@@ -1,5 +1,8 @@
 namespace EasyCards.Common.Helpers;
 
+using System;
+using System.Collections.Generic;
+
 public class LoggingHelper
 {
     public static string StructToString<T>(T data)

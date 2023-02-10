@@ -3,7 +3,7 @@
 using System.Reflection;
 using System.Text.Json;
 
-var exportedTypes = typeof(RogueGenesia.GameManager.GameManager).Assembly.GetExportedTypes();
+var exportedTypes = typeof(RogueGenesia.GameManager.GameManagerFight).Assembly.GetExportedTypes();
 var enums = exportedTypes.Where(i => i.IsEnum);
 
 var target = Path.GetFullPath(args.Length > 0 ? args[0] : "enums.json");

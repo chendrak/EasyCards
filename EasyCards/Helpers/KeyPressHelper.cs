@@ -1,8 +1,9 @@
-namespace EasyCards.Common.Helpers;
+namespace EasyCards.Helpers;
 
 using System;
 using System.Collections.Generic;
 using BepInEx.Unity.IL2CPP;
+using Common.Helpers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -47,7 +48,7 @@ class KeyPressBehaviour : MonoBehaviour
         foreach (var keypressAction in _keypressActions)
         {
             var data = keypressAction.Key;
-            if (kb[data.Key].wasPressedThisFrame && AreModifiersHeld(data.Modifiers))
+            if (kb[data.Key].wasPressedThisFrame && this.AreModifiersHeld(data.Modifiers))
             {
                 keypressAction.Value.Invoke();
             }

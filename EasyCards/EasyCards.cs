@@ -1,8 +1,6 @@
 using BepInEx;
 using EasyCards.Bootstrap;
 using EasyCards.CardTypes;
-using EasyCards.Common.Events;
-using EasyCards.Common.Helpers;
 using EasyCards.Effects;
 using EasyCards.Helpers;
 using Il2CppInterop.Runtime;
@@ -14,6 +12,10 @@ using SemanticVersioning;
 
 namespace EasyCards
 {
+    using System.Reflection;
+    using Events;
+    using HarmonyLib;
+
     [BepInDependency(DependencyGUID: "ModManager", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     public class EasyCards : RogueGenesiaMod
@@ -38,7 +40,7 @@ namespace EasyCards
             DebugHelper.Initialize();
             GameEvents.OnGameLaunchEvent += EffectHolder.ResetEffects;
 
-            HarmonyPatchHelper.ApplyPatches("EasyCards");
+            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
 
             // This should be the last thing we initialize, so the cards get loaded at the very end
             CardLoader.Initialize();
