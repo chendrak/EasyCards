@@ -14,17 +14,9 @@ public static class Localization
 
         foreach (var (localizationKey, translation) in translations)
         {
-            var locale = GetLocaleForKey(localizationKey);
-
-            if (locale == null)
-            {
-                Logger.LogWarning($"\tLocale {localizationKey} not supported!");
-                continue;
-            }
-
             var ld = new LocalizationData
             {
-                Key = locale,
+                Key = localizationKey,
                 Value = translation
             };
 
@@ -63,18 +55,5 @@ public static class Localization
                 cardScso.DescriptionOverride.Add(translation);
             }
         }
-    }
-
-    private static UnityEngine.Localization.Locale GetLocaleForKey(string localizationKey)
-    {
-        foreach (var locale in ModGenesia.ModGenesia.GetLocales())
-        {
-            if (locale.Identifier.Code == localizationKey)
-            {
-                return locale;
-            }
-        }
-
-        return null;
     }
 }

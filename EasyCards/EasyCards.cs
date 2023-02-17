@@ -22,7 +22,7 @@ namespace EasyCards
     {
         internal static EasyCards Instance { get; private set; }
 
-        private readonly Version MinimumRequiredGameVersion = new(0, 7, 2, preRelease: ".0b-beta");
+        private readonly Version MinimumRequiredGameVersion = new(0, 7, 6, preRelease: ".0");
 
         public override void Load()
         {
