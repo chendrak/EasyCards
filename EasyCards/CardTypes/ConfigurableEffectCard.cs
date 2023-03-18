@@ -1,11 +1,10 @@
 namespace EasyCards.CardTypes;
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using BepInEx.Logging;
 using Effects;
 using Events;
+using Helpers;
 using Models.Templates;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;
@@ -13,10 +12,6 @@ using UnityEngine;
 
 public class ConfigurableEffectCard : SoulCard
 {
-    protected ManualLogSource Log = EasyCards.Instance.Log;
-
-    public ConfigurableEffectCard(IntPtr ptr) : base(ptr) { }
-
     private List<ConfigurableEffect> Effects = new();
 
     // Trigger Lists
@@ -35,9 +30,9 @@ public class ConfigurableEffectCard : SoulCard
 
     private void InitializeEffects(string name)
     {
-        this.Log.LogInfo($"InitializeEffects({name})");
+        Log.Info($"InitializeEffects({name})");
         this.Effects = EffectHolder.GetEffects(name);
-        this.Log.LogInfo($"Number of effects: {this.Effects.Count}");
+        Log.Info($"Number of effects: {this.Effects.Count}");
 
         this.OnKillEffects = this.Effects.Where(effect =>
             effect.Trigger is EffectTrigger.OnKill or EffectTrigger.OnEliteKill or EffectTrigger.OnBossKill ||
@@ -85,7 +80,7 @@ public class ConfigurableEffectCard : SoulCard
 
     private void OnPlayerTakeDamage(DamageInformation damageInfo)
     {
-        this.Log.LogInfo($"{this._name}.OnTakeDamage");
+        Log.Info($"{this._name}.OnTakeDamage");
         foreach (var takeDamageEffect in this.OnTakeDamageEffects)
         {
             takeDamageEffect.OnTakeDamage(damageInfo.DamageValue);
@@ -94,7 +89,7 @@ public class ConfigurableEffectCard : SoulCard
 
     private void OnDeath()
     {
-        this.Log.LogInfo($"OnDeath()");
+        Log.Info($"OnDeath()");
         foreach (var deathEffect in this.OnDeathEffects)
         {
             deathEffect.Apply();
@@ -130,7 +125,7 @@ public class ConfigurableEffectCard : SoulCard
 
     public override void OnDash(PlayerEntity owner)
     {
-        this.Log.LogInfo($"OnDash()");
+        Log.Info($"OnDash()");
         foreach (var effect in this.OnDashEffects)
         {
             effect.Apply();
@@ -153,7 +148,7 @@ public class ConfigurableEffectCard : SoulCard
 
     private void CleanUpEvents()
     {
-        this.Log.LogInfo($"CleanUpEvents");
+        Log.Info($"CleanUpEvents");
         GameEvents.OnRunEndEvent -= this.CleanUpEvents;
         GameEvents.OnPlayerFinalDeathEvent -= this.CleanUpEvents;
 

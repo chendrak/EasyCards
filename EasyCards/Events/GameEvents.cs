@@ -45,7 +45,7 @@ public static class GameEvents
     private static void GameData_OnGameStart() => OnGameLaunchEvent?.Invoke();
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(GameEndManager), nameof(GameEndManager.Awake))]
+    [HarmonyPatch(typeof(GameEndManager), nameof(GameData.OnGameEnd))]
     [HarmonyPatch(typeof(PauseMenu), nameof(PauseMenu.On_Confirm))]
     private static void OnRunEnded() => OnRunEndEvent?.Invoke();
 

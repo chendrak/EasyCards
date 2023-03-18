@@ -9,12 +9,22 @@
         <RootNamespace>EasyCards</RootNamespace>
         <Nullable>enable</Nullable>
         <Authors>chendrak</Authors>
+        <BaseGameDirectory>/Users/chendrak/games/roguegenesia/Modded/Rogue Genesia_Data/Managed</BaseGameDirectory>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.662" />
-        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.*" />
-        <PackageReference Include="RogueGenesia.Mod" Version="1.0.*" IncludeAssets="all" />
+    <ItemGroup><!--        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.662" />-->
+<!--        <PackageReference Include="BepInEx.PluginInfoProps" Version="2.1.*" />-->
+<!--        <PackageReference Include="RogueGenesia.Mod" Version="1.0.*" IncludeAssets="all" />-->
+    
+      <PackageReference Include="HarmonyX" Version="2.10.1" />
+    
+      <PackageReference Include="SemanticVersioning" Version="2.0.2" />
+    
+      <PackageReference Include="Serilog" Version="2.12.0" />
+    
+      <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    
+      <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -27,8 +37,20 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="ModManager.RogueGenesiaMod">
-        <HintPath>Libraries\ModManager.RogueGenesiaMod.dll</HintPath>
+      <Reference Include="ModGenesia">
+        <HintPath>$(BaseGameDirectory)\ModGenesia.dll</HintPath>
+      </Reference>
+      <Reference Include="RogueGenesia">
+        <HintPath>$(BaseGameDirectory)\RogueGenesia.dll</HintPath>
+      </Reference>
+      <Reference Include="Unity.InputSystem">
+        <HintPath>$(BaseGameDirectory)\Unity.InputSystem.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine">
+        <HintPath>$(BaseGameDirectory)\UnityEngine.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.CoreModule">
+        <HintPath>$(BaseGameDirectory)\UnityEngine.CoreModule.dll</HintPath>
       </Reference>
     </ItemGroup>
 

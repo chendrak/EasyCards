@@ -1,5 +1,3 @@
-using Il2CppSystem.IO;
-
 namespace EasyCards;
 
 public static class Paths

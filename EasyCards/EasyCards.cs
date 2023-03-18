@@ -1,35 +1,40 @@
-using BepInEx;
 using EasyCards.Bootstrap;
-using EasyCards.CardTypes;
 using EasyCards.Effects;
 using EasyCards.Helpers;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.Injection;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using ModGenesia;
-using ModManager;
-using SemanticVersioning;
 
 namespace EasyCards
 {
     using System.Reflection;
     using Events;
     using HarmonyLib;
+    using SemanticVersioning;
 
-    [BepInDependency(DependencyGUID: "ModManager", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     public class EasyCards : RogueGenesiaMod
     {
+        public const string MOD_NAME = "EasyCards";
         internal static EasyCards Instance { get; private set; }
 
         private readonly Version MinimumRequiredGameVersion = new(0, 7, 6, preRelease: ".0");
 
-        public override void Load()
+        public override void OnGameFinishedLoading()
         {
+            Log.Debug($"OnGameFinishedLoading");
+        }
+
+        public override void GameRegisterationStep()
+        {
+            Log.Debug($"GameRegisterationStep");
+            CardLoader.Initialize();
+        }
+
+        public override void OnModLoaded(ModData modData)
+        {
+            Log.Debug($"OnModLoaded({modData})");
             if (!VersionHelper.IsGameVersionAtLeast(this.MinimumRequiredGameVersion))
             {
-                Log.LogError($"Wrong game version! Minimum required game version is {this.MinimumRequiredGameVersion}, you have {VersionHelper.GameVersion}");
-                this.Unload();
+                Log.Error($"Wrong game version! Minimum required game version is {this.MinimumRequiredGameVersion}, you have {VersionHelper.GameVersion}");
+                this.OnModUnloaded(modData);
                 return;
             }
 
@@ -41,36 +46,11 @@ namespace EasyCards
             GameEvents.OnGameLaunchEvent += EffectHolder.ResetEffects;
 
             Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
-
-            // This should be the last thing we initialize, so the cards get loaded at the very end
-            CardLoader.Initialize();
         }
 
-        public override string ModDescription()
+        public void OnModUnloaded(ModData modData)
         {
-            var loadedCards = CardLoader.GetLoadedCards();
-            return $"Loaded cards: {loadedCards.Count}";
-        }
 
-        private static void AddCustomCard<T>() where T : CustomSoulCard
-        {
-            var classType = typeof(T);
-            ClassInjector.RegisterTypeInIl2Cpp(classType);
-            var card = System.Activator.CreateInstance<T>();
-            var soulCardCreationData = card.GetSoulCardCreationData();
-            var ptr = IL2CPP.GetIl2CppClass(
-                "Assembly-CSharp.dll",
-                classType.Namespace,
-                classType.Name
-            );
-
-            var ctor = Il2CppType.TypeFromPointer(ptr)
-                .GetConstructor((Il2CppReferenceArray<Il2CppSystem.Type>)System.Array.Empty<Il2CppSystem.Type>());
-            var so = CardAPI.AddCustomCard(
-                card.Name,
-                ctor,
-                soulCardCreationData
-            );
         }
     }
 }

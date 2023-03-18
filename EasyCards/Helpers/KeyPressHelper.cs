@@ -2,8 +2,6 @@ namespace EasyCards.Helpers;
 
 using System;
 using System.Collections.Generic;
-using BepInEx.Unity.IL2CPP;
-using Common.Helpers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,11 +16,13 @@ public enum Modifiers
 
 public static class KeyPressHelper
 {
+    private static GameObject managerGo;
     private static KeyPressBehaviour _behaviour;
 
     static KeyPressHelper()
     {
-        _behaviour = IL2CPPChainloader.AddUnityComponent<KeyPressBehaviour>();
+        managerGo = new GameObject { hideFlags = HideFlags.HideAndDontSave };
+        _behaviour = managerGo.AddComponent<KeyPressBehaviour>();
     }
 
     public static void RegisterKey(Key key, Modifiers modifiers, Action action)
