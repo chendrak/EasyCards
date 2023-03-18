@@ -1,5 +1,7 @@
 namespace EasyCards;
 
+using System.IO;
+
 public static class Paths
 {
     public static string EasyCards = Path.Combine(BepInEx.Paths.PluginPath, MyPluginInfo.PLUGIN_NAME);
