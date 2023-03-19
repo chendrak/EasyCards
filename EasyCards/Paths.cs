@@ -4,8 +4,16 @@ using System.IO;
 
 public static class Paths
 {
-    public static string EasyCards = Path.Combine(BepInEx.Paths.PluginPath, MyPluginInfo.PLUGIN_NAME);
-    public static string Assets = Path.Combine(EasyCards, "Assets");
-    public static string Data = Path.Combine(EasyCards, "Data");
-    public static string Plugins = BepInEx.Paths.PluginPath;
+    public static string EasyCards { get; private set; }
+    public static string Assets { get; private set; }
+    public static string Data { get; private set; }
+    public static string BaseModDirectory { get; private set; }
+
+    public static void Initialize(DirectoryInfo modDirectory)
+    {
+        EasyCards = modDirectory.FullName;
+        Assets = Path.Combine(EasyCards, "Assets");
+        Data = Path.Combine(EasyCards, "Data");
+        BaseModDirectory = modDirectory.Parent.FullName;
+    }
 }

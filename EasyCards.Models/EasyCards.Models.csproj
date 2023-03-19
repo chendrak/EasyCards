@@ -1,23 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <Platform>x64</Platform>
+<!--    <Nullable>enable</Nullable>-->
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../EasyCards.EnumGenerator/EasyCards.EnumGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Reference Include="RogueGenesia">
-      <HintPath>..\..\..\games\roguegenesia\Modded\Rogue Genesia_Data\Managed\RogueGenesia.dll</HintPath>
+      <HintPath>$(BaseGameDirectory)\RogueGenesia.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\games\roguegenesia\Modded\Rogue Genesia_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>$(BaseGameDirectory)\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\games\roguegenesia\Modded\Rogue Genesia_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(BaseGameDirectory)\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

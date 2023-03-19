@@ -1,9 +1,11 @@
-using System.Collections.Immutable;
 using RogueGenesia.Data;
 
 namespace EasyCards.Services;
 
+using System.Collections.Generic;
+using System.Linq;
+
 public static class CardRepository
 {
-    public static ImmutableArray<SoulCardScriptableObject> GetAllCards() => GameDataGetter.GetAllCards().ToImmutableArray();
+    public static List<SoulCardScriptableObject> GetAllCards() => GameDataGetter.GetAllCards().ToList();
 }

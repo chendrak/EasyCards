@@ -6,4 +6,11 @@
         </RestoreAdditionalProjectSources>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     </PropertyGroup>
+
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <BaseGameDirectory>D:\Games\steamapps\common\Rogue Genesia\Modded\Rogue Genesia_Data\Managed</BaseGameDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <BaseGameDirectory>/Users/chendrak/games/roguegenesia/Modded/Rogue Genesia_Data/Managed</BaseGameDirectory>
+  </PropertyGroup>
 </Project>

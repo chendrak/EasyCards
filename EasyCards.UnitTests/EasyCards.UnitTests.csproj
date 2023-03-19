@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
@@ -25,6 +25,10 @@
   <ItemGroup>
     <ProjectReference Include="..\EasyCards.Models\EasyCards.Models.csproj" />
     <ProjectReference Include="..\EasyCards\EasyCards.csproj" />
+
+    <Reference Include="RogueGenesia">
+      <HintPath>$(BaseGameDirectory)\RogueGenesia.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

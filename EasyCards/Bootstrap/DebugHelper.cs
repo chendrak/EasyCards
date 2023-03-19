@@ -65,7 +65,7 @@ public static class DebugHelper
         Log.Info("OnDebugLogKeyPressed");
         var allCards = CardRepository.GetAllCards();
 
-        Log.Info($"=== Listing All Cards ({allCards.Length}) ===");
+        Log.Info($"=== Listing All Cards ({allCards.Count}) ===");
 
         foreach (var card in allCards)
         {

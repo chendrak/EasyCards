@@ -2,46 +2,36 @@ namespace EasyCards.Helpers;
 
 using System;
 using System.Collections.Generic;
-using Serilog;
-using SLog = Serilog.Log;
+using SLog = UnityEngine.Debug;
 
 /// <summary>
 /// Helper classthat simplifies logging within your plugin.
 /// </summary>
 public static class Log
 {
-    static Log()
-    {
-        SLog.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.Console()
-            .WriteTo.File("logs\\EasyCards.log")
-            .CreateLogger();
-    }
-
     public static void Info(string msg)
     {
-        SLog.Information(msg);
+        SLog.Log($"[INFO] {msg}");
     }
 
     public static void Debug(string msg)
     {
-        SLog.Debug(msg);
-    }
-
-    public static void Message(string msg)
-    {
-        SLog.Verbose(msg);
+        SLog.Log($"[DEBUG] {msg}");
     }
 
     public static void Error(string msg)
     {
-        SLog.Error(msg);
+        SLog.LogError($"[ERROR] {msg}");
+    }
+
+    public static void Verbose(string msg)
+    {
+        SLog.Log($"[VERBOSE] {msg}");
     }
 
     public static void Warn(string msg)
     {
-        SLog.Warning(msg);
+        SLog.LogWarning($"[WARN] {msg}");
     }
 
     /// <summary>
@@ -57,12 +47,12 @@ public static class Log
         var values = new Dictionary<string, object>();
         Array.ForEach(fields, (field) =>
         {
-            values.TryAdd(field.Name, field.GetValue(data));
+            values.Add(field.Name, field.GetValue(data));
         });
 
         Array.ForEach(properties, (property) =>
         {
-            values.TryAdd(property.Name, property.GetValue(data));
+            values.Add(property.Name, property.GetValue(data));
         });
 
         var lines = new List<string>();

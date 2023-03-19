@@ -10,12 +10,12 @@ public static class Localization
     {
         var result = new List<LocalizationData>();
 
-        foreach (var (localizationKey, translation) in translations)
+        foreach (var translation in translations)
         {
             var ld = new LocalizationData
             {
-                Key = localizationKey,
-                Value = translation
+                Key = translation.Key,
+                Value = translation.Value
             };
 
             result.Add(ld);

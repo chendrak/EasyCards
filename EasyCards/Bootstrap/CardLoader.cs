@@ -47,8 +47,10 @@ public static class CardLoader
             }
         }
 
+        Log.Info($"Searching for cards.json files in {Paths.BaseModDirectory}");
+
         // Scan for *.cards.json files in plugins subfolders
-        var cardJsonFiles = Directory.GetFiles(Paths.Plugins, "*.cards.json", SearchOption.AllDirectories);
+        var cardJsonFiles = Directory.GetFiles(Paths.BaseModDirectory, "*.cards.json", SearchOption.AllDirectories);
         foreach (var jsonFile in cardJsonFiles)
         {
             try
@@ -273,10 +275,13 @@ public static class CardLoader
         var result = new List<SoulCardScriptableObject>();
         foreach (var cardToGet in cardsToGet)
         {
-            var cardScso = allCards.GetValueOrDefault(cardToGet);
-            if (cardScso != null)
+            SoulCardScriptableObject cardScso;
+            if (allCards.TryGetValue(cardToGet, out cardScso))
             {
-                result.Add(cardScso);
+                if (cardScso != null)
+                {
+                    result.Add(cardScso);
+                }
             }
         }
 

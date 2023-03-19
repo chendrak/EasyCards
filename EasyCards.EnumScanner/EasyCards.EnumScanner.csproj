@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <Reference Include="RogueGenesia">
-      <HintPath>..\..\..\games\roguegenesia\Modded\Rogue Genesia_Data\Managed\RogueGenesia.dll</HintPath>
+      <HintPath>$(BaseGameDirectory)\RogueGenesia.dll</HintPath>
     </Reference>
   </ItemGroup>
 
