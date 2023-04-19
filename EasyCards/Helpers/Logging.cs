@@ -5,18 +5,40 @@ using System.Collections.Generic;
 using SLog = UnityEngine.Debug;
 
 /// <summary>
-/// Helper classthat simplifies logging within your plugin.
+/// Helper class that simplifies logging within your plugin.
 /// </summary>
 public static class Log
 {
+    public enum LogLevel
+    {
+        ERROR,
+        WARN,
+        INFO,
+        DEBUG,
+        VERBOSE
+    }
+
+    private static LogLevel logLevel = LogLevel.VERBOSE;
+
+    public static void SetMinimumLogLevel(LogLevel logLevel)
+    {
+        Log.logLevel = logLevel;
+    }
+
     public static void Info(string msg)
     {
-        SLog.Log($"[INFO] {msg}");
+        if (logLevel >= LogLevel.INFO)
+        {
+            SLog.Log($"[INFO] {msg}");
+        }
     }
 
     public static void Debug(string msg)
     {
-        SLog.Log($"[DEBUG] {msg}");
+        if (logLevel >= LogLevel.DEBUG)
+        {
+            SLog.Log($"[DEBUG] {msg}");
+        }
     }
 
     public static void Error(string msg)
@@ -26,12 +48,18 @@ public static class Log
 
     public static void Verbose(string msg)
     {
-        SLog.Log($"[VERBOSE] {msg}");
+        if (logLevel >= LogLevel.VERBOSE)
+        {
+            SLog.Log($"[VERBOSE] {msg}");
+        }
     }
 
     public static void Warn(string msg)
     {
-        SLog.LogWarning($"[WARN] {msg}");
+        if (logLevel >= LogLevel.WARN)
+        {
+            SLog.LogWarning($"[WARN] {msg}");
+        }
     }
 
     /// <summary>

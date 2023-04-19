@@ -1,10 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net48</TargetFramework>
+      <TargetFramework>net48</TargetFramework>
+<!--      <TargetFramework>netstandard2.0</TargetFramework>-->
         <AssemblyName>EasyCards</AssemblyName>
         <Description>Custom Cards Made Easy</Description>
-        <Version>1.1.12</Version>
+        <Version>1.1.13</Version>
         <LangVersion>latest</LangVersion>
         <RootNamespace>EasyCards</RootNamespace>
         <Nullable>enable</Nullable>

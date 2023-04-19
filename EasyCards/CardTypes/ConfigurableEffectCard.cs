@@ -3,11 +3,11 @@ namespace EasyCards.CardTypes;
 using System.Collections.Generic;
 using System.Linq;
 using Effects;
-using Events;
 using Helpers;
 using Models.Templates;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;
+using RogueGenesia.GameManager;
 using UnityEngine;
 
 public class ConfigurableEffectCard : SoulCard
@@ -68,26 +68,22 @@ public class ConfigurableEffectCard : SoulCard
     {
         this.InitializeEffects(this._name);
 
-        GameEvents.OnRunEndEvent += this.CleanUpEvents;
-        GameEvents.OnPlayerFinalDeathEvent += this.CleanUpEvents;
-
-        GameEvents.OnRogueLevelStartedEvent += this.OnRogueLevelStarted;
-        GameEvents.OnRogueLevelEndedEvent += this.OnRogueLevelEnded;
-        GameEvents.OnDeathEvent += this.OnDeath;
-
-        GameEvents.OnPlayerTakeDamageEvent += this.OnPlayerTakeDamage;
+        GameEventManager.OnStageStart.AddListener(this.OnRogueLevelStarted);
+        GameEventManager.OnStageEnd.AddListener(this.OnRogueLevelEnded);
+        GameEventManager.OnPlayerDeath.AddListener(this.OnDeath);
+        GameEventManager.OnPlayerTakeDamage_BeforeApplying.AddListener(this.OnPlayerTakeDamage);
     }
 
-    private void OnPlayerTakeDamage(DamageInformation damageInfo)
+    private void OnPlayerTakeDamage(PlayerEntity playerEntity, AvatarData avatarData, DamageInformation damageInformation)
     {
         Log.Info($"{this._name}.OnTakeDamage");
         foreach (var takeDamageEffect in this.OnTakeDamageEffects)
         {
-            takeDamageEffect.OnTakeDamage(damageInfo.DamageValue);
+            takeDamageEffect.OnTakeDamage(damageInformation.DamageValue);
         }
     }
 
-    private void OnDeath()
+    private void OnDeath(PlayerEntity playerEntity, AvatarData avatarData)
     {
         Log.Info($"OnDeath()");
         foreach (var deathEffect in this.OnDeathEffects)
@@ -96,7 +92,7 @@ public class ConfigurableEffectCard : SoulCard
         }
     }
 
-    private void OnRogueLevelStarted()
+    private void OnRogueLevelStarted(LevelObject level)
     {
         this.levelStartTime = Time.time;
         foreach (var effect in this.Effects.Where(effect =>
@@ -106,7 +102,7 @@ public class ConfigurableEffectCard : SoulCard
         }
     }
 
-    private void OnRogueLevelEnded() { }
+    private void OnRogueLevelEnded(LevelObject level) { }
 
     public override void OnUpdate(PlayerEntity owner)
     {
@@ -143,18 +139,5 @@ public class ConfigurableEffectCard : SoulCard
                 onKillEffect.OnKill(monster);
             }
         }
-    }
-
-
-    private void CleanUpEvents()
-    {
-        Log.Info($"CleanUpEvents");
-        GameEvents.OnRunEndEvent -= this.CleanUpEvents;
-        GameEvents.OnPlayerFinalDeathEvent -= this.CleanUpEvents;
-
-        GameEvents.OnRogueLevelStartedEvent -= this.OnRogueLevelStarted;
-        GameEvents.OnRogueLevelEndedEvent -= this.OnRogueLevelEnded;
-
-        GameEvents.OnPlayerTakeDamageEvent -= this.OnPlayerTakeDamage;
     }
 }

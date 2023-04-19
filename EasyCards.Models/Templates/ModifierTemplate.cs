@@ -1,13 +1,14 @@
-using EasyCards.Models.Templates.Generated;
 namespace EasyCards.Models.Templates;
+
+using RogueGenesia.Data;
 
 public class ModifierTemplate
 {
     public float ModifierValue { get; set; }
 
-    public TemplateModifierType ModifierType { get; set; }
+    public ModifierType ModifierType { get; set; }
 
-    public TemplateStatsType Stat { get; set; }
+    public StatsType Stat { get; set; }
 
     public override string ToString()
     {

@@ -1,8 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+<!--        <TargetFramework>net6.0</TargetFramework>-->
+        <TargetFramework>net48</TargetFramework>
+<!--        <TargetFramework>netstandard2.0</TargetFramework>-->
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+      <Nullable>enable</Nullable>
+      <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>

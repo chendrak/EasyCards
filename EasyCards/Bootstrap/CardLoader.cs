@@ -28,7 +28,6 @@ public static class CardLoader
 
     public static void Initialize()
     {
-        RegisterCustomCardTypes();
         if (Directory.Exists(Paths.Data))
         {
             var jsonFiles = Directory.GetFiles(Paths.Data, "*.json");
@@ -67,11 +66,6 @@ public static class CardLoader
         var allCards = CardRepository.GetAllCards().ToDictionary(card => card.name);
         PostProcessRemovals(allCards, _successFullyLoadedCards);
         PostProcessRequirements(allCards, _successFullyLoadedCards);
-    }
-
-    private static void RegisterCustomCardTypes()
-    {
-
     }
 
     public static Dictionary<string, CardTemplate> GetLoadedCards() => _successFullyLoadedCards;

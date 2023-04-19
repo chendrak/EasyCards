@@ -7,8 +7,6 @@ using RogueGenesia.Data;
 
 namespace EasyCards.Helpers;
 
-using Models.Templates.Generated;
-
 public static class CardTemplateExtensions
 {
     public static List<StatRequirement>? ToStatRequirementList(this StatRequirementTemplate template, bool isMinRequirement)
@@ -115,7 +113,7 @@ public static class CardTemplateExtensions
         var singMod = new SingularModifier
         {
             Value = modifierTemplate.ModifierValue,
-            ModifierType = modifierTemplate.ModifierType.CastTo<ModifierType>()
+            ModifierType = modifierTemplate.ModifierType
         };
 
         var statModifier = new StatModifier

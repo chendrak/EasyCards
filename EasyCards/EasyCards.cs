@@ -2,19 +2,18 @@ using EasyCards.Bootstrap;
 using EasyCards.Effects;
 using EasyCards.Helpers;
 using ModGenesia;
+using RogueGenesia.GameManager;
+using UnityEngine;
+using Version = SemanticVersioning.Version;
 
 namespace EasyCards
 {
-    using System.Reflection;
-    using Events;
-    using HarmonyLib;
-    using Version = SemanticVersioning.Version;
 
     public class EasyCards : RogueGenesiaMod
     {
         public const string MOD_NAME = "EasyCards";
 
-        private readonly Version MinimumRequiredGameVersion = new(0, 7, 6, preRelease: ".0");
+        private readonly Version MinimumRequiredGameVersion = new(0, 8, 2, preRelease: ".0");
 
         public override void OnRegisterModdedContent()
         {
@@ -29,6 +28,12 @@ namespace EasyCards
 
         public override void OnModLoaded(ModData modData)
         {
+            Debug.Log($"OnModLoaded({modData})");
+
+            // This needs to be the first line, because a bunch of stuff relies on the paths being initialized
+            Paths.Initialize(modData.ModDirectory);
+
+
             Log.Debug($"OnModLoaded({modData})");
             if (!VersionHelper.IsGameVersionAtLeast(this.MinimumRequiredGameVersion))
             {
@@ -37,12 +42,8 @@ namespace EasyCards
                 return;
             }
 
-            Paths.Initialize(modData.ModDirectory);
-
             DebugHelper.Initialize();
-            GameEvents.OnGameLaunchEvent += EffectHolder.ResetEffects;
-
-            // Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
+            GameEventManager.OnGameStart.AddListener(EffectHolder.ResetEffects);
         }
 
         public override void OnModUnloaded()

@@ -1,25 +1,25 @@
-using EasyCards.Models.Templates.Generated;
-
 namespace EasyCards.Models.Templates
 {
+    using RogueGenesia.Data;
+
     public class CardTemplate
     {
-        private const string SchemaFileName = "schema.json";
-
+        // FIXME: Find a way to make the schema-file work again
+        // private const string SchemaFileName = "schema.json";
         // [JsonPropertyName("$schema")]
-        public string Schema
-        {
-            get => SchemaFileName;
-            // ReSharper disable once ValueParameterNotUsed - This is only here to appease the schema generation gods.
-            set { }
-        }
+        // public string Schema
+        // {
+        //     get => SchemaFileName;
+        //     // ReSharper disable once ValueParameterNotUsed - This is only here to appease the schema generation gods.
+        //     set { }
+        // }
 
         public string Name { get; set; }
         public string? TexturePath { get; set; }
 
-        public TemplateCardRarity Rarity { get; set; }
+        public CardRarity Rarity { get; set; }
 
-        public List<TemplateCardTag> CardTags { get; set; } = new();
+        public List<CardTag> CardTags { get; set; } = new();
         public float DropWeight { get; set; }
         public float LevelUpWeight { get; set; }
         public int MaxLevel { get; set; }
