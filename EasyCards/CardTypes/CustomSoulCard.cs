@@ -2,7 +2,6 @@ namespace EasyCards.CardTypes;
 
 using System;
 using System.Collections.Generic;
-using Common.Helpers;
 using Helpers;
 using ModGenesia;
 using RogueGenesia.Data;
