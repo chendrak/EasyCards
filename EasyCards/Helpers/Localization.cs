@@ -4,6 +4,8 @@ using RogueGenesia.Data;
 
 namespace EasyCards.Helpers;
 
+using Common.Logging;
+
 public static class Localization
 {
     public static List<LocalizationData> GetTranslations(Dictionary<string, string> translations)

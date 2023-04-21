@@ -6,20 +6,23 @@ using RogueGenesia.GameManager;
 
 namespace EasyCards
 {
+    using Common.Logging;
 
     public class EasyCards : RogueGenesiaMod
     {
         public const string MOD_NAME = "EasyCards";
 
-        public override void OnRegisterModdedContent()
+        public EasyCards()
         {
-            Log.Debug($"OnRegisterModdedContent");
-            CardLoader.Initialize();
+            ModOptionHelper.RegisterModOptions();
+            var logLevel = ModOptionHelper.AreDebugLogsEnabled() ? Log.LogLevel.DEBUG : Log.LogLevel.INFO;
+            Log.SetMinimumLogLevel(logLevel);
         }
 
-        public override void OnAllContentLoaded()
+        public override void OnRegisterModdedContent()
         {
-            Log.Debug($"OnAllContentLoaded");
+            Log.Info($"Attempting to find card packs");
+            CardLoader.Initialize();
         }
 
         public override void OnModLoaded(ModData modData)

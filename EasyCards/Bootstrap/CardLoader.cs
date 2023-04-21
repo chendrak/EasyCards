@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CardTypes;
+using Common.Logging;
 using Effects;
 using Extensions;
 using Helpers;
@@ -101,12 +102,12 @@ public static class CardLoader
 
                 if (cardTemplate.Effects.Count == 0)
                 {
-                    Log.Info($"Adding stat card {cardTemplate.Name}");
+                    Log.Debug($"Adding stat card {cardTemplate.Name}");
                     CardAPI.AddCustomStatCard(cardTemplate.Name, soulCardData);
                 }
                 else
                 {
-                    Log.Info($"Adding effect card {cardTemplate.Name}");
+                    Log.Debug($"Adding effect card {cardTemplate.Name}");
                     CardAPI.AddCustomCard(cardTemplate.Name, effectCardConstructor, soulCardData);
 
                     foreach (var effect in cardTemplate.Effects)

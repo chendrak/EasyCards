@@ -7,6 +7,8 @@ using RogueGenesia.Data;
 
 namespace EasyCards.Helpers;
 
+using Common.Logging;
+
 public static class CardTemplateExtensions
 {
     public static List<StatRequirement>? ToStatRequirementList(this StatRequirementTemplate template, bool isMinRequirement)

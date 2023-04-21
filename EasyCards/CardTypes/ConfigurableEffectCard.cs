@@ -2,8 +2,8 @@ namespace EasyCards.CardTypes;
 
 using System.Collections.Generic;
 using System.Linq;
+using Common.Logging;
 using Effects;
-using Helpers;
 using Models.Templates;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;

@@ -1,4 +1,4 @@
-namespace EasyCards.Helpers;
+namespace EasyCards.Common.Logging;
 
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ public static class Log
         VERBOSE
     }
 
-    private static LogLevel logLevel = LogLevel.VERBOSE;
+    private static LogLevel logLevel = LogLevel.INFO;
 
     public static void SetMinimumLogLevel(LogLevel logLevel)
     {

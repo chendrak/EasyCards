@@ -8,8 +8,10 @@
     <Platform>x64</Platform>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  
   <ItemGroup>
     <ProjectReference Include="../EasyCards.EnumGenerator/EasyCards.EnumGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="../EasyCards.Common/EasyCards.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

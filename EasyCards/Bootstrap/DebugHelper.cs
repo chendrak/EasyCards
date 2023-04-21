@@ -1,5 +1,6 @@
 namespace EasyCards.Bootstrap;
 
+using Common.Logging;
 using Helpers;
 using RogueGenesia.Data;
 using Services;
