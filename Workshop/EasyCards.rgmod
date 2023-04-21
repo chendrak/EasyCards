@@ -1,0 +1,23 @@
+{
+	"DisplayedName":[
+		{
+			"Key":"en",
+			"Value":"EasyCards"
+		}
+	],
+	"DisplayedDescription":[
+		{
+			"Key":"en",
+			"Value":"Allows modders to create card packs easily. Does nothing on its own!"
+		}
+	],
+	"Version":"1.0.13",
+	"Name":"EasyCards",
+	"Author":"chendrak",
+	"WorkshopID":"",
+	"HardDependencies":[],
+	"SoftDependencies":[],
+	"Tags":[
+		"cards"
+	],
+}
