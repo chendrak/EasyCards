@@ -32,6 +32,11 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.13
+
+* Add Steam Workshop support
+* Add Debug Log option to mod options
+
 #### 1.1.12
 
 * Fix for the most recent game changes regarding localization
