@@ -1,10 +1,8 @@
 namespace EasyCards.Helpers;
 
 using System.Collections.Generic;
-using Common.Logging;
 using ModGenesia;
 using RogueGenesia.Data;
-using RogueGenesia.GameManager;
 
 public static class ModOptionHelper
 {
