@@ -6,6 +6,7 @@ using RogueGenesia.GameManager;
 
 namespace EasyCards
 {
+    using System.Linq;
     using Common.Logging;
 
     public class EasyCards : RogueGenesiaMod
@@ -16,13 +17,15 @@ namespace EasyCards
         {
             ModOptionHelper.RegisterModOptions();
             var logLevel = ModOptionHelper.AreDebugLogsEnabled() ? Log.LogLevel.DEBUG : Log.LogLevel.INFO;
+            Log.Initialize(MOD_NAME);
             Log.SetMinimumLogLevel(logLevel);
         }
 
         public override void OnRegisterModdedContent()
         {
             Log.Info($"Attempting to find card packs");
-            CardLoader.Initialize();
+            var modPaths = ModLoader.EnabledMods.Select(mod => mod.ModDirectory.FullName).ToList();
+            CardLoader.Initialize(modPaths);
         }
 
         public override void OnModLoaded(ModData modData)

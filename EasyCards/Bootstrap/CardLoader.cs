@@ -6,7 +6,6 @@ using System.Linq;
 using CardTypes;
 using Common.Logging;
 using Effects;
-using Extensions;
 using Helpers;
 using Models.Templates;
 using ModGenesia;
@@ -27,40 +26,27 @@ public static class CardLoader
 
     private static readonly Dictionary<string, CardTemplate> _successFullyLoadedCards = new();
 
-    public static void Initialize()
+    public static void Initialize(List<string> modPaths)
     {
-        if (Directory.Exists(Paths.Data))
-        {
-            var jsonFiles = Directory.GetFiles(Paths.Data, "*.json");
 
-            // Load files using the old logic
-            foreach (var jsonFile in jsonFiles)
+        foreach (var modPath in modPaths)
+        {
+
+            Log.Info($"Searching for cards.json files in {modPath}");
+
+            // Scan for *.cards.json files in plugins subfolders
+            var cardJsonFiles = Directory.GetFiles(modPath, "*.cards.json", SearchOption.AllDirectories);
+            foreach (var jsonFile in cardJsonFiles)
             {
                 try
                 {
-                    AddCardsFromFile(jsonFile, Paths.Assets);
+                    var assetPath = Path.GetDirectoryName(jsonFile);
+                    AddCardsFromFile(jsonFile, assetPath!);
                 }
                 catch (Exception ex)
                 {
                     Log.Error($"Unable to load cards from file {jsonFile}: {ex}");
                 }
-            }
-        }
-
-        Log.Info($"Searching for cards.json files in {Paths.BaseModDirectory}");
-
-        // Scan for *.cards.json files in plugins subfolders
-        var cardJsonFiles = Directory.GetFiles(Paths.BaseModDirectory, "*.cards.json", SearchOption.AllDirectories);
-        foreach (var jsonFile in cardJsonFiles)
-        {
-            try
-            {
-                var assetPath = Path.GetDirectoryName(jsonFile);
-                AddCardsFromFile(jsonFile, assetPath!);
-            }
-            catch (Exception ex)
-            {
-                Log.Error($"Unable to load cards from file {jsonFile}: {ex}");
             }
         }
 

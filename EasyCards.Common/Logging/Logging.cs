@@ -9,6 +9,7 @@ using SLog = UnityEngine.Debug;
 /// </summary>
 public static class Log
 {
+    private static string Prefix = "CustomMod";
     public enum LogLevel
     {
         ERROR,
@@ -17,6 +18,8 @@ public static class Log
         DEBUG,
         VERBOSE
     }
+
+    public static void Initialize(string prefix) => Prefix = prefix;
 
     private static LogLevel logLevel = LogLevel.INFO;
 
@@ -29,7 +32,7 @@ public static class Log
     {
         if (logLevel >= LogLevel.INFO)
         {
-            SLog.Log($"[INFO] {msg}");
+            SLog.Log($"[{Prefix}] [INFO] {msg}");
         }
     }
 
@@ -37,20 +40,20 @@ public static class Log
     {
         if (logLevel >= LogLevel.DEBUG)
         {
-            SLog.Log($"[DEBUG] {msg}");
+            SLog.Log($"[{Prefix}] [DEBUG] {msg}");
         }
     }
 
     public static void Error(string msg)
     {
-        SLog.LogError($"[ERROR] {msg}");
+        SLog.LogError($"[{Prefix}] [ERROR] {msg}");
     }
 
     public static void Verbose(string msg)
     {
         if (logLevel >= LogLevel.VERBOSE)
         {
-            SLog.Log($"[VERBOSE] {msg}");
+            SLog.Log($"[{Prefix}] [VERBOSE] {msg}");
         }
     }
 
@@ -58,7 +61,7 @@ public static class Log
     {
         if (logLevel >= LogLevel.WARN)
         {
-            SLog.LogWarning($"[WARN] {msg}");
+            SLog.LogWarning($"[{Prefix}] [WARN] {msg}");
         }
     }
 
