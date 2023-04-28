@@ -32,6 +32,10 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.14
+
+* Fix for most recent game version
+
 #### 1.1.13
 
 * Add Steam Workshop support
