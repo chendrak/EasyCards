@@ -14,18 +14,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Costura.Fody" Version="5.7.0">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-
-      <PackageReference Include="Fody" Version="6.7.0">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="../EasyCards.Common/EasyCards.Common.csproj" />
         <ProjectReference Include="../EasyCards.Models/EasyCards.Models.csproj" />
     </ItemGroup>

@@ -15,7 +15,7 @@ public static class DebugHelper
 
     private static void LogCard(SoulCardScriptableObject card)
     {
-        Log.Info($"=== Card: {card.name} / Localized Name: {card.GetLocalizedName()} ===");
+        Log.Info($"=== Card: {card.name} / Localized Name: {card.GetName()} ===");
 
         var cardsToRemove = card.CardRemoved;
         Log.Info($"Removes cards: {cardsToRemove.Length}");
@@ -92,7 +92,7 @@ public static class DebugHelper
 
         foreach (var heldSoulCard in heldSoulCards)
         {
-            Log.Info($"\t{heldSoulCard.GetName}");
+            Log.Info($"\t{heldSoulCard.GetName()}");
         }
 
         var heldSoulCardSoList = player._soulCardSOList;

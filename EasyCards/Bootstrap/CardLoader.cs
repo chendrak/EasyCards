@@ -1,8 +1,10 @@
 namespace EasyCards.Bootstrap;
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using CardTypes;
 using Common.Logging;
 using Effects;
@@ -115,7 +117,9 @@ public static class CardLoader
     private static SoulCardCreationData ConvertCardTemplate(CardTemplate cardTemplate, string modSource,
         string assetBasePath)
     {
-        var soulCardData = new SoulCardCreationData();
+        var soulCardData = CreateEmptySoulCardData();
+
+        // var soulCardData = new SoulCardCreationData("", modSource);
 
         soulCardData.ModSource = modSource;
 
@@ -194,6 +198,24 @@ public static class CardLoader
         // soulCardData.CardHardRequirement = cardTemplate.RequiresAll?.ToRequirementList();
 
         return soulCardData;
+    }
+
+    private static SoulCardCreationData CreateEmptySoulCardData()
+    {
+        var soulCardCreationDataType = typeof(SoulCardCreationData);
+        var soulCardCreationData = (SoulCardCreationData)FormatterServices.GetUninitializedObject(soulCardCreationDataType);
+
+
+        soulCardCreationData.NameOverride = new();
+        soulCardCreationData.DescriptionOverride = new();
+        soulCardCreationData.CardExclusion = Array.Empty<string>();
+        soulCardCreationData.CardToRemove = Array.Empty<string>();
+        soulCardCreationData.CardWithStatsToBan = Array.Empty<StatsType>();
+        soulCardCreationData.CardRequirement = ScriptableObject.CreateInstance<SCSORequirementList>();
+        soulCardCreationData.CardHardRequirement = ScriptableObject.CreateInstance<SCSORequirementList>();
+        soulCardCreationData.avatarLimitationList = new();
+
+        return soulCardCreationData;
     }
 
     private static void PostProcessRemovals(Dictionary<string, SoulCardScriptableObject> allCards,
