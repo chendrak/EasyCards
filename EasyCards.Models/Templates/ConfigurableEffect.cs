@@ -1,5 +1,6 @@
 namespace EasyCards.Models.Templates;
 
+using Common.Logging;
 using RogueGenesia.Actors.Survival;
 using RogueGenesia.Data;
 using UnityEngine;
@@ -22,7 +23,7 @@ public class ConfigurableEffect
 
     public void Enable(float time)
     {
-        Debug.Log($"Enabling effect: {this}");
+        Log.Debug($"Enabling effect: {this}");
         this.activationTime = time;
         this.Enabled = true;
 
@@ -35,7 +36,7 @@ public class ConfigurableEffect
 
     public void Disable()
     {
-        Debug.Log($"Disabling effect: {this}");
+        Log.Debug($"Disabling effect: {this}");
         this.Enabled = false;
     }
 
@@ -46,33 +47,33 @@ public class ConfigurableEffect
         if (!this.Enabled)
             return;
 
-        Debug.Log($"Applying effect: {this}");
+        Log.Debug($"Applying effect: {this}");
 
         switch (this.Action)
         {
             case EffectAction.AddGold:
                 var amountToAdd = this.Properties.Amount ?? 0;
-                Debug.Log($"AddGold: {amountToAdd}");
+                Log.Debug($"AddGold: {amountToAdd}");
                 this.PlayerData.Gold += amountToAdd;
                 break;
             case EffectAction.AddBanishes:
-                Debug.Log($"AddBanishes: {this.Properties.Amount}");
+                Log.Debug($"AddBanishes: {this.Properties.Amount}");
                 this.PlayerData.BanishLeft += (int?)this.Properties.Amount ?? 0;
                 break;
             case EffectAction.AddRerolls:
-                Debug.Log($"AddRerolls: {this.Properties.Amount}");
+                Log.Debug($"AddRerolls: {this.Properties.Amount}");
                 this.PlayerData.RerollLeft += (int?)this.Properties.Amount ?? 0;
                 break;
             case EffectAction.AddRarityRerolls:
-                Debug.Log($"AddRarityRerolls: {this.Properties.Amount}");
+                Log.Debug($"AddRarityRerolls: {this.Properties.Amount}");
                 this.PlayerData.RarityRerollLeft += (int?)this.Properties.Amount ?? 0;
                 break;
             case EffectAction.HealAmount:
-                Debug.Log($"HealAmount: {this.Properties.Amount}");
+                Log.Debug($"HealAmount: {this.Properties.Amount}");
                 this.PlayerData.HealPlayer(this.Properties.Amount ?? 0);
                 break;
             case EffectAction.HealPercentage:
-                Debug.Log($"HealPercentage: {this.Properties.Percentage}%");
+                Log.Debug($"HealPercentage: {this.Properties.Percentage}%");
                 if (this.Properties.Percentage is { } percentage)
                 {
                     var playerMaxHealth = this.PlayerData._playerStats.MaxHealth.Value;
@@ -84,7 +85,7 @@ public class ConfigurableEffect
                 // Functionality removed
                 break;
             default:
-                Debug.LogWarning($"Unsupported action {this.Action}");
+                Log.Warn($"Unsupported action {this.Action}");
                 break;
         }
     }
@@ -161,12 +162,12 @@ public class ConfigurableEffect
 
         if (this.Trigger == EffectTrigger.OnBossKill && monster.Boss)
         {
-            Debug.Log($"Killed boss, applying effect: {this}");
+            Log.Debug($"Killed boss, applying effect: {this}");
             this.Apply();
         }
         else if (this.Trigger == EffectTrigger.OnEliteKill && monster.Elite)
         {
-            Debug.Log($"Killed Elite, applying effect: {this}");
+            Log.Debug($"Killed Elite, applying effect: {this}");
             this.Apply();
         }
         else if (this.Trigger == EffectTrigger.OnKill)

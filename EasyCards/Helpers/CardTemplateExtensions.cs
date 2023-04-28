@@ -7,7 +7,7 @@ using RogueGenesia.Data;
 
 namespace EasyCards.Helpers;
 
-using Models.Templates.Generated;
+using Common.Logging;
 
 public static class CardTemplateExtensions
 {
@@ -28,7 +28,7 @@ public static class CardTemplateExtensions
             return statsRequirements;
         }
 
-        EasyCards.Instance.Log.LogWarning($"{template.RequirementType} is not a valid requirement type! Valid options are: [{EnumToStringHelper.NamesToString(typeof(StatRequirementType))}]");
+        Log.Warn($"{template.RequirementType} is not a valid requirement type! Valid options are: [{EnumToStringHelper.NamesToString(typeof(StatRequirementType))}]");
         return null;
     }
 
@@ -48,7 +48,7 @@ public static class CardTemplateExtensions
             return statReq;
         }
 
-        EasyCards.Instance.Log.LogWarning($"{template.Name} is not a valid stat name! Valid options are: [{EnumToStringHelper.NamesToString(typeof(StatsType))}]");
+        Log.Warn($"{template.Name} is not a valid stat name! Valid options are: [{EnumToStringHelper.NamesToString(typeof(StatsType))}]");
         return null;
     }
 
@@ -71,7 +71,7 @@ public static class CardTemplateExtensions
             statRequirements = template.Stats.ToStatRequirementList(template.Stats.IsMinRequirement());
         }
 
-        var requirementList = CardAPI.MakeCardRequirement(cardRequirements.ToIl2CppReferenceArray(), statRequirements.ToIl2CppReferenceArray());
+        var requirementList = CardAPI.MakeCardRequirement(cardRequirements.ToArray(), statRequirements.ToArray());
         return requirementList;
     }
     public static ModCardRequirement ToModCardRequirement(this CardRequirementTemplate template)
@@ -115,7 +115,7 @@ public static class CardTemplateExtensions
         var singMod = new SingularModifier
         {
             Value = modifierTemplate.ModifierValue,
-            ModifierType = modifierTemplate.ModifierType.CastTo<ModifierType>()
+            ModifierType = modifierTemplate.ModifierType
         };
 
         var statModifier = new StatModifier

@@ -1,15 +1,14 @@
 namespace EasyCards.Bootstrap;
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using BepInEx.Logging;
+using System.Runtime.Serialization;
 using CardTypes;
+using Common.Logging;
 using Effects;
-using Extensions;
 using Helpers;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.Injection;
 using Models.Templates;
 using ModGenesia;
 using RogueGenesia.Data;
@@ -22,48 +21,34 @@ public static class CardLoader
 {
     static CardLoader()
     {
-        Logger = EasyCards.Instance.Log;
-        _placeholderSprite = SpriteLoader.LoadSprite(Path.Combine(Paths.EasyCards, "placeholder.png"));
+        _placeholderSprite = ModGenesia.LoadSprite(Path.Combine(Paths.EasyCards, "placeholder.png"));
     }
 
-    private static ManualLogSource Logger { get; }
     private static readonly Sprite _placeholderSprite;
 
     private static readonly Dictionary<string, CardTemplate> _successFullyLoadedCards = new();
 
-    public static void Initialize()
+    public static void Initialize(List<string> modPaths)
     {
-        RegisterCustomCardTypes();
-        if (Directory.Exists(Paths.Data))
-        {
-            var jsonFiles = Directory.GetFiles(Paths.Data, "*.json");
 
-            // Load files using the old logic
-            foreach (var jsonFile in jsonFiles)
+        foreach (var modPath in modPaths)
+        {
+
+            Log.Info($"Searching for cards.json files in {modPath}");
+
+            // Scan for *.cards.json files in plugins subfolders
+            var cardJsonFiles = Directory.GetFiles(modPath, "*.cards.json", SearchOption.AllDirectories);
+            foreach (var jsonFile in cardJsonFiles)
             {
                 try
                 {
-                    AddCardsFromFile(jsonFile, Paths.Assets);
+                    var assetPath = Path.GetDirectoryName(jsonFile);
+                    AddCardsFromFile(jsonFile, assetPath!);
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError($"Unable to load cards from file {jsonFile}: {ex}");
+                    Log.Error($"Unable to load cards from file {jsonFile}: {ex}");
                 }
-            }
-        }
-
-        // Scan for *.cards.json files in plugins subfolders
-        var cardJsonFiles = Directory.GetFiles(Paths.Plugins, "*.cards.json", SearchOption.AllDirectories);
-        foreach (var jsonFile in cardJsonFiles)
-        {
-            try
-            {
-                var assetPath = Path.GetDirectoryName(jsonFile);
-                AddCardsFromFile(jsonFile, assetPath!);
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError($"Unable to load cards from file {jsonFile}: {ex}");
             }
         }
 
@@ -72,33 +57,25 @@ public static class CardLoader
         PostProcessRequirements(allCards, _successFullyLoadedCards);
     }
 
-    private static void RegisterCustomCardTypes()
-    {
-        if (!ClassInjector.IsTypeRegisteredInIl2Cpp<ConfigurableEffectCard>())
-        {
-            ClassInjector.RegisterTypeInIl2Cpp<ConfigurableEffectCard>();
-        }
-    }
-
     public static Dictionary<string, CardTemplate> GetLoadedCards() => _successFullyLoadedCards;
 
     private static void AddCardsFromFile(string fileName, string assetBasePath)
     {
         if (!File.Exists(fileName))
         {
-            Logger.LogError($"File does not exist: {fileName}");
+            Log.Error($"File does not exist: {fileName}");
         }
 
-        Logger.LogInfo($"Loading cards from file {fileName}");
+        Log.Info($"Loading cards from file {fileName}");
 
         var json = File.ReadAllText(fileName);
         var templateFile = JsonDeserializer.Deserialize<TemplateFile>(json);
 
-        Logger.LogInfo($"Loaded {templateFile.Stats.Count} cards");
+        Log.Info($"Loaded {templateFile.Stats.Count} cards");
 
-        var modSource = templateFile.ModSource ?? MyPluginInfo.PLUGIN_NAME;
+        var modSource = templateFile.ModSource ?? EasyCards.MOD_NAME;
 
-        var effectCardType = Il2CppType.Of<ConfigurableEffectCard>();
+        var effectCardType = typeof(ConfigurableEffectCard);
         var effectCardConstructor = effectCardType.GetConstructors().First();
 
         var allCards = templateFile.Stats
@@ -113,12 +90,12 @@ public static class CardLoader
 
                 if (cardTemplate.Effects.Count == 0)
                 {
-                    Logger.LogInfo($"Adding stat card {cardTemplate.Name}");
+                    Log.Debug($"Adding stat card {cardTemplate.Name}");
                     CardAPI.AddCustomStatCard(cardTemplate.Name, soulCardData);
                 }
                 else
                 {
-                    Logger.LogInfo($"Adding effect card {cardTemplate.Name}");
+                    Log.Debug($"Adding effect card {cardTemplate.Name}");
                     CardAPI.AddCustomCard(cardTemplate.Name, effectCardConstructor, soulCardData);
 
                     foreach (var effect in cardTemplate.Effects)
@@ -132,7 +109,7 @@ public static class CardLoader
             }
             catch (Exception ex)
             {
-                Logger.LogError($"Error adding {cardTemplate.Name}: {ex}");
+                Log.Error($"Error adding {cardTemplate.Name}: {ex}");
             }
         }
     }
@@ -140,7 +117,9 @@ public static class CardLoader
     private static SoulCardCreationData ConvertCardTemplate(CardTemplate cardTemplate, string modSource,
         string assetBasePath)
     {
-        var soulCardData = new SoulCardCreationData();
+        var soulCardData = CreateEmptySoulCardData();
+
+        // var soulCardData = new SoulCardCreationData("", modSource);
 
         soulCardData.ModSource = modSource;
 
@@ -149,7 +128,7 @@ public static class CardLoader
         if (cardTemplate.TexturePath != null)
         {
             var texturePath = Path.Combine(assetBasePath, cardTemplate.TexturePath);
-            sprite = SpriteLoader.LoadSprite(texturePath);
+            sprite = ModGenesia.LoadSprite(texturePath);
             if (sprite)
             {
                 soulCardData.Texture = sprite;
@@ -157,12 +136,12 @@ public static class CardLoader
             else
             {
                 soulCardData.Texture = _placeholderSprite;
-                Logger.LogError($"Unable to load sprite from {texturePath}. Assigning placeholder sprite.");
+                Log.Error($"Unable to load sprite from {texturePath}. Assigning placeholder sprite.");
             }
         }
         else
         {
-            Logger.LogError($"No sprite set for {cardTemplate.Name}. Assigning placeholder sprite.");
+            Log.Error($"No sprite set for {cardTemplate.Name}. Assigning placeholder sprite.");
             soulCardData.Texture = _placeholderSprite;
         }
 
@@ -193,7 +172,7 @@ public static class CardLoader
         }
         else
         {
-            Logger.LogWarning($"No Name localizations provided for {cardTemplate.Name}!");
+            Log.Warn($"No Name localizations provided for {cardTemplate.Name}!");
         }
 
         if (cardTemplate.DescriptionLocalization.Count > 0)
@@ -221,15 +200,33 @@ public static class CardLoader
         return soulCardData;
     }
 
+    private static SoulCardCreationData CreateEmptySoulCardData()
+    {
+        var soulCardCreationDataType = typeof(SoulCardCreationData);
+        var soulCardCreationData = (SoulCardCreationData)FormatterServices.GetUninitializedObject(soulCardCreationDataType);
+
+
+        soulCardCreationData.NameOverride = new();
+        soulCardCreationData.DescriptionOverride = new();
+        soulCardCreationData.CardExclusion = Array.Empty<string>();
+        soulCardCreationData.CardToRemove = Array.Empty<string>();
+        soulCardCreationData.CardWithStatsToBan = Array.Empty<StatsType>();
+        soulCardCreationData.CardRequirement = ScriptableObject.CreateInstance<SCSORequirementList>();
+        soulCardCreationData.CardHardRequirement = ScriptableObject.CreateInstance<SCSORequirementList>();
+        soulCardCreationData.avatarLimitationList = new();
+
+        return soulCardCreationData;
+    }
+
     private static void PostProcessRemovals(Dictionary<string, SoulCardScriptableObject> allCards,
         Dictionary<string, CardTemplate> addedCards)
     {
-        Logger.LogDebug($"=== Post processing removals for {addedCards.Count} cards ===");
+        Log.Debug($"=== Post processing removals for {addedCards.Count} cards ===");
 
         var addedCardNames = addedCards.Keys;
         foreach (var cardName in addedCardNames)
         {
-            Logger.LogDebug($"Processing {cardName}");
+            Log.Debug($"Processing {cardName}");
             var cardTemplate = addedCards[cardName];
             var cardScso = allCards[cardName];
 
@@ -237,38 +234,38 @@ public static class CardLoader
 
             if (cardsToRemove.Count > 0)
             {
-                Logger.LogDebug($"\tRemoves {cardsToRemove.Count} cards:");
+                Log.Debug($"\tRemoves {cardsToRemove.Count} cards:");
                 foreach (var cardToRemove in cardsToRemove)
                 {
-                    Logger.LogDebug($"\t\t{cardToRemove.name}");
+                    Log.Debug($"\t\t{cardToRemove.name}");
                 }
             }
 
-            cardScso.CardRemoved = cardsToRemove.ToIl2CppReferenceArray();
+            cardScso.CardRemoved = cardsToRemove.ToArray();
         }
     }
 
     private static void PostProcessRequirements(Dictionary<string, SoulCardScriptableObject> allCards,
         Dictionary<string, CardTemplate> addedCards)
     {
-        // Logger.LogDebug($"=== Post processing requirements for {addedCards.Count} cards ===");
+        // Log.Debug($"=== Post processing requirements for {addedCards.Count} cards ===");
 
         var addedCardNames = addedCards.Keys;
         foreach (var cardName in addedCardNames)
         {
-            // Logger.LogDebug($"Processing {cardName}");
+            // Log.Debug($"Processing {cardName}");
             var cardTemplate = addedCards[cardName];
             var cardScso = allCards[cardName];
 
             if (cardTemplate.RequiresAny != null)
             {
-                // Logger.LogDebug($"\t{cardName} - RequiresAny");
+                // Log.Debug($"\t{cardName} - RequiresAny");
                 cardScso.CardRequirement = cardTemplate.RequiresAny.ToRequirementList();
             }
 
             if (cardTemplate.RequiresAll != null)
             {
-                // Logger.LogDebug($"\t{cardName} - RequiresAll");
+                // Log.Debug($"\t{cardName} - RequiresAll");
                 cardScso.HardCardRequirement = cardTemplate.RequiresAll.ToRequirementList();
             }
         }
@@ -281,10 +278,13 @@ public static class CardLoader
         var result = new List<SoulCardScriptableObject>();
         foreach (var cardToGet in cardsToGet)
         {
-            var cardScso = allCards.GetValueOrDefault(cardToGet);
-            if (cardScso != null)
+            SoulCardScriptableObject cardScso;
+            if (allCards.TryGetValue(cardToGet, out cardScso))
             {
-                result.Add(cardScso);
+                if (cardScso != null)
+                {
+                    result.Add(cardScso);
+                }
             }
         }
 
@@ -302,7 +302,7 @@ public static class CardLoader
             }
             else
             {
-                Logger.LogWarning($"Could not convert stat: {statName} ");
+                Log.Warn($"Could not convert stat: {statName} ");
             }
         }
 

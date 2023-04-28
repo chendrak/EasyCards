@@ -1,76 +1,47 @@
-using BepInEx;
 using EasyCards.Bootstrap;
-using EasyCards.CardTypes;
 using EasyCards.Effects;
 using EasyCards.Helpers;
-using Il2CppInterop.Runtime;
-using Il2CppInterop.Runtime.Injection;
-using Il2CppInterop.Runtime.InteropTypes.Arrays;
 using ModGenesia;
-using ModManager;
-using SemanticVersioning;
+using RogueGenesia.GameManager;
 
 namespace EasyCards
 {
-    using System.Reflection;
-    using Events;
-    using HarmonyLib;
+    using System.Linq;
+    using Common.Logging;
 
-    [BepInDependency(DependencyGUID: "ModManager", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     public class EasyCards : RogueGenesiaMod
     {
-        internal static EasyCards Instance { get; private set; }
+        public const string MOD_NAME = "EasyCards";
 
-        private readonly Version MinimumRequiredGameVersion = new(0, 7, 6, preRelease: ".0");
-
-        public override void Load()
+        public EasyCards()
         {
-            if (!VersionHelper.IsGameVersionAtLeast(this.MinimumRequiredGameVersion))
-            {
-                Log.LogError($"Wrong game version! Minimum required game version is {this.MinimumRequiredGameVersion}, you have {VersionHelper.GameVersion}");
-                this.Unload();
-                return;
-            }
+            ModOptionHelper.RegisterModOptions();
+            var logLevel = ModOptionHelper.AreDebugLogsEnabled() ? Log.LogLevel.DEBUG : Log.LogLevel.INFO;
+            Log.Initialize(MOD_NAME);
+            Log.SetMinimumLogLevel(logLevel);
+        }
 
-            // This must be set, before resolving anything from the container.
-            // As the container uses this to expose BepInEx types.
-            Instance = this;
+        public override void OnRegisterModdedContent()
+        {
+            Log.Info($"Attempting to find card packs");
+            var modPaths = ModLoader.EnabledMods.Select(mod => mod.ModDirectory.FullName).ToList();
+            CardLoader.Initialize(modPaths);
+        }
+
+        public override void OnModLoaded(ModData modData)
+        {
+            // This needs to be the first line, because a bunch of stuff relies on the paths being initialized
+            Paths.Initialize(modData.ModDirectory);
+
+            Log.Debug($"OnModLoaded({modData})");
 
             DebugHelper.Initialize();
-            GameEvents.OnGameLaunchEvent += EffectHolder.ResetEffects;
-
-            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
-
-            // This should be the last thing we initialize, so the cards get loaded at the very end
-            CardLoader.Initialize();
+            GameEventManager.OnGameStart.AddListener(EffectHolder.ResetEffects);
         }
 
-        public override string ModDescription()
+        public override void OnModUnloaded()
         {
-            var loadedCards = CardLoader.GetLoadedCards();
-            return $"Loaded cards: {loadedCards.Count}";
-        }
-
-        private static void AddCustomCard<T>() where T : CustomSoulCard
-        {
-            var classType = typeof(T);
-            ClassInjector.RegisterTypeInIl2Cpp(classType);
-            var card = System.Activator.CreateInstance<T>();
-            var soulCardCreationData = card.GetSoulCardCreationData();
-            var ptr = IL2CPP.GetIl2CppClass(
-                "Assembly-CSharp.dll",
-                classType.Namespace,
-                classType.Name
-            );
-
-            var ctor = Il2CppType.TypeFromPointer(ptr)
-                .GetConstructor((Il2CppReferenceArray<Il2CppSystem.Type>)System.Array.Empty<Il2CppSystem.Type>());
-            var so = CardAPI.AddCustomCard(
-                card.Name,
-                ctor,
-                soulCardCreationData
-            );
+            Log.Debug($"OnModUnloaded");
         }
     }
 }

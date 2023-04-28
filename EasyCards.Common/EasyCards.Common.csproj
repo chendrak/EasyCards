@@ -1,23 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>latest</LangVersion>
-    <PlatformTarget>x64</PlatformTarget>
-    <Platform>x64</Platform>
     <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="../EasyCards.EnumGenerator/EasyCards.EnumGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-    <ProjectReference Include="../EasyCards.Common/EasyCards.Common.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="RogueGenesia">
-      <HintPath>$(BaseGameDirectory)\RogueGenesia.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>$(BaseGameDirectory)\UnityEngine.dll</HintPath>
     </Reference>

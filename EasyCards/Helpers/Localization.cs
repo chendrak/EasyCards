@@ -1,23 +1,23 @@
 using System.Collections.Generic;
-using BepInEx.Logging;
 using EasyCards.Models.Templates;
 using RogueGenesia.Data;
 
 namespace EasyCards.Helpers;
 
+using Common.Logging;
+
 public static class Localization
 {
-    private static ManualLogSource Logger => EasyCards.Instance.Log;
     public static List<LocalizationData> GetTranslations(Dictionary<string, string> translations)
     {
         var result = new List<LocalizationData>();
 
-        foreach (var (localizationKey, translation) in translations)
+        foreach (var translation in translations)
         {
             var ld = new LocalizationData
             {
-                Key = localizationKey,
-                Value = translation
+                Key = translation.Key,
+                Value = translation.Value
             };
 
             result.Add(ld);
@@ -38,7 +38,7 @@ public static class Localization
 
     public static void PostProcessDescriptions(Dictionary<string, SoulCardScriptableObject> allCards, Dictionary<string, CardTemplate> addedCards)
     {
-        Logger.LogInfo($"=== Post processing descriptions for {addedCards.Count} cards ===");
+        Log.Info($"=== Post processing descriptions for {addedCards.Count} cards ===");
 
         foreach (var cardName in addedCards.Keys)
         {
@@ -48,7 +48,7 @@ public static class Localization
 
             var cardScso = allCards[cardName];
             var translations = GetDescriptionTranslations(cardTemplate);
-            Logger.LogInfo($"\tGot {translations.Count} description translations for {cardName}");
+            Log.Info($"\tGot {translations.Count} description translations for {cardName}");
 
             foreach (var translation in translations)
             {

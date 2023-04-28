@@ -1,7 +1,8 @@
-namespace EasyCards.Models.Templates;
-
-public class CardRequirementTemplate
+namespace EasyCards.Models.Templates
 {
-    public string Name { get; set; }
-    public int Level { get; set; }
+    public class CardRequirementTemplate
+    {
+        public string Name { get; set; }
+        public int Level { get; set; }
+    }
 }
