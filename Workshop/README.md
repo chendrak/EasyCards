@@ -32,6 +32,10 @@ If all else fails, feel free to swing by the [Rogue: Genesia Discord](https://di
 
 ## Changelog
 
+#### 1.1.15
+
+* Fix for errors showing when mods are being reloaded
+
 #### 1.1.14
 
 * Fix for most recent game version
