@@ -308,4 +308,9 @@ public static class CardLoader
 
         return result.ToArray();
     }
+
+    public static void Cleanup()
+    {
+        _successFullyLoadedCards.Clear();
+    }
 }
