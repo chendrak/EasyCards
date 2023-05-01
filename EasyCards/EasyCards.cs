@@ -7,11 +7,14 @@ using RogueGenesia.GameManager;
 namespace EasyCards
 {
     using System.Linq;
+    using System.Reflection;
     using Common.Logging;
+    using HarmonyLib;
 
     public class EasyCards : RogueGenesiaMod
     {
         public const string MOD_NAME = "EasyCards";
+        private Harmony harmony;
 
         public EasyCards()
         {
@@ -33,6 +36,8 @@ namespace EasyCards
             // This needs to be the first line, because a bunch of stuff relies on the paths being initialized
             Paths.Initialize(modData.ModDirectory);
 
+            this.harmony = Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly());
+
             Log.Debug($"OnModLoaded({modData})");
 
             DebugHelper.Initialize();
@@ -42,6 +47,7 @@ namespace EasyCards
         public override void OnModUnloaded()
         {
             Log.Debug($"OnModUnloaded");
+            this.harmony.UnpatchSelf();
         }
     }
 }

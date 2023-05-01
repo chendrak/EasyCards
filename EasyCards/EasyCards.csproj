@@ -44,11 +44,24 @@
         <HintPath>$(BaseGameDirectory)\UnityEngine.CoreModule.dll</HintPath>
       </Reference>
     </ItemGroup>
-  
+
+    <ItemGroup>
+      <PackageReference Include="HarmonyX" Version="2.10.1" />
+    </ItemGroup>
+
+  <!--
+
+    using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
+    -->
+
     <Target Name="PostPublishCleanup" AfterTargets="Publish">
         <ItemGroup>
             <!-- These are files that are unnecessary for the game, or are just not needed -->
-            <FilesToDelete Include="$(PublishDir)*.dll" Exclude="$(PublishDir)$(TargetName)*.dll" />
+            <FilesToDelete Include="$(PublishDir)*.dll" Exclude="$(PublishDir)$(TargetName)*.dll;$(PublishDir)0Harmony.dll;$(PublishDir)Mono*.dll;$(PublishDir)System.Linq.dll;$(PublishDir)System.Reflection.dll;$(PublishDir)System.Reflection.Emit.dll;$(PublishDir)System.Collections.Generic.dll;" />
             <!-- This is skipped in debug configuration, to make debugging plugins easier -->
             <FilesToDelete Include="$(PublishDir)*.pdb" Condition="'$(Configuration)' == 'Release'" />
             <FilesToDelete Include="$(PublishDir)*.deps.json" />
