@@ -41,7 +41,8 @@ namespace EasyCards
 
         public override void OnModUnloaded()
         {
-            Log.Debug($"OnModUnloaded");
+            Log.Debug("OnModUnloaded");
+            CardLoader.Cleanup();
         }
     }
 }
